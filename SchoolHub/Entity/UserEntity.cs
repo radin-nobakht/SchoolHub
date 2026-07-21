@@ -21,6 +21,6 @@ namespace SchoolHub.Entity
         public string Code { get; set; }
 
         [Required]
-        public string Role {  get; set; }
+        public bool IsStudent {  get; set; }
     }
 }

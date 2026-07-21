@@ -1,0 +1,49 @@
+﻿@using SchoolHub.Dto.School
+@model List<SchoolDto>
+
+<link href="~/css/schoolpagecss.css" rel="stylesheet" />
+
+<div class="container mt-4">
+
+    <div class="row g-4">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-4 col-md-6">
+
+                <a asp-action="SchoolInfo"
+                   asp-route-id="@item.Id"
+                   class="text-decoration-none">
+
+                    <div class="school-card">
+
+                        <div class="school-icon">
+                            🏫
+                        </div>
+
+                        <h4>@item.SchoolName</h4>
+
+                        <p>
+                            <strong>شهر:</strong>
+                            @item.SchoolCity
+                        </p>
+
+                        <p>
+                            <strong>منطقه:</strong>
+                            @item.SchoolRegion
+                        </p>
+
+                        <button class="btn btn-primary w-100">
+                            مشاهده اطلاعات
+                        </button>
+
+                    </div>
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

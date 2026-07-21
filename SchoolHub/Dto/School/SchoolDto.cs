@@ -1,23 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SchoolHub.Entity
+﻿namespace SchoolHub.Dto.School
 {
-    public class SchoolEntity
+    public class SchoolDto
     {
-        [Key]
-        [Required]
         public int Id { get; set; }
-
-        [Required]
         public string SchoolName { get; set; }
-
-        [Required]
         public string SchoolCity { get; set; }
-
-        [Required]
         public int SchoolRegion { get; set; }
-
-        [Required]
         public int ManagerUserId { get; set; }
     }
 }

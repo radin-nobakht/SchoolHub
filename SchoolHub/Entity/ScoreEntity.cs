@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace SchoolHub.Entity
 {
+    [Keyless]
     public class ScoreEntity
     {
         [Required]

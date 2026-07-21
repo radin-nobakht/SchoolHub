@@ -9,12 +9,15 @@ namespace SchoolHub.Entity
         public int Id { get; set; }
 
         [Required]
-        public string ClassName { get; set; }
+        public int SchoolId { get; set; }
+
+        [Required]
+        public string ClassSubject { get; set; }
 
         [Required]
         public string Grade { get; set; }
 
         [Required]
-        public string TecherUserId {  get; set; }
+        public int TecherUserId {  get; set; }
     }
 }

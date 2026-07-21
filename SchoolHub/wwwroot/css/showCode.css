@@ -1,0 +1,89 @@
+﻿.code-box {
+    width: 100%;
+    margin: 30px 0;
+    padding: 20px;
+    background: #eef4ff;
+    border: 2px dashed #2563eb;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #2563eb;
+    letter-spacing: 6px;
+    user-select: all;
+}
+
+.info-box {
+    background: #f8f9fa;
+    border-right: 5px solid #2563eb;
+    padding: 15px;
+    border-radius: 10px;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+}
+
+    .actions a,
+    .actions button {
+        flex: 1;
+        height: 50px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 15px;
+        transition: .3s;
+    }
+
+.copy-btn {
+    background: #f1f5f9;
+    color: #2563eb;
+    border: 1px solid #2563eb;
+}
+
+    .copy-btn:hover {
+        background: #2563eb;
+        color: #fff;
+    }
+
+.login-btn {
+    background: #2563eb;
+    color: #fff;
+}
+
+    .login-btn:hover {
+        background: #1d4ed8;
+    }
+
+.success-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 42px;
+    margin: 0 auto 25px;
+}
+
+@media(max-width:500px) {
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .code-box {
+        font-size: 24px;
+        letter-spacing: 3px;
+    }
+}
