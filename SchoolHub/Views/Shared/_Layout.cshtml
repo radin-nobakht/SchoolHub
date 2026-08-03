@@ -1,61 +1,134 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SchoolHub</title>
+
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/select2/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SchoolHub.styles.css" asp-append-version="true" />
+    <link href="~/sweetalert2/sweetalert2.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SchoolHub</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Privacy">Privacy</a>
-                        </li>
-                       
-                        <li >
-                            <a class="btn btn-primary" asp-controller="User" asp-action="Login">
-                                ورود
-                            </a>
-                        </li>
-                        <li >
-                            <a class="btn btn-primary" asp-controller="User" asp-action="SignIn">
-                                ثبت نام
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+
+    <div class="layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <div class="sidebar-header">
+                <i class="bi bi-mortarboard-fill"></i>
+                <span>SchoolHub</span>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+            <ul class="sidebar-menu">
+
+                <li>
+                    <a href="/School/SchoolPage">
+                        <i class="bi bi-speedometer2"></i>
+                        مدارس
+                    </a>
+                </li>
+
+              
+            </ul>
+
+        </aside>
+
+        <!-- Main -->
+        <div class="main-content">
+
+            <!-- Top Navbar -->
+            <header>
+
+                <nav class="navbar custom-navbar">
+
+                    <div class="container-fluid">
+
+                        @{
+                            var name = Context.User?.Identity?.Name;
+                        }
+
+                        @if (name == null)
+                        {
+                            <div class="ms-auto">
+
+                                <a class="btn btn-light me-2"
+                                   asp-controller="User"
+                                   asp-action="Login">
+                                    ورود
+                                </a>
+
+                                <a class="btn btn-outline-light"
+                                   asp-controller="User"
+                                   asp-action="SignIn">
+                                    ثبت نام
+                                </a>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="dropdown ms-auto">
+
+                                <a class="btn btn-light dropdown-toggle"
+                                   href="#"
+                                   role="button"
+                                   data-bs-toggle="dropdown">
+
+                                    <i class="bi bi-person-circle"></i>
+                                    @name
+
+                                </a>
+
+                                <ul class="dropdown-menu">
+
+                                    <li>
+                                        <a class="dropdown-item text-danger"
+                                           asp-controller="Account"
+                                           asp-action="Logout">
+
+                                            <i class="bi bi-box-arrow-right"></i>
+                                            خروج
+
+                                        </a>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </nav>
+
+            </header>
+
+            <!-- Page Content -->
+            <main class="container-fluid py-4">
+                @RenderBody()
+            </main>
+
+        </div>
+
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - SchoolHub - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/sweetalert2/sweetalert2.all.js"></script>
+    <script src="~/select2/js/i18n/fa.min.js"></script>
+    <script src="~/select2/js/select2.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

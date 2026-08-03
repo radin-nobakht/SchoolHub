@@ -18,7 +18,7 @@ namespace SchoolHub.Entity
         public string NationalIdNumber { get; set; }
 
         [Required]
-        public string Code { get; set; }
+        public string Password { get; set; }
 
         [Required]
         public bool IsStudent {  get; set; }

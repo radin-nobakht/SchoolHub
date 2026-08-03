@@ -13,7 +13,8 @@ namespace SchoolHub.Service
             CreateMap<UserDto, UserEntity>().ReverseMap();
             CreateMap<SchoolDto, SchoolEntity>().ReverseMap();
             CreateMap<ClassDto, ClassEntity>().ReverseMap();
-
+            CreateMap<DistrictDto, DistrictEntity>().ReverseMap();
+            CreateMap<GeneralItemDto, GeneralItemEntity>().ReverseMap();
 
         }
     }

@@ -1,23 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SchoolHub.Entity
+namespace SchoolHub.Entity;
+
+public class ClassEntity
 {
-    public class ClassEntity
-    {
-        [Key]
-        [Required]
-        public int Id { get; set; }
+    [Key]
+    [Required]
+    public int Id { get; set; }
 
-        [Required]
-        public int SchoolId { get; set; }
+    [Required]
+    public int SchoolId { get; set; }
 
-        [Required]
-        public string ClassSubject { get; set; }
+    [Required]
+    public string Name { get; set; }
 
-        [Required]
-        public string Grade { get; set; }
+    [Required]
+    public int GradeId { get; set; }
 
-        [Required]
-        public int TecherUserId {  get; set; }
-    }
 }

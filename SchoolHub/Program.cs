@@ -20,7 +20,7 @@ builder.Services.AddDbContext<MyContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("SqlCs"));
 });
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ISchoolService, SchoolService>();
 
 builder.Services
@@ -28,7 +28,6 @@ builder.Services
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
-        options.LogoutPath = "/Account/Logout";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
         options.SlidingExpiration = true;
     });
@@ -52,7 +51,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Index}/{id?}")
+    pattern: "{controller=School}/{action=SchoolPage}/{id?}")
     .WithStaticAssets();
 
 

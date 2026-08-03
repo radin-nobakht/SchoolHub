@@ -1,0 +1,80 @@
+﻿@model int
+
+<div class="modal fade" id="addClassModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">اضافه کردن کلاس</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+
+            <form asp-controller="School"
+                  asp-action="AddClass"
+                  method="post">
+
+                <div class="modal-body">
+
+                    <input type="hidden"
+                           name="schoolId"
+                           value="@Model" />
+
+                    <div class="mb-3">
+                        <label class="form-label">نام مدرسه</label>
+                        <input type="text"
+                               class="form-control"
+                               name="schoolName"
+                               required
+                               placeholder="نام مدرسه خود را وارد کنید">
+                    </div>
+
+                   
+                    <div class="mb-3">
+                        <label class="form-label">پایه </label>
+
+                        <select id="schoolProvince"
+                                class="form-control select2"
+                                name="schoolProvince"
+                                required
+                                onchange="Grade">
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">کد ملی معلم</label>
+                        <input type="text"
+                               class="form-control"
+                               name="teacherNationalIdNumber"
+                               required
+                               placeholder="کد ملی معلم را وارد کنید">
+                    </div>
+
+                    <p class="text-danger fw-bold">
+                        @ViewBag.Error
+                    </p>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        انصراف
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        ثبت
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

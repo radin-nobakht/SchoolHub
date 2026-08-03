@@ -10,7 +10,7 @@ public class UserDto
     [Required]
     public string NationalIdNumber { get; set; }
     [Required]
-    public string Code { get; set; }
+    public string Password { get; set; }
     public bool IsStudent { get; set; }
     public ValidationDto Validation { get; set; } = new ValidationDto();
 }

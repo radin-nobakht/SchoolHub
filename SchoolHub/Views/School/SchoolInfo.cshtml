@@ -1,155 +1,167 @@
 ﻿@model SchoolHub.Dto.School.AllDatailAboutSchool
 
-<link href="~/css/schoolInfoCss.css" rel="stylesheet" />
-    <div class="container py-5">
+<link href="c:\users\radin\source\repos\schoolhub\schoolhub\views\school\schoolinfo.cshtml.css" rel="stylesheet" />
+<div class="container py-5">
 
-        <div class="school-card">
+    <div class="school-card">
 
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center">
 
-                <div>
+            <div>
 
-                    <div class="school-title">
+                <div class="school-title">
 
-                        @Model.School.SchoolName
-
-                    </div>
-
-                    <small class="text-muted">
-
-                        اطلاعات کامل مدرسه
-
-                    </small>
+                    @Model.School.Name
 
                 </div>
 
-                <a href="#" class="btn btn-primary">
+                <small class="text-muted">
 
-                    ویرایش مدرسه
+                    اطلاعات کامل مدرسه
 
-                </a>
+                </small>
 
             </div>
 
-            <div class="row mt-4 g-3">
+            <a href="School/UpdateSchool" class="btn btn-primary">
 
-                <div class="col-md-4">
-
-                    <div class="info-box">
-
-                        <span>🏙 شهر</span>
-
-                        <h5>@Model.School.SchoolCity</h5>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="info-box">
-
-                        <span>📍 منطقه</span>
-
-                        <h5>@Model.School.SchoolRegion</h5>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <div class="info-box">
-
-                        <span>👨‍💼 مدیر مدرسه</span>
-
-                        <h5>@(Model.Manager.Name+" "+Model.Manager.LastName)</h5>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="d-flex justify-content-between align-items-center classes-title">
-
-            <span>
-
-                کلاس‌های مدرسه
-
-            </span>
-
-            <a href="#" class="btn btn-success">
-
-                افزودن کلاس
+                ویرایش مدرسه
 
             </a>
 
         </div>
 
-        <div class="row g-4">
+        <div class="row mt-4 g-3">
 
-            @foreach (var item in Model.Classes)
-            {
+            <div class="col-md-4">
 
-                <div class="col-lg-4 col-md-6">
+                <div class="info-box">
 
-                    <div class="class-card">
+                    <span>🏙 استان</span>
 
-                        <div class="class-name">
-
-                            @item.classes.ClassSubject
-
-                        </div>
-
-                        <div class="class-grade">
-
-                            پایه @item.classes.Grade
-
-                        </div>
-
-                        <hr>
-
-                        <div class="teacher">
-
-                            👨‍🏫@(item.Teacher.Name + " "+item.Teacher.LastName)
-
-                        </div>
-
-                      
-
-                        <div class="buttons">
-
-                            <a href="#" class="btn btn-outline-primary btn-sm w-100">
-
-                                مشاهده
-
-                            </a>
-
-                            <a href="#" class="btn btn-outline-warning btn-sm w-100">
-
-                                ویرایش
-
-                            </a>
-
-                            <a href="#" class="btn btn-outline-danger btn-sm w-100">
-
-                                حذف
-
-                            </a>
-
-                        </div>
-
-                    </div>
+                    <h5>@Model.School.Province</h5>
 
                 </div>
 
-            }
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="info-box">
+
+                    <span>🏙 شهر</span>
+
+                    <h5>@Model.School.City</h5>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="info-box">
+
+                    <span>📍 منطقه</span>
+
+                    <h5>@Model.School.District</h5>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="info-box">
+
+                    <span>👨‍💼 مدیر مدرسه</span>
+
+                    <h5>@(Model.Manager.Name + " " + Model.Manager.LastName)</h5>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
+
+    <div class="d-flex justify-content-between align-items-center classes-title">
+
+        <span>
+
+            کلاس‌های مدرسه
+
+        </span>
+
+        <button type="button"
+                class="btn btn-success"
+                id="btnOpenAddClass">
+            افزودن کلاس
+        </button>
+
+    </div>
+
+    <div class="row g-4">
+
+        @foreach (var item in Model.Classes)
+        {
+
+            <div class="col-lg-4 col-md-6 class-item">
+                <div class="class-card">
+
+                    <div class="class-name">
+
+                        @item.Name
+
+                    </div>
+
+                    <div class="class-grade">
+
+                        پایه @item.Grade
+
+                    </div>
+
+                    <div class="buttons">
+
+                        <a href="#" class="btn btn-outline-primary btn-sm w-100">
+
+                            مشاهده
+
+                        </a>
+
+                        <a href="#" class="btn btn-outline-warning btn-sm w-100">
+
+                            ویرایش
+
+                        </a>
+
+                        <button class="btn btn-outline-danger btn-sm w-100 btnDelete"
+                                data-id="@item.Id"
+                                data-grade="@item.Grade"
+                                data-subject="@item.Name">
+                            حذف
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+
+</div>
+<partial name="_AddClass" model="Model.School.Id" />
+@section Scripts
+{
+    <script>
+        $("#btnOpenAddClass").on("click", function () {
+            const modal = new bootstrap.Modal($("#addClassModal")[0]);
+             modal.show();
+        });
+
+    </script>
+}

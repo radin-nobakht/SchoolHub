@@ -1,0 +1,130 @@
+﻿<div class="modal fade" id="addSchoolModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">اضافه کردن مدرسه</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form action="/School/AddSchool" method="post">
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label class="form-label">نام مدرسه</label>
+                        <input type="text"
+                               class="form-control"
+                               name="schoolName"
+                               required
+                               placeholder="نام مدرسه خود را وارد کنید">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">استان </label>
+
+                        <select id="provinceGeneral"
+                                class="form-control select2"
+                                name="garadeId"
+                                required
+                                onchange="city()">
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">شهر</label>
+
+                        <select id="schoolCity"
+                                class="form-control select2"
+                                name="cityId"
+                                required
+                                onchange="district()">
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="District">
+                        <label class="form-label">منطقه</label>
+
+                        <select id="schoolDistrict"
+                                class="form-control select2"
+                                name="districtId">
+
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">نوع </label>
+
+                        <select id="typeGeneral"
+                                class="form-control select2"
+                                name="TypeGeneralId">
+
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">شیفت </label>
+
+                        <select id="shiftGeneral"
+                                class="form-control select2"
+                                name="ShiftGeneralId">
+
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">مقطع </label>
+
+                        <select id="educationLevelGeneral"
+                                class="form-control select2"
+                                name="EducationLevelGeneralId">
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">دوره </label>
+
+                        <select id="educationPeriodGeneral"
+                                class="form-control select2"
+                                name="EducationPeriodGeneralId">
+                        </select>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label">جنسیت </label>
+
+                        <select id="genderGeneral"
+                                class="form-control select2"
+                                name="GenderGeneralId">
+
+                        </select>
+                    </div>
+
+
+
+                    <p class="text-danger fw-bold">
+                        @ViewBag.Eror
+                    </p>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                    id="cancel">
+                        انصراف
+                    </button>
+
+                    <button type="submit" class="btn btn-primary">
+                        ثبت
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
