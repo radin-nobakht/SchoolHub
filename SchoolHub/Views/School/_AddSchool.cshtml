@@ -1,125 +1,136 @@
 ﻿<div class="modal fade" id="addSchoolModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content school-modal">
 
-            <div class="modal-header">
-                <h5 class="modal-title">اضافه کردن مدرسه</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header school-modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-building-add me-2"></i>
+                    اضافه کردن مدرسه
+                </h5>
+
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal">
+                </button>
             </div>
 
             <form action="/School/AddSchool" method="post">
 
                 <div class="modal-body">
 
-                    <div class="mb-3">
-                        <label class="form-label">نام مدرسه</label>
-                        <input type="text"
-                               class="form-control"
-                               name="schoolName"
-                               required
-                               placeholder="نام مدرسه خود را وارد کنید">
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">نام مدرسه</label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   name="name"
+                                   required
+                                   placeholder="مثلاً دبیرستان نمونه">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">استان</label>
+
+                            <select id="provinceGeneral"
+                                    class="form-select select2"
+                                    name="garadeId"
+                                    required
+                                    onchange="city()">
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">شهر</label>
+
+                            <select id="schoolCity"
+                                    class="form-select select2"
+                                    name="cityId"
+                                    required
+                                    onchange="district()">
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3" id="District">
+                            <label class="form-label">منطقه</label>
+
+                            <select id="schoolDistrict"
+                                    class="form-select select2"
+                                    name="districtId">
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">نوع مدرسه</label>
+
+                            <select id="typeGeneral"
+                                    class="form-select select2"
+                                    name="TypeGeneralId">
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">شیفت</label>
+
+                            <select id="shiftGeneral"
+                                    class="form-select select2"
+                                    name="ShiftGeneralId">
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">مقطع</label>
+
+                            <select id="educationLevelGeneral"
+                                    class="form-select select2"
+                                    name="EducationLevelGeneralId">
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">دوره</label>
+
+                            <select id="educationPeriodGeneral"
+                                    class="form-select select2"
+                                    name="EducationPeriodGeneralId">
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">جنسیت</label>
+
+                            <select id="genderGeneral"
+                                    class="form-select select2"
+                                    name="GenderGeneralId">
+                            </select>
+                        </div>
+
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">استان </label>
-
-                        <select id="provinceGeneral"
-                                class="form-control select2"
-                                name="garadeId"
-                                required
-                                onchange="city()">
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">شهر</label>
-
-                        <select id="schoolCity"
-                                class="form-control select2"
-                                name="cityId"
-                                required
-                                onchange="district()">
-                        </select>
-                    </div>
-
-                    <div class="mb-3" id="District">
-                        <label class="form-label">منطقه</label>
-
-                        <select id="schoolDistrict"
-                                class="form-control select2"
-                                name="districtId">
-
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">نوع </label>
-
-                        <select id="typeGeneral"
-                                class="form-control select2"
-                                name="TypeGeneralId">
-
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">شیفت </label>
-
-                        <select id="shiftGeneral"
-                                class="form-control select2"
-                                name="ShiftGeneralId">
-
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">مقطع </label>
-
-                        <select id="educationLevelGeneral"
-                                class="form-control select2"
-                                name="EducationLevelGeneralId">
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">دوره </label>
-
-                        <select id="educationPeriodGeneral"
-                                class="form-control select2"
-                                name="EducationPeriodGeneralId">
-                        </select>
-                    </div>
-
-
-                    <div class="mb-3">
-                        <label class="form-label">جنسیت </label>
-
-                        <select id="genderGeneral"
-                                class="form-control select2"
-                                name="GenderGeneralId">
-
-                        </select>
-                    </div>
-
-
-
-                    <p class="text-danger fw-bold">
-                        @ViewBag.Eror
-                    </p>
+                    @if (ViewBag.Eror != null)
+                    {
+                        <div class="alert alert-danger mt-3">
+                            @ViewBag.Eror
+                        </div>
+                    }
 
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button"
-                            class="btn btn-secondary"
+
+                    <button class="btn btn-light border"
                             data-bs-dismiss="modal"
-                    id="cancel">
+                            type="button">
                         انصراف
                     </button>
 
-                    <button type="submit" class="btn btn-primary">
-                        ثبت
+                    <button class="btn btn-primary px-4"
+                            type="submit">
+                        <i class="bi bi-check-circle ms-1"></i>
+                        ثبت مدرسه
                     </button>
+
                 </div>
 
             </form>
@@ -127,4 +138,3 @@
         </div>
     </div>
 </div>
-

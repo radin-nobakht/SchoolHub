@@ -2,8 +2,7 @@
 {
     public class AllDatailAboutSchool
     {
-        public SchoolDto School { get; set; }=new SchoolDto();
-        public UserDto Manager { get; set; } = new UserDto();
+        public FullSchoolDataDto School { get; set; }=new FullSchoolDataDto();
         public List<ClassDto> Classes { get; set; }=new List<ClassDto>();
     }
     

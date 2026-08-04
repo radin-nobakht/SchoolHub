@@ -16,12 +16,11 @@ namespace SchoolHub.Controllers
             var schools = schoolService.GetSchools(userId);
             return View(schools);
         }
-        public IActionResult SchoolInfo(int id)
+        public async Task<IActionResult> SchoolInfo(int id)
         {
             var school = new AllDatailAboutSchool();
-            school.School = schoolService.GetSchoolById(id);
-            school.Classes = schoolService.GetClasses(id);
-            school.Manager = schoolService.GetManagerById(school.School.ManagerUserId);
+            school.School = await schoolService.GetFullDataOfSchoolById(id);
+   //         school.Classes = schoolService.GetClasses(id);
             return View(school);
         }
 

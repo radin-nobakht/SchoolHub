@@ -16,5 +16,6 @@ namespace SchoolHub.Interface
         Dictionary<string, List<GeneralItemDto>> GetGeneralItems(string[] titles);
         SchoolDto GetSchoolById(int id);
         List<SchoolDto> GetSchools(int id);
+        Task<FullSchoolDataDto> GetFullDataOfSchoolById(int schoolId);
     }
 }

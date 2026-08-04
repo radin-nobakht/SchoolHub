@@ -30,7 +30,7 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
              {
                  Province = province.Title,
                  City = city.Title,
-                 District = int.Parse(district.Title)
+                 District = district.Title
              }
              ).FirstOrDefault();
 
@@ -71,8 +71,6 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
         return mapper.Map<SchoolDto>(db.Schools.FirstOrDefault(x => x.Id == id));
     }
 
-    public List<GeneralItemDto> GetProvinces() => mapper.Map<List<GeneralItemDto>>(db.GeneralItems.Where(x => x.ParentId == db.GeneralItems.FirstOrDefault(x => x.Title == "استان").Id).ToList());
-
     public List<ClassDto> GetClasses(int schoolId)
     {
         var result = db.Classes.Where(x => x.SchoolId == schoolId).ToList();
@@ -87,18 +85,71 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
 
     public bool AddSchool(SchoolDto school)
     {
-        if (school.Name != null && school.District != 0 && school.City != null && school.Province != null)
+        if (school.Name != null && school.CityId != 0 && school.GenderGeneralId != 0 && school.TypeGeneralId != 0 && school.ShiftGeneralId != 0 && school.EducationLevelGeneralId != 0 && school.EducationPeriodGeneralId != 0)
         {
             var isDuplicate = db.Schools.FirstOrDefault(x => x.Name == school.Name && x.ShiftGeneralId == school.ShiftGeneralId) == null ? false : true;
             if (!isDuplicate)
             {
 
                 db.Schools.Add(mapper.Map<SchoolEntity>(school));
+                db.SaveChanges();
+                return true;
             }
         }
         return false;
     }
+    public async Task<FullSchoolDataDto> GetFullDataOfSchoolById(int schoolId)
+    {
+        #region schoolJoin
+        var result =
+           (from school in db.Schools
+            where school.Id == schoolId
 
+            join manager in db.Users
+             on school.ManagerUserId equals manager.Id
+
+            join city in db.GeneralItems
+             on school.CityId equals city.Id
+
+            join province in db.GeneralItems
+             on city.ParentId equals province.Id
+
+            join district in db.GeneralItems
+             on school.DistrictId equals district.Id
+
+            join type in db.GeneralItems
+             on school.TypeGeneralId equals type.Id
+
+            join gender in db.GeneralItems
+             on school.GenderGeneralId equals gender.Id
+
+            join Shift in db.GeneralItems
+             on school.ShiftGeneralId equals Shift.Id
+
+            join educationLevel in db.GeneralItems
+             on school.EducationLevelGeneralId equals educationLevel.Id
+
+            join educationPeriod in db.GeneralItems
+             on school.EducationPeriodGeneralId equals educationPeriod.Id
+
+            select new FullSchoolDataDto
+            {
+                Id = schoolId,
+                Name = school.Name,
+                MangerFullName = (manager.Name + " " + manager.LastName),
+                Province = province.Title,
+                City = city.Title,
+                District = district.Title,
+                Type = type.Title,
+                Gender = gender.Title,
+                Shift = Shift.Title,
+                EducationLevel = educationLevel.Title,
+                EducationPeriod = educationPeriod.Title
+            }).FirstOrDefault();
+        #endregion
+
+        return result;
+    }
     public bool AddClass(ClassDto classDto)
     {
         if (classDto.Name != null && classDto.GradeId != 0)
@@ -142,8 +193,8 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
 
     public List<GeneralItemDto> GetDistrictByCityId(int cityId)
     {
-        var districts = db.Districts
-                          .Where(x => x.CityId == cityId)
+        var districts = db.GeneralItems
+                          .Where(x => x.ParentId == cityId)
                           .ToList();
 
         if (!districts.Any())
