@@ -22,6 +22,7 @@ builder.Services.AddDbContext<MyContext>(option =>
 });
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ISchoolService, SchoolService>();
+builder.Services.AddScoped<IMenuService, MenuService>();
 
 builder.Services
     .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

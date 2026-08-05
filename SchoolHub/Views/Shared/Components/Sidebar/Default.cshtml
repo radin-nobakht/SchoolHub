@@ -1,0 +1,64 @@
+﻿<li class="menu-item">
+
+    <a href="#schoolsMenu"
+       data-bs-toggle="collapse">
+
+        <i class="bi bi-mortarboard-fill"></i>
+
+        مدارس
+
+        <i class="bi bi-chevron-down ms-auto"></i>
+
+    </a>
+
+
+    <ul id="schoolsMenu" class="collapse submenu">
+
+
+        @foreach (var type in Model)
+        {
+            <li>
+
+                <a href="#type-@type.SchoolType"
+                   data-bs-toggle="collapse">
+
+                    <i class="bi bi-building"></i>
+
+                    @type.SchoolType
+
+                    <i class="bi bi-chevron-down ms-auto"></i>
+
+                </a>
+
+
+                <ul id="type-@type.SchoolType"
+                    class="collapse submenu">
+
+
+                    @foreach (var school in type.Schools)
+                    {
+                        <li>
+
+                            <a asp-controller="School"
+                               asp-action="SchoolInfo"
+                               asp-route-id="@school.Id">
+
+                                <i class="bi bi-house"></i>
+
+                                @school.Name
+
+                            </a>
+
+                        </li>
+                    }
+
+
+                </ul>
+
+            </li>
+        }
+
+
+    </ul>
+
+</li>
