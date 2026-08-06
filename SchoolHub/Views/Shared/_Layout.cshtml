@@ -18,31 +18,10 @@
 </head>
 
 <body>
-    @await Component.InvokeAsync("Sidebar")
- @*   <div class="layout">
+   <div class="layout">
+           @await Component.InvokeAsync("Sidebar")
 
-        <!-- Sidebar -->
-        <aside class="sidebar">
-
-            <div class="sidebar-header">
-                <i class="bi bi-mortarboard-fill"></i>
-                <span>SchoolHub</span>
-            </div>
-
-            <ul class="sidebar-menu">
-
-                <li>
-                    <a href="/School/SchoolPage">
-                        <i class="bi bi-mortarboard-fill"></i>
-                        مدارس
-                    </a>
-                </li>
-
-              
-            </ul>
-
-        </aside>
-
+  
         <!-- Main -->
         <div class="main-content">
 
@@ -120,7 +99,7 @@
 
         </div>
 
-    </div>*@
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

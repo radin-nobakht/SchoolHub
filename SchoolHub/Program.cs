@@ -21,6 +21,7 @@ builder.Services.AddDbContext<MyContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("SqlCs"));
 });
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IGeneralService, GeneralService>();
 builder.Services.AddScoped<ISchoolService, SchoolService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
 

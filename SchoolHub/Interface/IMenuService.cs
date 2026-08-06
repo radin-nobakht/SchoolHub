@@ -1,6 +1,6 @@
 ﻿using SchoolHub.Dto.School;
 
-namespace SchoolHub.Service
+namespace SchoolHub.Interface
 {
     public interface IMenuService
     {

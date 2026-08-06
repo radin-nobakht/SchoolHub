@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace SchoolHub.Controllers
 {
     [Authorize]
-    public class SchoolController(ISchoolService schoolService) : Controller
+    public class SchoolController(ISchoolService schoolService,IGeneralService generalService) : Controller
     {
         public IActionResult SchoolPage()
         {
@@ -19,7 +19,7 @@ namespace SchoolHub.Controllers
         public async Task<IActionResult> SchoolInfo(int id)
         {
             var school = new AllDatailAboutSchool();
-            school.School = await schoolService.GetFullDataOfSchoolById(id);
+            school.School = await generalService.GetFullDataOfSchoolById(id);
    //         school.Classes = schoolService.GetClasses(id);
             return View(school);
         }
@@ -71,7 +71,7 @@ namespace SchoolHub.Controllers
 
         public IActionResult GetGenerals()
         {
-            var genrals = schoolService.GetGeneralItems(new string[]
+            var genrals = generalService.GetGeneralItems(new string[]
             {
                 "نوع","استان","جنسیت","دوره تحصیلی","مقطع تحصیلی","شیفت"
             });
@@ -90,12 +90,12 @@ namespace SchoolHub.Controllers
 
         public IActionResult GetCities(int provinceId)
         {
-            return Json(schoolService.GetCitiesByProvinceId(provinceId));
+            return Json(generalService.GetCitiesByProvinceId(provinceId));
         } 
 
         public IActionResult GetDistricts(int CityId)
         {
-             return Json(schoolService.GetDistrictByCityId(CityId));
+             return Json(generalService.GetDistrictByCityId(CityId));
         } 
     }
 }

@@ -593,6 +593,16 @@ textarea {
         width: calc(100% - 230px);
     }
 }
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.collapse-icon {
+    cursor: pointer;
+    margin-right: auto;
+}
 
 @media (max-width:992px) {
 
@@ -668,7 +678,97 @@ textarea {
     background: #4e73df;
     color: white;
 }
+/*==================================================
+    Sidebar Collapse Menu
+==================================================*/
 
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0 25px;
+}
+
+
+    .sidebar-item > a {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex: 1;
+        color: white;
+        text-decoration: none;
+        padding: 15px 0;
+    }
+
+
+        .sidebar-item > a i {
+            width: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+
+.collapse-icon {
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+    transition: .2s;
+}
+
+
+.sidebar-item:hover {
+    background: rgba(255,255,255,.15);
+}
+
+
+/* زیرمنو */
+.submenu {
+    list-style: none;
+    padding-right: 25px;
+}
+
+
+    .submenu li a {
+        padding: 12px 25px;
+        font-size: 14px;
+    }
+.sidebar-item {
+    display: flex !important;
+    align-items: center !important;
+    width: 100%;
+}
+
+
+    .sidebar-item > a:first-child {
+        flex: 1;
+        padding: 15px 25px !important;
+        display: flex !important;
+        align-items: center;
+        gap: 15px;
+    }
+
+
+.collapse-toggle {
+    width: 40px;
+    padding: 15px 0 !important;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.collapse-icon {
+    margin: 0 !important;
+}
+
+.collapse-icon {
+    transition: transform .2s ease;
+}
+
+.sidebar-link[aria-expanded="true"] .collapse-icon,
+.collapse-toggle[aria-expanded="true"] .collapse-icon {
+    transform: rotate(-90deg);
+}
 /*==================================================
     End
 ==================================================*/

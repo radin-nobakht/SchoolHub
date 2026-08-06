@@ -2,6 +2,7 @@
 using SchoolHub.Adapter;
 using SchoolHub.Dto.School;
 using SchoolHub.Entity;
+using SchoolHub.Interface;
 
 namespace SchoolHub.Service
 {
@@ -27,11 +28,11 @@ namespace SchoolHub.Service
 
             //var resu = from s in db.Schools.Where(x => x.Id == 1)
             //           join x in queryX on s.Id equals x.Id
-
+            var typeParentId = db.GeneralItems.FirstOrDefault(i => i.Title == "نوع");
 
             var result = (
                 from type in db.GeneralItems
-                where type.ParentId == 9
+                where type.ParentId == typeParentId.Id
 
                 join school in db.Schools.Where(x => x.ManagerUserId == userId)
                     on type.Id equals school.TypeGeneralId
