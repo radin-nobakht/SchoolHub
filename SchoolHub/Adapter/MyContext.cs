@@ -11,6 +11,7 @@ namespace SchoolHub.Adapter
             Database.SetCommandTimeout(30);
         }
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<EducationGradeEntity> EducationGrades { get; set; }
         public DbSet<StudentEntity> Students { get; set; }
         public DbSet<ScoreEntity> Scores { get; set; }
         public DbSet<SchoolEntity> Schools { get; set; }

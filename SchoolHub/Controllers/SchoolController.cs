@@ -55,10 +55,7 @@ namespace SchoolHub.Controllers
                     return View();
                 }
                 else
-                {
                     return RedirectToAction("SchoolInfo", new { id = classDto.SchoolId });
-
-                }
         }
 
         [HttpPost]
@@ -69,7 +66,7 @@ namespace SchoolHub.Controllers
             
         }
 
-        public IActionResult GetGenerals()
+        public IActionResult GetGeneralsSchool()
         {
             var genrals = generalService.GetGeneralItems(new string[]
             {
@@ -97,5 +94,13 @@ namespace SchoolHub.Controllers
         {
              return Json(generalService.GetDistrictByCityId(CityId));
         } 
+        public IActionResult GetGrades(int schoolId)
+        {
+            return Json(generalService.GetGeneralGrades(schoolId));
+        }
+        public IActionResult GetMajor(int generalGradeId)
+        {
+            return Json(generalService.GetGeneralMajor(generalGradeId));
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Identity.Client;
 using SchoolHub.Adapter;
 using SchoolHub.Dto.School;
 using SchoolHub.Entity;
@@ -101,6 +102,21 @@ namespace SchoolHub.Service
             return result;
         }
 
+        public List<GeneralItemDto> GetGeneralGrades (int schoolId)
+        {
+            var school = db.Schools.Where(x=> x.Id == schoolId).Select(x => new
+            {
+                EducationLevelGeneralId = x.EducationLevelGeneralId,
+                EducationPeriodGeneralId = x.EducationPeriodGeneralId
+            }).FirstOrDefault();
 
+            var gradeIds = db.EducationGrades.Where(x => x.GeneralEducationPeriodId == school.EducationPeriodGeneralId && x.GeneralEducationLevelId == school.EducationLevelGeneralId).Select(x => x.GeneralGradeId).ToList();
+            return mapper.Map<List<GeneralItemDto>>(db.GeneralItems.Where(x => gradeIds.Contains(x.Id)));
+        }
+        public List<GeneralItemDto> GetGeneralMajor(int gradrId)
+        {
+            var a = db.GeneralItems.Where(x => x.ParentId == gradrId).ToList();
+            return mapper.Map<List<GeneralItemDto>>(a);
+        }
     }
 }

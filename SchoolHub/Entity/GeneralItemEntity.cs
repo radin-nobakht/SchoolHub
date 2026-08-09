@@ -8,8 +8,10 @@ namespace SchoolHub.Entity
         [Required]
         public int Id { get; set; }
 
-        
         public int? ParentId { get; set; }
+
+        [Required]
+        public string TitleType { get; set; }
 
         [Required]
         public string Title { get; set; }

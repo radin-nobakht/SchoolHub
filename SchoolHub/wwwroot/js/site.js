@@ -72,7 +72,7 @@ function district() {
 
 function generalItems() {
     $.ajax({
-        url: "/school/GetGenerals",
+        url: "/school/GetGeneralsSchool",
         type: "GET",
         success: function (data) {
             //#region educationLevelGeneral
@@ -177,3 +177,75 @@ function generalItems() {
         }
     });
 };
+$(document).on("click", "#btnOpenAddClass", function () {
+    const modal = new bootstrap.Modal($("#addClassModal")[0]);
+    Grades();
+    modal.show();
+});
+function Grades() {
+    let schoolId = $("#schoolId").val();
+
+    $.ajax({
+        url: "/school/GetGrades",
+        type: "GET",
+        data: {
+            schoolId: schoolId
+        },
+        success: function (data) {
+            let select = $('#gradeGeneral');
+            select.empty();
+
+            $.each(data, function (index, item) {
+
+                select.append(
+                    `<option value="${item.id}">
+                            ${item.title}
+                        </option>`
+                );
+
+            });
+            Major();
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+function Major() {
+    let generalGradeId = $("#gradeGeneral").val();
+
+    $.ajax({
+        url: "/school/GetMajor",
+        type: "GET",
+        data: {
+            generalGradeId: generalGradeId
+        },
+        success: function (data) {
+            if (data != null && data.length > 0) {
+                // لیست حداقل یک آیتم دارد
+                let select = $("#majorGeneral");
+                select.empty();
+
+                $.each(data, function (index, item) {
+
+                    select.append(
+                        `<option value="${item.id}">
+                             ${item.title}
+                         </option>`
+                    );
+
+                });
+                $("#major").show();
+            }
+            else {
+                $("#major").hide();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+

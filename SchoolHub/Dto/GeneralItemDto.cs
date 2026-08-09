@@ -9,6 +9,7 @@ namespace SchoolHub.Entity
 
         public int? ParentId { get; set; }
 
+        public string TitleType { get; set; }
         public string Title { get; set; }
 
         public bool Active { get; set; }

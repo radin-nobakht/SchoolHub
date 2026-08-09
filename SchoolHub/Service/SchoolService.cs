@@ -135,17 +135,5 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
         return false;
     }
 
-
-    //public List<GeneralItemDto> GetGeneralItems(string title)
-    //{
-    //    var generalCategory = db.GeneralItems.FirstOrDefault(x => x.Title == title);
-    //    return mapper.Map<List<GeneralItemDto>>(db.GeneralItems.Where(x => x.ParentId == generalCategory.Id));
-    //}
-    //public List<GeneralItemDto> GetGeneralItems(string[] titles)
-    //{
-    //    var generalCategory = db.GeneralItems.FirstOrDefault(x => titles.Contains(x.Title));
-    //    return mapper.Map<List<GeneralItemDto>>(db.GeneralItems.Where(x => x.ParentId == generalCategory.Id));
-    //}
-
-
+    
 }

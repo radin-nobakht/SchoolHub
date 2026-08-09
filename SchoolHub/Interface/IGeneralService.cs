@@ -9,5 +9,7 @@ namespace SchoolHub.Interface
         List<GeneralItemDto> GetDistrictByCityId(int cityId);
         Task<FullSchoolDataDto> GetFullDataOfSchoolById(int schoolId);
         Dictionary<string, List<GeneralItemDto>> GetGeneralItems(string[] titles);
+        List<GeneralItemDto> GetGeneralGrades(int schoolId);
+        List<GeneralItemDto> GetGeneralMajor(int gradrId);
     }
 }
