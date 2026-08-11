@@ -15,6 +15,8 @@ public class ClassEntity
     public string Name { get; set; }
 
     [Required]
-    public int GradeId { get; set; }
+    public int GradeGeneralId { get; set; }
+
+    public int? MajorGeneralId { get; set; }
 
 }

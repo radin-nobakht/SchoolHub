@@ -2,8 +2,7 @@
 {
     public class TeacherDto
     {
-        public int Id { get; set; }
-        public int TeacherUserId { get; set; }
-        public int SchoolId { get; set; }
+        public string TeacherName { get; set; }
+        public string SubjectName { get; set; }
     }
 }

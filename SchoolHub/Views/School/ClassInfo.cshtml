@@ -1,0 +1,241 @@
+﻿@model ClassInfoViewModel
+
+<div class="card shadow-sm border-0">
+
+    
+    <!-- Header -->
+    <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">
+            اطلاعات کلاس
+        </h5>
+
+        <button type="button"
+                class="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="بستن">
+        </button>
+    </div>
+
+    <div class="card-body">
+
+        <!-- اطلاعات کلاس -->
+        <div class="row mb-4">
+
+            <!-- نام کلاس -->
+            <div class="col-md-4 border-end">
+                <div class="px-3">
+                    <span class="info-label">
+                        نام کلاس
+                    </span>
+
+                    <span class="info-value">
+                        @Model.Class.Name
+                    </span>
+                </div>
+            </div>
+
+            <!-- پایه -->
+            <div class="col-md-4 border-end">
+                <div class="px-3">
+                    <span class="info-label">
+                        پایه
+                    </span>
+
+                    <span class="info-value">
+                        @Model.Class.Grade
+                    </span>
+                </div>
+            </div>
+
+            <!-- رشته -->
+            @if (!string.IsNullOrEmpty(Model.Class.Major))
+            {
+                <div class="col-md-4">
+                    <div class="px-3">
+                        <span class="info-label">
+                            رشته
+                        </span>
+
+                        <span class="info-value">
+                            @Model.Class.Major
+                        </span>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        <hr />
+
+        <!-- دانش‌آموزان و معلم‌ها -->
+        <div class="row g-4 mt-2">
+
+            <!-- دانش‌آموزان -->
+            <div class="col-lg-6">
+
+                <div class="card border shadow-sm h-100">
+
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0">
+                            دانش‌آموزان کلاس
+                        </h6>
+                    </div>
+
+                    <div class="card-body p-0">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover mb-0 align-middle">
+
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>نام دانش‌آموز</th>
+                                        <th>مثبت</th>
+                                        <th>منفی</th>
+                                        <th>معدل نوبت اول</th>
+                                        <th>معدل نوبت دوم</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @for (int i = 0; i < Model.Students.Count; i++)
+                                    {
+                                        var student = Model.Students[i];
+
+                                        <tr>
+
+                                            <td>
+                                                @(i + 1)
+                                            </td>
+
+                                            <td>
+                                                @student.StudentFullName
+                                            </td>
+
+                                            <td>
+                                                @student.Positives
+                                            </td>
+
+                                            <td>
+                                                @student.Negatives
+                                            </td>
+
+                                            <td>
+                                                @student.FirstTermGPA
+                                            </td>
+
+                                            <td>
+                                                @student.SecondTermGPA
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- معلم‌ها -->
+            <div class="col-lg-6">
+
+                <div class="card border shadow-sm h-100">
+
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0">
+                            معلم‌های کلاس
+                        </h6>
+                    </div>
+
+                    <div class="card-body p-0">
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover mb-0 align-middle">
+
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>نام معلم</th>
+                                        <th>درس</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @for (int i = 0; i < Model.Teachers.Count; i++)
+                                    {
+                                        var teacher = Model.Teachers[i];
+
+                                        <tr>
+
+                                            <td>
+                                                @(i + 1)
+                                            </td>
+
+                                            <td>
+                                                @teacher.TeacherName
+                                            </td>
+
+                                            <td>
+                                                @teacher.SubjectName
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+
+</div>
+
+<style>
+
+    .info-label {
+        display: block;
+        color: #6c757d;
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .info-value {
+        display: block;
+        font-size: 16px;
+        font-weight: 600;
+        color: #212529;
+    }
+
+    .table th {
+        white-space: nowrap;
+    }
+
+    .table td,
+    .table th {
+        vertical-align: middle;
+    }
+
+</style>

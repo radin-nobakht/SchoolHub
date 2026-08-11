@@ -1,25 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SchoolHub.Entity
+namespace SchoolHub.Dto.School
 {
-    public class StudentEntity
+    public class StudentDto
     {
-        [Key]
-        [Required]
+       
         public int Id { get; set; }
 
-        [Required]
         public int StudentUserId { get; set; }
+        public string StudentFullName { get; set; } = string.Empty;
 
-        [Required]
         public int ClassId { get; set; }
 
         public int? Positives { get; set; }
-        
+
         public int? Negatives { get; set; }
-        
+
         public decimal? FirstTermGPA { get; set; }
-        
+
         public decimal? SecondTermGPA { get; set; }
     }
 }

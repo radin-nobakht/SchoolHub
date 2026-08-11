@@ -1,21 +1,46 @@
 ﻿@model int
 
-<div class="modal fade" id="addClassModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade add-class-modal"
+     id="addClassModal"
+     tabindex="-1"
+     aria-hidden="true">
+
     <div class="modal-dialog modal-dialog-centered">
+
         <div class="modal-content">
 
+            <!-- Header -->
             <div class="modal-header">
-                <h5 class="modal-title">اضافه کردن کلاس</h5>
+
+                <div class="modal-title-wrapper">
+
+                    <div class="modal-icon">
+                        🎓
+                    </div>
+
+                    <div>
+                        <h5 class="modal-title">
+                            افزودن کلاس
+                        </h5>
+
+                        <span class="modal-subtitle">
+                            اطلاعات کلاس جدید را وارد کنید
+                        </span>
+                    </div>
+
+                </div>
 
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="modal"
                         aria-label="Close">
                 </button>
+
             </div>
 
-            <form asp-controller="School"
-                  asp-action="AddClass"
+
+            <!-- Form -->
+            <form action="/School/AddClass"
                   method="post">
 
                 <div class="modal-body">
@@ -25,58 +50,97 @@
                            id="schoolId"
                            value="@Model" />
 
-                    <div class="mb-3">
-                        <label class="form-label">نام</label>
-                        <input type="text"
-                               class="form-control"
-                               name="schoolName"
-                               required
-                               placeholder="نام مدرسه خود را وارد کنید">
+
+                    <!-- Class Name -->
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            نام کلاس
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                🏫
+                            </span>
+
+                            <input type="text"
+                                   class="form-control custom-input"
+                                   name="name"
+                                   required
+                                   autocomplete="off"
+                                   placeholder="مثلاً کلاس ۹۰۱">
+
+                        </div>
+
                     </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">پایه</label>
+
+                    <!-- Grade -->
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            پایه
+                        </label>
 
                         <select id="gradeGeneral"
-                                class="form-select select2"
+                                class="form-select select2 custom-select"
                                 name="gradeGeneralId"
                                 required
                                 onchange="Major()">
                         </select>
+
                     </div>
 
 
-                    <div class="col-md-6 mb-3" id="major">
-                        <label class="form-label">رشته</label>
+                    <!-- Major -->
+                    <div class="form-group"
+                         id="major">
+
+                        <label class="form-label">
+                            رشته
+                        </label>
 
                         <select id="majorGeneral"
-                                class="form-select select2"
+                                class="form-select select2 custom-select"
                                 name="majorGeneralId">
                         </select>
+
                     </div>
 
 
-                    <p class="text-danger fw-bold">
-                        @ViewBag.Error
-                    </p>
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="form-error">
+                            <span>⚠️</span>
+                            <span>@ViewBag.Error</span>
+                        </div>
+                    }
 
                 </div>
 
+
+                <!-- Footer -->
                 <div class="modal-footer">
+
                     <button type="button"
-                            class="btn btn-secondary"
+                            class="btn btn-light modal-cancel-btn"
                             data-bs-dismiss="modal">
                         انصراف
                     </button>
 
                     <button type="submit"
-                            class="btn btn-primary">
-                        ثبت
+                            class="btn btn-primary modal-submit-btn">
+                        <span>✓</span>
+                        ثبت کلاس
                     </button>
+
                 </div>
 
             </form>
 
         </div>
+
     </div>
+
 </div>

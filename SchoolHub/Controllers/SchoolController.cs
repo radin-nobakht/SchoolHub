@@ -20,8 +20,19 @@ namespace SchoolHub.Controllers
         {
             var school = new AllDatailAboutSchool();
             school.School = await generalService.GetFullDataOfSchoolById(id);
-   //         school.Classes = schoolService.GetClasses(id);
+            school.Classes = schoolService.GetClasses(id);
             return View(school);
+        }
+
+        public async Task<IActionResult> ClassInfo(int id)
+        {
+            var a = new ClassInfoViewModel
+            {
+                Class = schoolService.GetClassById(id),
+                Students = schoolService.GetStudentByClassId(id),
+                Teachers = schoolService.GetTeacherByClassId(id)
+            };
+            return View(a);
         }
 
         [HttpPost]

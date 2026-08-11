@@ -1,78 +1,363 @@
-﻿body {
-    background: #f5f7fb;
-    font-family: Vazirmatn,Tahoma;
+﻿```css
+/* ==============================
+   Base
+================================= */
+.school-page {
+    padding-bottom: 50px;
 }
 
+body {
+    background: #f4f7fb;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+
+/* ==============================
+   School Card
+================================= */
+
 .school-card {
-    background: white;
-    border-radius: 20px;
+    background: #ffffff;
+    border-radius: 24px;
     padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    border: 1px solid #e9edf3;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.07);
+}
+
+
+/* ==============================
+   School Header
+================================= */
+
+.school-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.school-header-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.school-icon {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef5ff;
+    border-radius: 16px;
+    font-size: 28px;
 }
 
 .school-title {
-    font-size: 30px;
-    font-weight: bold;
+    font-size: 27px;
+    font-weight: 800;
+    color: #172033;
+    line-height: 1.4;
+}
+
+.school-subtitle {
+    margin-top: 4px;
+    color: #8a94a6;
+    font-size: 14px;
+}
+
+.edit-school-btn {
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-weight: 600;
+}
+
+
+/* ==============================
+   School Information
+================================= */
+
+.school-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 25px;
 }
 
 .info-box {
-    background: #f8f9fa;
-    border-radius: 15px;
-    padding: 20px;
-    text-align: center;
-    transition: .3s;
-    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 90px;
+    padding: 17px;
+    background: #f8fafc;
+    border: 1px solid #edf1f6;
+    border-radius: 16px;
+    text-align: right;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 
     .info-box:hover {
-        transform: translateY(-5px);
+        transform: translateY(-3px);
+        border-color: #dce6f5;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, .07);
     }
 
-    .info-box span {
-        display: block;
-        color: gray;
-        margin-bottom: 10px;
-    }
-
-.classes-title {
-    margin-top: 50px;
-    margin-bottom: 20px;
-    font-size: 25px;
-    font-weight: bold;
+.info-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 13px;
+    font-size: 21px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, .06);
 }
 
+.info-content {
+    min-width: 0;
+}
+
+    .info-content span {
+        display: block;
+        margin-bottom: 5px;
+        color: #8b95a7;
+        font-size: 13px;
+    }
+
+    .info-content h5 {
+        margin: 0;
+        color: #202939;
+        font-size: 16px;
+        font-weight: 700;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+
+/* ==============================
+   Classes Header
+================================= */
+
+.classes-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 45px;
+    margin-bottom: 22px;
+}
+
+.classes-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.classes-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef5ff;
+    border-radius: 14px;
+    font-size: 22px;
+}
+
+.classes-heading h3 {
+    margin: 0;
+    font-size: 23px;
+    font-weight: 800;
+    color: #172033;
+}
+
+.classes-heading span {
+    display: block;
+    margin-top: 3px;
+    color: #8b95a7;
+    font-size: 13px;
+}
+
+.add-class-btn {
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-weight: 600;
+}
+
+
+/* ==============================
+   Class Card
+================================= */
+
 .class-card {
-    background: white;
-    border-radius: 18px;
-    padding: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,.08);
-    transition: .3s;
     height: 100%;
+    padding: 22px;
+    background: #ffffff;
+    border: 1px solid #e9edf3;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 
     .class-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 18px 35px rgba(0,0,0,.15);
+        transform: translateY(-5px);
+        border-color: #d9e3f2;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, .11);
     }
 
-.class-name {
+
+/* ==============================
+   Class Header
+================================= */
+
+.class-card-header {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #edf0f5;
+}
+
+.class-card-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f6ff;
+    border-radius: 14px;
     font-size: 22px;
-    font-weight: bold;
 }
 
-.class-grade {
-    color: #0d6efd;
-    margin-top: 8px;
-    font-size: 18px;
+.class-name {
+    color: #172033;
+    font-size: 20px;
+    font-weight: 800;
 }
 
-.teacher {
-    margin-top: 20px;
-    color: #555;
+.class-label {
+    margin-top: 2px;
+    color: #9aa3b2;
+    font-size: 12px;
 }
 
-.buttons {
-    margin-top: 25px;
+
+/* ==============================
+   Class Details
+================================= */
+
+.class-details {
     display: flex;
     gap: 10px;
+    margin-top: 18px;
 }
+
+.class-detail {
+    flex: 1;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 12px;
+    text-align: center;
+}
+
+    .class-detail span {
+        display: block;
+        margin-bottom: 5px;
+        color: #8b95a7;
+        font-size: 12px;
+    }
+
+    .class-detail strong {
+        display: block;
+        color: #273247;
+        font-size: 15px;
+    }
+
+
+/* ==============================
+   Buttons
+================================= */
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 20px;
+}
+
+    .buttons .btn {
+        border-radius: 10px;
+        padding: 8px 5px;
+        font-weight: 600;
+    }
+
+
+/* ==============================
+   Responsive
+================================= */
+
+@media (max-width: 992px) {
+
+    .school-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .school-card {
+        padding: 20px;
+        border-radius: 18px;
+    }
+
+    .school-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .edit-school-btn {
+        width: 100%;
+    }
+
+    .school-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .classes-header {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .add-class-btn {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .school-title {
+        font-size: 22px;
+    }
+
+    .classes-heading h3 {
+        font-size: 20px;
+    }
+
+    .class-card {
+        padding: 18px;
+    }
+
+    .buttons {
+        grid-template-columns: 1fr;
+    }
+}
+
+```
