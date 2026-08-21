@@ -1,4 +1,4 @@
-﻿@model List<SchoolHub.Dto.School.SchoolBarDto>
+﻿@model MenuViewModel
 
 
 <aside class="sidebar">
@@ -50,85 +50,154 @@
 
 
 
+            <li class="sidebar-section">
 
-            <ul id="schoolsMenu"
-                class="collapse submenu">
+                <a href="#managerSchools"
+                   data-bs-toggle="collapse"
+                   class="sidebar-link">
 
+                    <i class="bi bi-person-badge"></i>
 
-                @{
-                    int index = 0;
-                }
+                    <span>
+                        مدیر
+                    </span>
 
+                    <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
 
-                @foreach (var type in Model)
-                {
-                    index++;
+                </a>
 
+                <ul id="managerSchools"
+                    class="collapse submenu">
 
-                    <li>
+                    @{
+                        int index = 0;
+                    }
 
+                    @foreach (var type in Model.MangerSchool)
+                    {
+                        index++;
 
-                        <a href="#type-@index"
-                           data-bs-toggle="collapse"
-                           class="sidebar-link">
+                        <li>
 
+                            <a href="#manager-type-@index"
+                               data-bs-toggle="collapse"
+                               class="sidebar-link">
 
-                            <i class="bi bi-building"></i>
+                                <i class="bi bi-building"></i>
 
+                                <span>
+                                    @type.SchoolType
+                                </span>
 
-                            <span>
-                                @type.SchoolType
-                            </span>
+                                <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
 
+                            </a>
 
-                            <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
+                            <ul id="manager-type-@index"
+                                class="collapse submenu">
 
+                                @foreach (var school in type.Schools)
+                                {
+                                    <li>
 
-                        </a>
+                                        <a asp-controller="School"
+                                           asp-action="SchoolInfo"
+                                           asp-route-id="@school.Id"
+                                           asp-route-mode="manager">
 
+                                            <i class="bi bi-house"></i>
 
+                                            <span>
+                                                @school.Name
+                                            </span>
 
+                                        </a>
 
-                        <ul id="type-@index"
-                            class="collapse submenu">
+                                    </li>
+                                }
 
+                            </ul>
 
+                        </li>
+                    }
 
-                            @foreach (var school in type.Schools)
-                            {
-                                <li>
+                </ul>
 
-                                    <a asp-controller="School"
-                                       asp-action="SchoolInfo"
-                                       asp-route-id="@school.Id">
+            </li>
+            <li class="sidebar-section">
 
+                <a href="#teacherSchools"
+                   data-bs-toggle="collapse"
+                   class="sidebar-link">
 
-                                        <i class="bi bi-house"></i>
+                    <i class="bi bi-person-workspace"></i>
 
+                    <span>
+                        معلم
+                    </span>
 
-                                        <span>
-                                            @school.Name
-                                        </span>
+                    <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
 
+                </a>
 
-                                    </a>
+                <ul id="teacherSchools"
+                    class="collapse submenu">
 
+                    @{
+                        index = 0;
+                    }
 
-                                </li>
-                            }
+                    @foreach (var type in Model.TeacherSchool)
+                    {
+                        index++;
 
+                        <li>
 
+                            <a href="#teacher-type-@index"
+                               data-bs-toggle="collapse"
+                               class="sidebar-link">
 
-                        </ul>
+                                <i class="bi bi-building"></i>
 
+                                <span>
+                                    @type.SchoolType
+                                </span>
 
-                    </li>
-                }
+                                <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
 
+                            </a>
 
+                            <ul id="teacher-type-@index"
+                                class="collapse submenu">
 
-            </ul>
+                                @foreach (var school in type.Schools)
+                                {
+                                    <li>
 
+                                        <a asp-controller="School"
+                                           asp-action="SchoolInfo"
+                                           asp-route-id="@school.Id"
+                                           asp-route-mode="teacher">
+
+                                            <i class="bi bi-house"></i>
+
+                                            <span>
+                                                @school.Name
+                                            </span>
+
+                                        </a>
+
+                                    </li>
+                                }
+
+                            </ul>
+
+                        </li>
+                    }
+
+                </ul>
+
+            </li>
 
         </li>
 

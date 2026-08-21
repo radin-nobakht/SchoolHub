@@ -4,6 +4,7 @@ namespace SchoolHub.Interface
 {
     public interface IMenuService
     {
-        List<SchoolBarDto> GetSchoolBar(int userId);
+        List<SchoolBarDto> GetSchoolThatManagerBar(int userId);
+        List<SchoolBarDto> GetSchoolThatTeacherBar(int userId);
     }
 }

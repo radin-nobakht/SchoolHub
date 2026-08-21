@@ -5,113 +5,319 @@ using SchoolHub.Interface;
 using SchoolHub.Models;
 using System.Security.Claims;
 
-namespace SchoolHub.Controllers
+namespace SchoolHub.Controllers;
+
+[Authorize]
+public class SchoolController(ISchoolService schoolService , IGeneralService generalService) : Controller
 {
-    [Authorize]
-    public class SchoolController(ISchoolService schoolService,IGeneralService generalService) : Controller
+    // =========================================================
+    // Teacher - اطلاعات یک کلاس
+    // =========================================================
+
+    public IActionResult TeacherClassInfo(int id)
     {
-        public IActionResult SchoolPage()
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (!int.TryParse(userIdClaim, out int userId))
+            return Unauthorized();
+
+        // بررسی اینکه این Teacher واقعاً این کلاس را تدریس می‌کند
+        if (!schoolService.IsTeacherAssignedToClass(userId, id))
+            return Forbid();
+
+        var classInfo = schoolService.GetClassById(id);
+
+        if (classInfo == null)
+            return NotFound();
+
+        var students = schoolService.GetStudentByClassId(id);
+
+        // فقط Assignmentهای Teacher فعلی
+        var teachers = schoolService.GetMySubjectsByClassId(
+            id,
+            userId);
+
+        var model = new ClassInfoViewModel
         {
-            int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
-            var schools = schoolService.GetSchools(userId);
-            return View(schools);
+            Class = classInfo,
+            Students = students,
+            Teachers = teachers
+        };
+
+        return View(model);
+    }
+
+
+    // =========================================================
+    // لیست مدارس کاربر
+    // =========================================================
+
+    public IActionResult SchoolPage()
+    {
+        if (!int.TryParse(
+            User.FindFirstValue(ClaimTypes.NameIdentifier),
+            out int userId))
+        {
+            return Unauthorized();
         }
-        public async Task<IActionResult> SchoolInfo(int id)
+
+        var schools = schoolService.GetSchools(userId);
+
+        return View(schools);
+    }
+
+
+    // =========================================================
+    // اطلاعات مدرسه
+    // Manager / Teacher
+    // =========================================================
+
+    public async Task<IActionResult> SchoolInfo(
+        int id,
+        string mode = "manager")
+    {
+        if (!int.TryParse(
+            User.FindFirstValue(ClaimTypes.NameIdentifier),
+            out int userId))
         {
-            var school = new AllDatailAboutSchool();
-            school.School = await generalService.GetFullDataOfSchoolById(id);
-            school.Classes = schoolService.GetClasses(id);
-            return View(school);
+            return Unauthorized();
         }
 
-        public async Task<IActionResult> ClassInfo(int id)
+        // ابتدا اطلاعات مدرسه را دریافت می‌کنیم
+        var school = await generalService.GetFullDataOfSchoolById(id);
+
+        if (school == null)
+            return NotFound();
+
+        var model = new AllDatailAboutSchool
         {
-            var a = new ClassInfoViewModel
-            {
-                Class = schoolService.GetClassById(id),
-                Students = schoolService.GetStudentByClassId(id),
-                Teachers = schoolService.GetTeacherByClassId(id)
-            };
-            return View(a);
+            School = school
+        };
+
+        // -----------------------------------------------------
+        // Manager
+        // -----------------------------------------------------
+
+        if (mode == "manager")
+        {
+            if (school.MangerUserId != userId)
+                return Forbid();
+
+            model.Classes = schoolService.GetClasses(id);
         }
 
-        [HttpPost]
-        public IActionResult AddSchool(SchoolDto school)
+        // -----------------------------------------------------
+        // Teacher
+        // -----------------------------------------------------
+
+        else if (mode == "teacher")
         {
-            int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId);
-            school.ManagerUserId= userId;
-             var validation = schoolService.AddSchool(school);
-            if (validation == false)
-            {
-                ViewBag.Eror = "مدرسه تکراری هست";
-                return RedirectToAction("SchoolPage");
-            }
-            else
-            {
-                return RedirectToAction("SchoolPage");
+            model.Classes = schoolService.GetTeacherClasses(
+                id,
+                userId);
 
-            }
-
+            // Teacher در این مدرسه هیچ کلاسی ندارد
+            if (model.Classes.Count == 0)
+                return Forbid();
         }
 
-      
-        [HttpPost]
-        public IActionResult AddClass(ClassDto classDto)
+        // -----------------------------------------------------
+        // Mode نامعتبر
+        // -----------------------------------------------------
+
+        else
         {
-            
-             var validation = schoolService.AddClass(classDto);
-                if (validation == false)
+            return BadRequest();
+        }
+
+        return View(model);
+    }
+
+
+    // =========================================================
+    // اطلاعات کلاس - Manager
+    // =========================================================
+
+    public IActionResult ClassInfo(int id)
+    {
+        var classInfo = schoolService.GetClassById(id);
+
+        if (classInfo == null)
+            return NotFound();
+
+        var model = new ClassInfoViewModel
+        {
+            Class = classInfo,
+            Students = schoolService.GetStudentByClassId(id),
+            Teachers = schoolService.GetTeacherByClassId(id)
+        };
+
+        return View(model);
+    }
+
+
+    // =========================================================
+    // افزودن مدرسه
+    // =========================================================
+
+    [HttpPost]
+    public IActionResult AddSchool(SchoolDto school)
+    {
+        if (!int.TryParse(
+            User.FindFirstValue(ClaimTypes.NameIdentifier),
+            out int userId))
+        {
+            return Unauthorized();
+        }
+
+        school.ManagerUserId = userId;
+
+        var validation = schoolService.AddSchool(school);
+
+        if (!validation)
+        {
+            TempData["Error"] = "مدرسه تکراری است.";
+        }
+
+        return RedirectToAction(nameof(SchoolPage));
+    }
+
+
+    // =========================================================
+    // افزودن کلاس
+    // =========================================================
+
+    [HttpPost]
+    public IActionResult AddClass(ClassDto classDto)
+    {
+        var validation = schoolService.AddClass(classDto);
+
+        if (!validation)
+        {
+            TempData["Error"] = "کلاس تکراری است.";
+
+            return RedirectToAction(
+                nameof(SchoolInfo),
+                new
                 {
-                    ViewBag.Eror = "کلاس تکراری هست";
-                    return View();
-                }
-                else
-                    return RedirectToAction("SchoolInfo", new { id = classDto.SchoolId });
+                    id = classDto.SchoolId,
+                    mode = "manager"
+                });
         }
 
-        [HttpPost]
-        public IActionResult DeleteClass(int id)
-        {
-            var validation = schoolService.DeleteClass(id);
-                return Json(validation);
-            
-        }
-
-        public IActionResult GetGeneralsSchool()
-        {
-            var genrals = generalService.GetGeneralItems(new string[]
+        return RedirectToAction(
+            nameof(SchoolInfo),
+            new
             {
-                "نوع","استان","جنسیت","دوره تحصیلی","مقطع تحصیلی","شیفت"
+                id = classDto.SchoolId,
+                mode = "manager"
             });
-            AddSchoolViewModel addSchoolViewModel = new AddSchoolViewModel
+    }
+
+
+    // =========================================================
+    // حذف کلاس
+    // =========================================================
+
+    [HttpPost]
+    public IActionResult DeleteClass(int id)
+    {
+        var validation = schoolService.DeleteClass(id);
+
+        return Json(validation);
+    }
+
+
+    // =========================================================
+    // دریافت GeneralItems مربوط به مدرسه
+    // =========================================================
+
+    public IActionResult GetGeneralsSchool()
+    {
+        var generals = generalService.GetGeneralItems(
+            new[]
             {
-                GeneralEducationLevels = genrals.FirstOrDefault(x=> x.Key == "مقطع تحصیلی").Value,
-                GeneralEducationPeriods = genrals.FirstOrDefault(x=> x.Key == "دوره تحصیلی").Value,
-                GeneralGender = genrals.FirstOrDefault(x=> x.Key == "جنسیت").Value,
-                GeneralProrvince = genrals.FirstOrDefault(x=> x.Key == "استان").Value,
-                GeneralShifts = genrals.FirstOrDefault(x=> x.Key == "شیفت").Value,
-                GeneralTypes = genrals.FirstOrDefault(x=> x.Key == "نوع").Value
-           
-            };
-            return Json(addSchoolViewModel);
-        } 
+                "نوع",
+                "استان",
+                "جنسیت",
+                "دوره تحصیلی",
+                "مقطع تحصیلی",
+                "شیفت"
+            });
 
-        public IActionResult GetCities(int provinceId)
+        var model = new AddSchoolViewModel
         {
-            return Json(generalService.GetCitiesByProvinceId(provinceId));
-        } 
+            GeneralEducationLevels =
+                generals.FirstOrDefault(
+                    x => x.Key == "مقطع تحصیلی").Value,
 
-        public IActionResult GetDistricts(int CityId)
-        {
-             return Json(generalService.GetDistrictByCityId(CityId));
-        } 
-        public IActionResult GetGrades(int schoolId)
-        {
-            return Json(generalService.GetGeneralGrades(schoolId));
-        }
-        public IActionResult GetMajor(int generalGradeId)
-        {
-            return Json(generalService.GetGeneralMajor(generalGradeId));
-        }
+            GeneralEducationPeriods =
+                generals.FirstOrDefault(
+                    x => x.Key == "دوره تحصیلی").Value,
+
+            GeneralGender =
+                generals.FirstOrDefault(
+                    x => x.Key == "جنسیت").Value,
+
+            GeneralProrvince =
+                generals.FirstOrDefault(
+                    x => x.Key == "استان").Value,
+
+            GeneralShifts =
+                generals.FirstOrDefault(
+                    x => x.Key == "شیفت").Value,
+
+            GeneralTypes =
+                generals.FirstOrDefault(
+                    x => x.Key == "نوع").Value
+        };
+
+        return Json(model);
+    }
+
+
+    // =========================================================
+    // دریافت شهرها
+    // =========================================================
+
+    public IActionResult GetCities(int provinceId)
+    {
+        var cities = generalService.GetCitiesByProvinceId(provinceId);
+
+        return Json(cities);
+    }
+
+
+    // =========================================================
+    // دریافت مناطق
+    // =========================================================
+
+    public IActionResult GetDistricts(int cityId)
+    {
+        var districts = generalService.GetDistrictByCityId(cityId);
+
+        return Json(districts);
+    }
+
+
+    // =========================================================
+    // دریافت پایه‌ها
+    // =========================================================
+
+    public IActionResult GetGrades(int schoolId)
+    {
+        var grades = generalService.GetGeneralGrades(schoolId);
+
+        return Json(grades);
+    }
+
+
+
+    public IActionResult GetMajor(int generalGradeId)
+    {
+        var majors = generalService.GetGeneralMajor(generalGradeId);
+
+        return Json(majors);
     }
 }
+

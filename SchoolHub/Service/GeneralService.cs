@@ -95,7 +95,8 @@ namespace SchoolHub.Service
                     Gender = gender.Title,
                     Shift = Shift.Title,
                     EducationLevel = educationLevel.Title,
-                    EducationPeriod = educationPeriod.Title
+                    EducationPeriod = educationPeriod.Title,
+                    MangerUserId = school.ManagerUserId
                 }).FirstOrDefault();
             #endregion
 

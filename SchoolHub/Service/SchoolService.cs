@@ -13,6 +13,12 @@ namespace SchoolHub.Service;
 
 public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
 {
+    public bool IsTeacherAssignedToClass(int teacherUserId, int classId)
+    {
+        return db.TeachingAssignments.Any(x =>
+            x.TeacherUserId == teacherUserId &&
+            x.ClassId == classId);
+    }
     public ClassDto? GetClassById(int classId)
     {
         var result = (
@@ -82,60 +88,61 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
             }).ToList();
         return result;
     }
-    public List<SchoolDto> GetSchools(int id)
+
+    public List<SchoolListItemViewModel> GetSchools(int userId)
     {
-        var schoolIds = new List<int>();
-        var schools = new List<SchoolDto>();
+        var managerSchoolIds = db.Schools
+            .Where(x => x.ManagerUserId == userId)
+            .Select(x => x.Id);
 
-        foreach (var s in mapper.Map<List<SchoolDto>>(db.Schools.Where(x => x.ManagerUserId == id).ToList()))
-        {
-            var result = (
-             from district in db.GeneralItems
-             join city in db.GeneralItems
-              on district.ParentId equals city.Id
-             join province in db.GeneralItems
-              on city.ParentId equals province.Id
-             where district.Id == s.DistrictId
-             select new SchoolDto
-             {
-                 Province = province.Title,
-                 City = city.Title,
-                 District = district.Title
-             }
-             ).FirstOrDefault();
+        var teacherSchoolIds =
+            from assignment in db.TeachingAssignments
+            join clas in db.Classes
+                on assignment.ClassId equals clas.Id
+            where assignment.TeacherUserId == userId
+            select clas.SchoolId;
 
-            s.Province = result.Province;
-            s.City = result.City;
-            s.District = result.District;
+        var schoolIds = managerSchoolIds
+            .Union(teacherSchoolIds);
 
-            schools.Add(s);
-        }
+        var schools =
+            from school in db.Schools
 
-        var ClassIds = db.TeachingAssignments.Where(x => x.TeacherUserId == id).Select(x => x.ClassId).ToList();
+            join district in db.GeneralItems
+                on school.DistrictId equals district.Id
 
-        foreach (var ci in ClassIds)
-        {
-            var clas = db.Classes.FirstOrDefault(x => x.Id == ci);
-            if (clas != null)
+            join city in db.GeneralItems
+                on district.ParentId equals city.Id
+
+            join province in db.GeneralItems
+                on city.ParentId equals province.Id
+
+            where schoolIds.Contains(school.Id)
+
+            select new SchoolListItemViewModel
             {
-                var isDuplicate = schoolIds.FirstOrDefault(x => x == clas.SchoolId) != null ? true : false;
-                if (!isDuplicate)
-                    schoolIds.Add(clas.SchoolId);
-            }
-        }
-        foreach (var si in schoolIds)
-        {
-            var school = db.Schools.FirstOrDefault(x => x.Id == si);
-            if (school != null)
-            {
-                var isDuplicate = schools.FirstOrDefault(x => x.Id == school.Id) != null ? true : false;
-                if (!isDuplicate)
-                    schools.Add(mapper.Map<SchoolDto>(school));
-            }
-        }
-        return schools;
+                School = new SchoolDto
+                {
+                    Id = school.Id,
+                    Name = school.Name,
+                    ManagerUserId = school.ManagerUserId,
+
+                    Province = province.Title,
+                    City = city.Title,
+                    District = district.Title
+                },
+
+                IsManager = school.ManagerUserId == userId,
+
+                IsTeacher = db.TeachingAssignments.Any(assignment =>
+                    assignment.TeacherUserId == userId &&
+                    db.Classes.Any(clas =>
+                        clas.Id == assignment.ClassId &&
+                        clas.SchoolId == school.Id))
+            };
+
+        return schools.ToList();
     }
-
     public SchoolDto GetSchoolById(int id)
     {
         return mapper.Map<SchoolDto>(db.Schools.FirstOrDefault(x => x.Id == id));
@@ -186,7 +193,35 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
         }
         return false;
     }
+    public List<ClassDto> GetTeacherClasses(int schoolId, int teacherUserId)
+    {
+        var result =
+            from assignment in db.TeachingAssignments
 
+            join classes in db.Classes
+                on assignment.ClassId equals classes.Id
+
+            where assignment.TeacherUserId == teacherUserId
+                  && classes.SchoolId == schoolId
+
+            join major in db.GeneralItems.Where(x => x.TitleType == "Major")
+                on classes.MajorGeneralId equals major.Id into majorGroup
+
+            from major in majorGroup.DefaultIfEmpty()
+
+            join grade in db.GeneralItems.Where(x => x.TitleType == "Grade")
+                on classes.GradeGeneralId equals grade.Id
+
+            select new ClassDto
+            {
+                Id = classes.Id,
+                Name = classes.Name,
+                Major = major != null ? major.Title : null,
+                Grade = grade.Title
+            };
+
+        return result.Distinct().ToList();
+    }
     public bool AddClass(ClassDto classDto)
     {
         if (classDto.Name != null && classDto.GradeGeneralId != 0)
@@ -219,6 +254,29 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
         }
         return false;
     }
+    public List<TeacherDto> GetMySubjectsByClassId(
+    int classId,
+    int teacherUserId)
+    {
+        var result =
+            from assignment in db.TeachingAssignments
 
+            where assignment.ClassId == classId
+                  && assignment.TeacherUserId == teacherUserId
+
+            join teacher in db.Users
+                on assignment.TeacherUserId equals teacher.Id
+
+            join subject in db.GeneralItems.Where(x => x.TitleType == "Subject")
+                on assignment.SubjectId equals subject.Id
+
+            select new TeacherDto
+            {
+                TeacherName = teacher.Name + " " + teacher.LastName,
+                SubjectName = subject.Title
+            };
+
+        return result.ToList();
+    }
 
 }

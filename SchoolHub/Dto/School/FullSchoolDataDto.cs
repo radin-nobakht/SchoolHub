@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int MangerUserId { get; set; }
         public string MangerFullName { get; set; }
         public string Province {  get; set; }
         public string City {  get; set; }
