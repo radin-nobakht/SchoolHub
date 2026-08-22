@@ -1,0 +1,283 @@
+﻿@model SchoolHub.Dto.School.AllDatailAboutSchool
+
+<div class="teacher-school-page">
+
+    <!-- ==================== School Header ==================== -->
+
+    <div class="school-card">
+
+        <div class="school-header">
+
+            <div class="school-header-info">
+
+                <div class="school-icon">
+                    🏫
+                </div>
+
+                <div>
+                    <div class="school-title">
+                        @Model.School.Name
+                    </div>
+
+                    <div class="school-subtitle">
+                        اطلاعات مدرسه
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================== School Information ==================== -->
+
+        <div class="school-info-grid">
+
+            <div class="info-box">
+                <div class="info-icon">
+                    🏙️
+                </div>
+
+                <div class="info-content">
+                    <span>استان</span>
+                    <h5>@Model.School.Province</h5>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <div class="info-icon">
+                    🌆
+                </div>
+
+                <div class="info-content">
+                    <span>شهر</span>
+                    <h5>@Model.School.City</h5>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <div class="info-icon">
+                    📍
+                </div>
+
+                <div class="info-content">
+                    <span>منطقه</span>
+                    <h5>@Model.School.District</h5>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <div class="info-icon">
+                    👨‍💼
+                </div>
+
+                <div class="info-content">
+                    <span>مدیر مدرسه</span>
+                    <h5>@Model.School.MangerFullName</h5>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <div class="info-icon">
+                    🏫
+                </div>
+
+                <div class="info-content">
+                    <span>نوع مدرسه</span>
+                    <h5>@Model.School.Type</h5>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <div class="info-icon">
+                    👥
+                </div>
+
+                <div class="info-content">
+                    <span>جنسیت</span>
+                    <h5>@Model.School.Gender</h5>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <div class="info-icon">
+                    ⏰
+                </div>
+
+                <div class="info-content">
+                    <span>شیفت</span>
+                    <h5>@Model.School.Shift</h5>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <div class="info-icon">
+                    📚
+                </div>
+
+                <div class="info-content">
+                    <span>مقطع تحصیلی</span>
+                    <h5>@Model.School.EducationLevel</h5>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <div class="info-icon">
+                    🎓
+                </div>
+
+                <div class="info-content">
+                    <span>دوره تحصیلی</span>
+                    <h5>@Model.School.EducationPeriod</h5>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================== My Classes Header ==================== -->
+
+    <div class="classes-header">
+
+        <div class="classes-heading">
+
+            <div class="classes-icon">
+                📚
+            </div>
+
+            <div>
+                <h3>کلاس‌های من</h3>
+
+                <span>
+                    کلاس‌هایی که در این مدرسه تدریس می‌کنید
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================== Teacher Classes ==================== -->
+    @if (Model.Classes is not null && Model.Classes.Any())
+    {
+        <div class="row g-4">
+
+            @foreach (var item in Model.Classes)
+            {
+                <div class="col-xl-4 col-lg-6 col-md-6 class-item">
+
+                    <div class="class-card">
+
+                        <!-- Class Header -->
+
+                        <div class="class-card-header">
+
+                            <div class="class-card-icon">
+                                🎓
+                            </div>
+
+                            <div>
+
+                                <div class="class-name">
+                                    @item.Name
+                                </div>
+
+                                <div class="class-label">
+                                    کلاس
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Class Details -->
+
+                        <div class="class-details">
+
+                            <div class="class-detail">
+
+                                <span>
+                                    پایه
+                                </span>
+
+                                <strong>
+                                    @item.Grade
+                                </strong>
+
+                            </div>
+
+
+                            @if (!string.IsNullOrWhiteSpace(item.Major))
+                            {
+                                <div class="class-detail">
+
+                                    <span>
+                                        رشته
+                                    </span>
+
+                                    <strong>
+                                        @item.Major
+                                    </strong>
+
+                                </div>
+                            }
+
+                        </div>
+
+
+                        <!-- Class Actions -->
+
+                        <div class="buttons">
+
+                            <a asp-controller="Teacher"
+                               asp-action="ClassInfo"
+                               asp-route-id="@item.Id"
+                               class="btn btn-outline-primary btn-sm">
+
+                                👁 مشاهده کلاس
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+    else
+    {
+        <!-- ==================== Empty Classes ==================== -->
+
+        <div class="empty-classes">
+
+            <div class="empty-icon">
+                📚
+            </div>
+
+            <h4>
+                کلاسی برای شما ثبت نشده است
+            </h4>
+
+            <p>
+                شما در این مدرسه در هیچ کلاسی به عنوان معلم ثبت نشده‌اید.
+            </p>
+
+        </div>
+    }
+
+</div>

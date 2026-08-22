@@ -7,7 +7,6 @@ namespace SchoolHub.Models
         public SchoolDto School { get; set; } = new();
 
         public bool IsManager { get; set; }
-
         public bool IsTeacher { get; set; }
         public bool IsStudent { get; set; }
     }

@@ -222,7 +222,9 @@ public class SchoolController(ISchoolService schoolService , IGeneralService gen
     [HttpPost]
     public IActionResult DeleteClass(int id)
     {
-        var validation = schoolService.DeleteClass(id);
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+        var validation = schoolService.DeleteClass(id,userId);
 
         return Json(validation);
     }

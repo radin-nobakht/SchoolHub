@@ -2,12 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolHub.Adapter;
 using SchoolHub.Dto;
-using SchoolHub.Entity;
 using SchoolHub.Dto.School;
-using Microsoft.AspNetCore.Mvc;
+using SchoolHub.Entity;
 using SchoolHub.Interface;
 using SchoolHub.Models;
-using System.Net.WebSockets;
 
 namespace SchoolHub.Service;
 
@@ -19,91 +17,155 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
             x.TeacherUserId == teacherUserId &&
             x.ClassId == classId);
     }
+
+
     public ClassDto? GetClassById(int classId)
     {
-        var result = (
-            from clas in db.Classes
-            where clas.Id == classId
+        return
+            (
+                from clas in db.Classes
 
-            join generalGrade in db.GeneralItems.Where(x => x.TitleType == "Grade")
-                on clas.GradeGeneralId equals generalGrade.Id
+                where clas.Id == classId
 
-            join generalMajor in db.GeneralItems.Where(x => x.TitleType == "Major")
-                on clas.MajorGeneralId equals generalMajor.Id into majorGroup
+                join generalGrade in db.GeneralItems
+                        .Where(x => x.TitleType == "Grade")
+                    on clas.GradeGeneralId equals generalGrade.Id
 
-            from generalMajor in majorGroup.DefaultIfEmpty()
+                join generalMajor in db.GeneralItems
+                        .Where(x => x.TitleType == "Major")
+                    on clas.MajorGeneralId equals generalMajor.Id
+                    into majorGroup
 
-            select new ClassDto
-            {
-                Name = clas.Name,
-                Grade = generalGrade.Title,
-                Major = generalMajor != null
-                    ? generalMajor.Title
-                    : null
-            }
-        ).FirstOrDefault();
+                from generalMajor in majorGroup.DefaultIfEmpty()
 
-        return result;
+                select new ClassDto
+                {
+                    Id = clas.Id,
+
+                    Name = clas.Name,
+
+                    Grade = generalGrade.Title,
+
+                    Major = generalMajor != null
+                        ? generalMajor.Title
+                        : null
+                }
+            )
+            .FirstOrDefault();
     }
+
+
     public List<TeacherDto> GetTeacherByClassId(int classId)
     {
-        var result = (
-            from teacherData in db.TeachingAssignments
-            where teacherData.ClassId == classId
+        return
+            (
+                from teacherData in db.TeachingAssignments
 
-            join teacherUser in db.Users
-            on teacherData.TeacherUserId equals teacherUser.Id
+                where teacherData.ClassId == classId
 
-            join generalSubject in db.GeneralItems.Where(x => x.TitleType == "Subject")
-            on teacherData.SubjectId equals generalSubject.Id
+                join teacherUser in db.Users
+                    on teacherData.TeacherUserId equals teacherUser.Id
 
-            select new TeacherDto
-            {
-                TeacherName = teacherUser.Name + " " + teacherUser.LastName,
-                SubjectName = generalSubject.Title
-            }
+                join generalSubject in db.GeneralItems
+                        .Where(x => x.TitleType == "Subject")
+                    on teacherData.SubjectId equals generalSubject.Id
 
-            ).ToList();
+                select new TeacherDto
+                {
+                    TeacherName =
+                        teacherUser.Name + " " + teacherUser.LastName,
 
-        return result;
+                    SubjectName = generalSubject.Title
+                }
+            )
+            .ToList();
     }
+
+
     public List<StudentDto> GetStudentByClassId(int classId)
     {
-        var result =
+        return
             (
-            from student in db.Students
-            where student.ClassId == classId
+                from student in db.Students
 
-            join studentUser in db.Users
-            on student.StudentUserId equals studentUser.Id
+                where student.ClassId == classId
 
-            select new StudentDto
-            {
-                Id = student.Id,
-                StudentFullName = studentUser.Name + " " + studentUser.LastName,
-                Positives = student.Positives != null ? student.Positives : 0,
-                Negatives = student.Negatives != null ? student.Negatives : 0,
-                FirstTermGPA = student.FirstTermGPA != null ? student.FirstTermGPA : 0.00m,
-                SecondTermGPA = student.SecondTermGPA != null ? student.FirstTermGPA : 0.00m
-            }).ToList();
-        return result;
+                join studentUser in db.Users
+                    on student.StudentUserId equals studentUser.Id
+
+                select new StudentDto
+                {
+                    Id = student.Id,
+
+                    StudentFullName =
+                        studentUser.Name + " " + studentUser.LastName,
+
+                    Positives = student.Positives ?? 0,
+
+                    Negatives = student.Negatives ?? 0,
+
+                    FirstTermGPA =
+                        student.FirstTermGPA ?? 0.00m,
+
+                    SecondTermGPA =
+                        student.SecondTermGPA ?? 0.00m
+                }
+            )
+            .ToList();
     }
+
+
+    public List<int> GetTeacherSchoolIds(int userId)
+    {
+        return
+            (
+                from assignment in db.TeachingAssignments
+
+                join clas in db.Classes
+                    on assignment.ClassId equals clas.Id
+
+                where assignment.TeacherUserId == userId
+
+                select clas.SchoolId
+            )
+            .Distinct()
+            .ToList();
+    }
+
+
+    public List<int> GetManagerSchoolIds(int userId)
+    {
+        return db.Schools
+            .Where(x => x.ManagerUserId == userId)
+            .Select(x => x.Id)
+            .ToList();
+    }
+
+
+    public List<int> GetStudentSchoolIds(int userId)
+    {
+        return
+            (
+                from student in db.Students
+
+                where student.StudentUserId == userId
+
+                join clas in db.Classes
+                    on student.ClassId equals clas.Id
+
+                select clas.SchoolId
+            )
+            .Distinct()
+            .ToList();
+    }
+
 
     public List<SchoolListItemViewModel> GetSchools(int userId)
     {
-        var managerSchoolIds = db.Schools
-            .Where(x => x.ManagerUserId == userId)
-            .Select(x => x.Id);
-
-        var teacherSchoolIds =
-            from assignment in db.TeachingAssignments
-            join clas in db.Classes
-                on assignment.ClassId equals clas.Id
-            where assignment.TeacherUserId == userId
-            select clas.SchoolId;
-
-        var schoolIds = managerSchoolIds
-            .Union(teacherSchoolIds);
+        var schoolIds = GetManagerSchoolIds(userId)
+            .Union(GetTeacherSchoolIds(userId))
+            .Union(GetStudentSchoolIds(userId))
+            .ToList();
 
         var schools =
             from school in db.Schools
@@ -124,76 +186,168 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
                 School = new SchoolDto
                 {
                     Id = school.Id,
+
                     Name = school.Name,
+
                     ManagerUserId = school.ManagerUserId,
 
                     Province = province.Title,
+
                     City = city.Title,
+
                     District = district.Title
                 },
 
-                IsManager = school.ManagerUserId == userId,
+                IsManager =
+                    school.ManagerUserId == userId,
 
-                IsTeacher = db.TeachingAssignments.Any(assignment =>
-                    assignment.TeacherUserId == userId &&
-                    db.Classes.Any(clas =>
-                        clas.Id == assignment.ClassId &&
-                        clas.SchoolId == school.Id))
+                IsTeacher =
+                    db.TeachingAssignments.Any(assignment =>
+                        assignment.TeacherUserId == userId &&
+                        db.Classes.Any(clas =>
+                            clas.Id == assignment.ClassId &&
+                            clas.SchoolId == school.Id)),
+
+                IsStudent =
+                    db.Students.Any(student =>
+                        student.StudentUserId == userId &&
+                        db.Classes.Any(clas =>
+                            clas.Id == student.ClassId &&
+                            clas.SchoolId == school.Id))
             };
 
         return schools.ToList();
     }
-    public SchoolDto GetSchoolById(int id)
+
+    public bool IsManagerOfSchool(int managerUserId, int schoolId)
     {
-        return mapper.Map<SchoolDto>(db.Schools.FirstOrDefault(x => x.Id == id));
+        return db.Schools.Any(x =>
+            x.Id == schoolId &&
+            x.ManagerUserId == managerUserId);
     }
+
+    public SchoolDto? GetSchoolById(int id)
+    {
+        var school = db.Schools
+            .FirstOrDefault(x => x.Id == id);
+
+        return school == null
+            ? null
+            : mapper.Map<SchoolDto>(school);
+    }
+
+
+    public SchoolDto? GetManagerSchoolById(
+        int schoolId,
+        int managerUserId)
+    {
+        var school = db.Schools
+            .FirstOrDefault(x =>
+                x.Id == schoolId &&
+                x.ManagerUserId == managerUserId);
+
+        return school == null
+            ? null
+            : mapper.Map<SchoolDto>(school);
+    }
+
 
     public List<ClassDto> GetClasses(int schoolId)
     {
-        var result = (
-            from classes in db.Classes
-            where classes.SchoolId == schoolId
+        return
+            (
+                from classes in db.Classes
 
-            join major in db.GeneralItems.Where(x => x.TitleType == "Major")
-                on classes.MajorGeneralId equals major.Id into majorGroup
+                where classes.SchoolId == schoolId
 
-            from major in majorGroup.DefaultIfEmpty()
+                join major in db.GeneralItems
+                        .Where(x => x.TitleType == "Major")
+                    on classes.MajorGeneralId equals major.Id
+                    into majorGroup
 
-            join grade in db.GeneralItems.Where(x => x.TitleType == "Grade")
-                on classes.GradeGeneralId equals grade.Id
+                from major in majorGroup.DefaultIfEmpty()
 
-            select new ClassDto
-            {
-                Id = classes.Id,
-                Name = classes.Name,
-                Major = major != null ? major.Title : null,
-                Grade = grade.Title
-            }
-        ).ToList();
+                join grade in db.GeneralItems
+                        .Where(x => x.TitleType == "Grade")
+                    on classes.GradeGeneralId equals grade.Id
 
-        return result;
+                select new ClassDto
+                {
+                    Id = classes.Id,
+
+                    Name = classes.Name,
+
+                    Major = major != null
+                        ? major.Title
+                        : null,
+
+                    Grade = grade.Title
+                }
+            )
+            .ToList();
     }
-    public UserDto GetManagerById(int id)
+
+
+    public List<ClassDto> GetManagerClasses(
+        int schoolId,
+        int managerUserId)
     {
-        return mapper.Map<UserDto>(db.Users.FirstOrDefault(x => x.Id == id));
+        var isManager = db.Schools.Any(x =>
+            x.Id == schoolId &&
+            x.ManagerUserId == managerUserId);
+
+        if (!isManager)
+            return [];
+
+        return GetClasses(schoolId);
     }
+
+
+    public UserDto? GetManagerById(int id)
+    {
+        var user = db.Users
+            .FirstOrDefault(x => x.Id == id);
+
+        return user == null
+            ? null
+            : mapper.Map<UserDto>(user);
+    }
+
 
     public bool AddSchool(SchoolDto school)
     {
-        if (school.Name != null && school.CityId != 0 && school.GenderGeneralId != 0 && school.TypeGeneralId != 0 && school.ShiftGeneralId != 0 && school.EducationLevelGeneralId != 0 && school.EducationPeriodGeneralId != 0)
-        {
-            var isDuplicate = db.Schools.FirstOrDefault(x => x.Name == school.Name && x.ShiftGeneralId == school.ShiftGeneralId) == null ? false : true;
-            if (!isDuplicate)
-            {
+        if (string.IsNullOrWhiteSpace(school.Name))
+            return false;
 
-                db.Schools.Add(mapper.Map<SchoolEntity>(school));
-                db.SaveChanges();
-                return true;
-            }
+        if (school.CityId == 0 ||
+            school.GenderGeneralId == 0 ||
+            school.TypeGeneralId == 0 ||
+            school.ShiftGeneralId == 0 ||
+            school.EducationLevelGeneralId == 0 ||
+            school.EducationPeriodGeneralId == 0)
+        {
+            return false;
         }
-        return false;
+
+        var isDuplicate = db.Schools.Any(x =>
+            x.Name == school.Name &&
+            x.ShiftGeneralId == school.ShiftGeneralId);
+
+        if (isDuplicate)
+            return false;
+
+        db.Schools.Add(
+            mapper.Map<SchoolEntity>(school));
+
+        db.SaveChanges();
+
+        return true;
     }
-    public List<ClassDto> GetTeacherClasses(int schoolId, int teacherUserId)
+
+
+    public List<ClassDto> GetTeacherClasses(
+        int schoolId,
+        int teacherUserId)
     {
         var result =
             from assignment in db.TeachingAssignments
@@ -204,79 +358,118 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
             where assignment.TeacherUserId == teacherUserId
                   && classes.SchoolId == schoolId
 
-            join major in db.GeneralItems.Where(x => x.TitleType == "Major")
-                on classes.MajorGeneralId equals major.Id into majorGroup
+            join major in db.GeneralItems
+                    .Where(x => x.TitleType == "Major")
+                on classes.MajorGeneralId equals major.Id
+                into majorGroup
 
             from major in majorGroup.DefaultIfEmpty()
 
-            join grade in db.GeneralItems.Where(x => x.TitleType == "Grade")
+            join grade in db.GeneralItems
+                    .Where(x => x.TitleType == "Grade")
                 on classes.GradeGeneralId equals grade.Id
 
             select new ClassDto
             {
                 Id = classes.Id,
+
                 Name = classes.Name,
-                Major = major != null ? major.Title : null,
+
+                Major = major != null
+                    ? major.Title
+                    : null,
+
                 Grade = grade.Title
             };
 
-        return result.Distinct().ToList();
+        return result
+            .Distinct()
+            .ToList();
     }
+
+
     public bool AddClass(ClassDto classDto)
     {
-        if (classDto.Name != null && classDto.GradeGeneralId != 0)
+        if (string.IsNullOrWhiteSpace(classDto.Name))
+            return false;
+
+        if (classDto.GradeGeneralId == 0 ||
+            classDto.SchoolId == 0)
         {
-
-            var isDuplicate = db.Classes.FirstOrDefault(x => x.GradeGeneralId == classDto.GradeGeneralId && x.Name == classDto.Name && x.SchoolId == classDto.SchoolId && x.MajorGeneralId == classDto.MajorGeneralId) == null ? false : true;
-            if (!isDuplicate)
-            {
-                db.Add(mapper.Map<ClassEntity>(classDto));
-                db.SaveChanges();
-
-
-                return true;
-            }
+            return false;
         }
-        return false;
+
+        var isDuplicate = db.Classes.Any(x =>
+            x.GradeGeneralId == classDto.GradeGeneralId &&
+            x.Name == classDto.Name &&
+            x.SchoolId == classDto.SchoolId &&
+            x.MajorGeneralId == classDto.MajorGeneralId);
+
+        if (isDuplicate)
+            return false;
+
+        db.Classes.Add(
+            mapper.Map<ClassEntity>(classDto));
+
+        db.SaveChanges();
+
+        return true;
     }
 
-    public bool DeleteClass(int id)
+
+    public bool DeleteClass(
+        int classId,
+        int managerUserId)
     {
-        if (id != 0)
-        {
-            var classEntity = db.Classes.FirstOrDefault(x => x.Id == id);
-            if (classEntity != null)
-            {
-                db.Classes.Remove(classEntity);
-                db.SaveChanges();
-                return true;
-            }
-        }
-        return false;
+        var classEntity =
+            from clas in db.Classes
+
+            join school in db.Schools
+                on clas.SchoolId equals school.Id
+
+            where clas.Id == classId &&
+                  school.ManagerUserId == managerUserId
+
+            select clas;
+
+        var entity = classEntity.FirstOrDefault();
+
+        if (entity == null)
+            return false;
+
+        db.Classes.Remove(entity);
+
+        db.SaveChanges();
+
+        return true;
     }
+
+
     public List<TeacherDto> GetMySubjectsByClassId(
-    int classId,
-    int teacherUserId)
+        int classId,
+        int teacherUserId)
     {
         var result =
             from assignment in db.TeachingAssignments
 
-            where assignment.ClassId == classId
-                  && assignment.TeacherUserId == teacherUserId
+            where assignment.ClassId == classId &&
+                  assignment.TeacherUserId == teacherUserId
 
             join teacher in db.Users
                 on assignment.TeacherUserId equals teacher.Id
 
-            join subject in db.GeneralItems.Where(x => x.TitleType == "Subject")
+            join subject in db.GeneralItems
+                    .Where(x => x.TitleType == "Subject")
                 on assignment.SubjectId equals subject.Id
 
             select new TeacherDto
             {
-                TeacherName = teacher.Name + " " + teacher.LastName,
+                TeacherName =
+                    teacher.Name + " " + teacher.LastName,
+
                 SubjectName = subject.Title
             };
 
         return result.ToList();
     }
-
 }

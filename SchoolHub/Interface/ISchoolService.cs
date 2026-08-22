@@ -6,19 +6,43 @@ namespace SchoolHub.Interface
 {
     public interface ISchoolService
     {
-        List<TeacherDto> GetMySubjectsByClassId(int classId,int teacherUserId);
-        List<ClassDto> GetTeacherClasses(int schoolId, int teacherUserId);
+        bool IsManagerOfSchool(int managerUserId, int schoolId);
         bool IsTeacherAssignedToClass(int teacherUserId, int classId);
-        bool AddClass(ClassDto classDto);
-        bool AddSchool(SchoolDto school);
-        bool DeleteClass(int id);
-        ClassDto GetClassById(int classId);
-        List<ClassDto> GetClasses(int schoolId);
-        UserDto GetManagerById(int id);
-        SchoolDto GetSchoolById(int id);
-        List<SchoolListItemViewModel> GetSchools(int userId);
-        List<StudentDto> GetStudentByClassId(int classId);
+
+        ClassDto? GetClassById(int classId);
+
         List<TeacherDto> GetTeacherByClassId(int classId);
 
+        List<StudentDto> GetStudentByClassId(int classId);
+
+        List<int> GetTeacherSchoolIds(int userId);
+
+        List<int> GetManagerSchoolIds(int userId);
+
+        List<int> GetStudentSchoolIds(int userId);
+
+        List<SchoolListItemViewModel> GetSchools(int userId);
+
+        SchoolDto? GetSchoolById(int id);
+
+        SchoolDto? GetManagerSchoolById(int schoolId, int managerUserId);
+
+        List<ClassDto> GetClasses(int schoolId);
+
+        List<ClassDto> GetManagerClasses(int schoolId, int managerUserId);
+
+        UserDto? GetManagerById(int id);
+
+        bool AddSchool(SchoolDto school);
+
+        List<ClassDto> GetTeacherClasses(int schoolId, int teacherUserId);
+
+        bool AddClass(ClassDto classDto);
+
+        bool DeleteClass(int classId, int managerUserId);
+
+        List<TeacherDto> GetMySubjectsByClassId(
+            int classId,
+            int teacherUserId);
     }
 }

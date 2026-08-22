@@ -45,11 +45,11 @@
                         @if (item.IsManager)
                         {
                             <a asp-action="SchoolInfo"
-                               asp-route-id="@item.School.Id"
-                               asp-route-mode="manager"
+                              asp-controller="Manager"
+                               asp-route-schoolId="@item.School.Id"
                                class="btn btn-primary flex-fill">
 
-                                👨‍💼 پنل مدیریت
+                                👨‍💼  مدیریت
 
                             </a>
                         }
