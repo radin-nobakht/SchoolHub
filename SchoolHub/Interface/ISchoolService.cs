@@ -27,9 +27,7 @@ namespace SchoolHub.Interface
 
         SchoolDto? GetManagerSchoolById(int schoolId, int managerUserId);
 
-        List<ClassDto> GetClasses(int schoolId);
-
-        List<ClassDto> GetManagerClasses(int schoolId, int managerUserId);
+        List<ClassDto> GetAllClasses(int schoolId);
 
         UserDto? GetManagerById(int id);
 
@@ -44,5 +42,6 @@ namespace SchoolHub.Interface
         List<TeacherDto> GetMySubjectsByClassId(
             int classId,
             int teacherUserId);
+        bool IsTeacherOfschool(int teacherUserId, int schoolId);
     }
 }

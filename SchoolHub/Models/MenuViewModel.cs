@@ -6,5 +6,6 @@ namespace SchoolHub.Models
     {
         public List<SchoolBarDto> MangerSchool { get; set; }
         public List<SchoolBarDto> TeacherSchool { get; set; }
+        public List<SchoolBarDto> StudentSchool { get; set; }
     }
 }

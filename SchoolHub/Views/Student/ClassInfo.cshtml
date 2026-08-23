@@ -1,0 +1,206 @@
+﻿@model SchoolHub.Dto.Student.StudentHomeDto
+
+<div class="student-page">
+
+    <!-- ==================== Student Information ==================== -->
+
+    <div class="student-info-card">
+
+        <div class="student-info-header">
+
+            <input type="hidden"
+                   id="classId"
+                   value="@Model.StudentInfo.ClassId" />
+            @if (Model.StudentInfo.Gender == "پسر")
+            {
+                <div class="student-avatar">
+                    👨‍🎓
+                </div>
+            }
+            else
+            {
+                <div class="student-avatar">
+                    👩‍🎓
+                </div>
+            }
+
+            
+            <div>
+                <h2>
+                    @Model.StudentInfo.FullName
+                </h2>
+            </div>
+
+        </div>
+
+
+        <div class="student-info-grid">
+
+            <div class="student-info-item">
+
+                <span>
+                    پایه
+                </span>
+
+                <strong>
+                    @Model.StudentInfo.Grade
+                </strong>
+
+            </div>
+
+
+            @if (Model.StudentInfo.Major != null)
+            {
+                <div class="student-info-item">
+
+                    <span>
+                        رشته
+                    </span>
+
+                    <strong>
+                        @Model.StudentInfo.Major
+                    </strong>
+
+                </div>
+            }
+
+
+            <div class="student-info-item">
+
+                <span>
+                    جنسیت
+                </span>
+
+                <strong>
+                    @Model.StudentInfo.Gender
+                </strong>
+
+            </div>
+
+
+            <div class="student-info-item">
+
+                <span>
+                    مدرسه
+                </span>
+
+                <strong>
+                    @Model.StudentInfo.SchoolName
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================== Subjects ==================== -->
+
+    <div class="student-subjects">
+
+        <div class="subjects-tabs">
+
+            @foreach (var subject in Model.Subjects)
+            {
+                <button type="button"
+                        class="subject-tab @(subject.Id == Model.SubjectInfo.SubjectId ? "active" : "")"
+                        data-subject-id="@subject.Id">
+
+                    @subject.Title
+
+                </button>
+            }
+
+        </div>
+
+
+        <!-- ==================== Subject Information ==================== -->
+
+        <div id="subject-content"
+             class="subject-content">
+
+            <partial name="_SubjectInfo"
+                     model="Model.SubjectInfo" />
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function() {
+
+            $(".subject-tab").on("click", function() {
+
+                const subjectId = $(this).data("subject-id");
+                const classId = $("#classId").val();
+
+
+                if (!subjectId || !classId) {
+                    return;
+                }
+
+
+                // تغییر درس فعال
+
+                $(".subject-tab").removeClass("active");
+
+                $(this).addClass("active");
+
+
+                // نمایش Loading
+
+                $("#subject-content").html(`
+                            <div class="subject-loading">
+                                در حال دریافت اطلاعات درس...
+                            </div>
+                        `);
+
+
+                // دریافت اطلاعات درس
+
+                $.ajax({
+
+                    url: "/Student/SubjectInfo",
+
+                    type: "GET",
+
+                    data: {
+                        subjectId: subjectId,
+                        classId: classId
+                    },
+
+
+                    success: function(result) {
+
+                        $("#subject-content").html(result);
+
+                    },
+
+
+                    error: function(xhr) {
+
+                        console.error(xhr);
+
+                        $("#subject-content").html(`
+                                    <div class="subject-error">
+                                        دریافت اطلاعات درس با خطا مواجه شد.
+                                    </div>
+                                `);
+
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
+}

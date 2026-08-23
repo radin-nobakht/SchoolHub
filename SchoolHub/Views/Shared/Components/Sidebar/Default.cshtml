@@ -1,208 +1,285 @@
 ﻿@model MenuViewModel
 
-
 <aside class="sidebar">
 
+    <!-- ==================== Sidebar Header ==================== -->
 
     <div class="sidebar-header">
 
-        <i class="bi bi-mortarboard-fill"></i>
-
-        <span>
+                <span>
             SchoolHub
         </span>
 
     </div>
 
 
+    <!-- ==================== Sidebar Menu ==================== -->
 
     <ul class="sidebar-menu">
 
+        <!-- ==================== Schools ==================== -->
 
-        <li>
+        <li class="sidebar-section">
 
+            <a href="#schoolsMenu"
+               data-bs-toggle="collapse"
+               class="sidebar-link">
 
-            <div class="sidebar-item">
+            <i class="bi bi-building-fill"></i>                <span>
+                    مدارس
+                </span>
 
+                <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
 
-                <a asp-controller="School"
-                   asp-action="SchoolPage">
+            </a>
 
-                    <i class="bi bi-mortarboard-fill"></i>
 
-                    <span>
-                        مدارس
-                    </span>
+            <ul id="schoolsMenu"
+                class="collapse submenu">
 
-                </a>
 
+                <!-- ==================== Manager ==================== -->
 
-                <a href="#schoolsMenu"
-                   data-bs-toggle="collapse"
-                   class="collapse-toggle">
+                <li class="sidebar-section">
 
-                    <i class="bi bi-chevron-left collapse-icon"></i>
+                    <a href="#managerSchools"
+                       data-bs-toggle="collapse"
+                       class="sidebar-link">
 
-                </a>
+                        <i class="bi bi-person-badge"></i>
 
+                        <span>
+                            مدیر
+                        </span>
 
-            </div>
+                        <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
 
+                    </a>
 
 
-            <li class="sidebar-section">
+                    <ul id="managerSchools"
+                        class="collapse submenu">
 
-                <a href="#managerSchools"
-                   data-bs-toggle="collapse"
-                   class="sidebar-link">
+                        @{
+                            int managerIndex = 0;
+                        }
 
-                    <i class="bi bi-person-badge"></i>
+                        @foreach (var type in Model.MangerSchool)
+                        {
+                            managerIndex++;
 
-                    <span>
-                        مدیر
-                    </span>
+                            <li>
 
-                    <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
+                                <a href="#manager-type-@managerIndex"
+                                   data-bs-toggle="collapse"
+                                   class="sidebar-link">
 
-                </a>
+                                    <i class="bi bi-building"></i>
 
-                <ul id="managerSchools"
-                    class="collapse submenu">
+                                    <span>
+                                        @type.SchoolType
+                                    </span>
 
-                    @{
-                        int index = 0;
-                    }
+                                    <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
 
-                    @foreach (var type in Model.MangerSchool)
-                    {
-                        index++;
+                                </a>
 
-                        <li>
 
-                            <a href="#manager-type-@index"
-                               data-bs-toggle="collapse"
-                               class="sidebar-link">
+                                <ul id="manager-type-@managerIndex"
+                                    class="collapse submenu">
 
-                                <i class="bi bi-building"></i>
+                                    @foreach (var school in type.Schools)
+                                    {
+                                        <li>
 
-                                <span>
-                                    @type.SchoolType
-                                </span>
+                                            <a asp-action="SchoolInfo"
+                                               asp-controller="Manager"
+                                               asp-route-schoolId="@school.Id"
+                                               class="sidebar-link">
 
-                                <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
+                                                <i class="bi bi-house"></i>
 
-                            </a>
+                                                <span>
+                                                    @school.Name
+                                                </span>
 
-                            <ul id="manager-type-@index"
-                                class="collapse submenu">
+                                            </a>
 
-                                @foreach (var school in type.Schools)
-                                {
-                                    <li>
+                                        </li>
+                                    }
 
-                                        <a asp-controller="School"
-                                           asp-action="SchoolInfo"
-                                           asp-route-id="@school.Id"
-                                           asp-route-mode="manager">
+                                </ul>
 
-                                            <i class="bi bi-house"></i>
+                            </li>
+                        }
 
-                                            <span>
-                                                @school.Name
-                                            </span>
+                    </ul>
 
-                                        </a>
+                </li>
 
-                                    </li>
-                                }
 
-                            </ul>
+                <!-- ==================== Teacher ==================== -->
 
-                        </li>
-                    }
+                <li class="sidebar-section">
 
-                </ul>
+                    <a href="#teacherSchools"
+                       data-bs-toggle="collapse"
+                       class="sidebar-link">
 
-            </li>
-            <li class="sidebar-section">
+                        <i class="bi bi-person-workspace"></i>
 
-                <a href="#teacherSchools"
-                   data-bs-toggle="collapse"
-                   class="sidebar-link">
+                        <span>
+                            معلم
+                        </span>
 
-                    <i class="bi bi-person-workspace"></i>
+                        <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
 
-                    <span>
-                        معلم
-                    </span>
+                    </a>
 
-                    <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
 
-                </a>
+                    <ul id="teacherSchools"
+                        class="collapse submenu">
 
-                <ul id="teacherSchools"
-                    class="collapse submenu">
+                        @{
+                            int teacherIndex = 0;
+                        }
 
-                    @{
-                        index = 0;
-                    }
+                        @foreach (var type in Model.TeacherSchool)
+                        {
+                            teacherIndex++;
 
-                    @foreach (var type in Model.TeacherSchool)
-                    {
-                        index++;
+                            <li>
 
-                        <li>
+                                <a href="#teacher-type-@teacherIndex"
+                                   data-bs-toggle="collapse"
+                                   class="sidebar-link">
 
-                            <a href="#teacher-type-@index"
-                               data-bs-toggle="collapse"
-                               class="sidebar-link">
+                                    <i class="bi bi-building"></i>
 
-                                <i class="bi bi-building"></i>
+                                    <span>
+                                        @type.SchoolType
+                                    </span>
 
-                                <span>
-                                    @type.SchoolType
-                                </span>
+                                    <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
 
-                                <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
+                                </a>
 
-                            </a>
 
-                            <ul id="teacher-type-@index"
-                                class="collapse submenu">
+                                <ul id="teacher-type-@teacherIndex"
+                                    class="collapse submenu">
 
-                                @foreach (var school in type.Schools)
-                                {
-                                    <li>
+                                    @foreach (var school in type.Schools)
+                                    {
+                                        <li>
 
-                                        <a asp-controller="School"
-                                           asp-action="SchoolInfo"
-                                           asp-route-id="@school.Id"
-                                           asp-route-mode="teacher">
+                                            <a asp-action="SchoolInfo"
+                                               asp-controller="Teacher"
+                                               asp-route-schoolId="@school.Id"
+                                               class="sidebar-link">
 
-                                            <i class="bi bi-house"></i>
+                                                <i class="bi bi-house"></i>
 
-                                            <span>
-                                                @school.Name
-                                            </span>
+                                                <span>
+                                                    @school.Name
+                                                </span>
 
-                                        </a>
+                                            </a>
 
-                                    </li>
-                                }
+                                        </li>
+                                    }
 
-                            </ul>
+                                </ul>
 
-                        </li>
-                    }
+                            </li>
+                        }
 
-                </ul>
+                    </ul>
 
-            </li>
+                </li>
+
+
+                <!-- ==================== Student ==================== -->
+
+                <li class="sidebar-section">
+
+                    <a href="#studentSchools"
+                       data-bs-toggle="collapse"
+                       class="sidebar-link">
+
+                        <i class="bi bi-person-standing"></i>
+
+                        <span>
+                            دانش‌آموز
+                        </span>
+
+                        <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
+
+                    </a>
+
+
+                    <ul id="studentSchools"
+                        class="collapse submenu">
+
+                        @{
+                            int studentIndex = 0;
+                        }
+
+                        @foreach (var type in Model.StudentSchool)
+                        {
+                            studentIndex++;
+
+                            <li>
+
+                                <a href="#student-type-@studentIndex"
+                                   data-bs-toggle="collapse"
+                                   class="sidebar-link">
+
+                                    <i class="bi bi-building"></i>
+
+                                    <span>
+                                        @type.SchoolType
+                                    </span>
+
+                                    <i class="bi bi-chevron-left ms-auto collapse-icon"></i>
+
+                                </a>
+
+
+                                <ul id="student-type-@studentIndex"
+                                    class="collapse submenu">
+
+                                    @foreach (var school in type.Schools)
+                                    {
+                                        <li>
+
+                                            <a asp-action="ClassInfo"
+                                               asp-controller="Student"
+                                               asp-route-schoolId="@school.Id"
+                                               class="sidebar-link">
+
+                                                <i class="bi bi-mortarboard-fill"></i>
+                                                <span>
+                                                    @school.Name
+                                                </span>
+
+                                            </a>
+
+                                        </li>
+                                    }
+
+                                </ul>
+
+                            </li>
+                        }
+
+                    </ul>
+
+                </li>
+
+            </ul>
 
         </li>
 
-
     </ul>
-
 
 </aside>

@@ -15,13 +15,16 @@ namespace SchoolHub.Controllers
 
             var isManager = schoolService.IsManagerOfSchool(managerUserId:userId , schoolId:schoolId);
             if (!isManager)
-            return RedirectToAction("SchoolPage","School");
+            {
+                TempData["Message"] = "شما اجازه دسترسی به این صفحه را ندارید.";
+                return RedirectToAction("SchoolPage", "School");
+            }
             else
             {
                 var schoolData = new AllDatailAboutSchool();
 
                 schoolData.School = await generalService.GetFullDataOfSchoolById(schoolId);
-                schoolData.Classes = schoolService.GetClasses(schoolId);
+                schoolData.Classes = schoolService.GetAllClasses(schoolId);
                 return View(schoolData);
             }
         }

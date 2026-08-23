@@ -22,7 +22,8 @@ namespace SchoolHub.ViewComponents
             return View(new MenuViewModel
             {
                 MangerSchool= menuService.GetSchoolThatManagerBar(userId),
-                TeacherSchool=menuService.GetSchoolThatTeacherBar(userId)
+                TeacherSchool=menuService.GetSchoolThatTeacherBar(userId),
+                StudentSchool=menuService.GetSchoolThatStudentrBar(userId)
             });
         }
     }

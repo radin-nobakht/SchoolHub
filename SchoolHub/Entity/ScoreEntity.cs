@@ -11,5 +11,15 @@ namespace SchoolHub.Entity
 
         [Required]
         public string Score { get; set; }
+
+        [Required]
+        public string Reason { get; set; } = string.Empty;
+
+        [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
+        public int GeneralSubjectId { get; set; }
+
     }
 }

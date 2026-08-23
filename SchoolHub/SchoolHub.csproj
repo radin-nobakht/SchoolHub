@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="..\..\..\..\Downloads\schoolhub_icon_transparent_40x40 (1).png" Link="wwwroot\image\schoolhub_icon_transparent_40x40 %281%29.png" />
+  </ItemGroup>
+
 
 
   <ItemGroup>
@@ -22,7 +26,7 @@
 
 
   <ItemGroup>
-    <Folder Include="Views\Student\" />
+    <Folder Include="wwwroot\image\" />
   </ItemGroup>
 
 </Project>

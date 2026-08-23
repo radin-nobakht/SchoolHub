@@ -1,0 +1,397 @@
+﻿/* =========================================================
+   Student Page
+   ========================================================= */
+
+.student-page {
+    width: 100%;
+    direction: rtl;
+}
+
+
+/* =========================================================
+   Student Information
+   ========================================================= */
+
+.student-info-card {
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+}
+
+.student-info-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.student-avatar {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eef2ff;
+    font-size: 28px;
+}
+
+.student-info-header h2 {
+    margin: 0 0 5px;
+    color: #1f2937;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.student-info-header span {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   Student Information Grid
+   ========================================================= */
+
+.student-info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.student-info-item {
+    padding: 16px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+    .student-info-item span {
+        display: block;
+        margin-bottom: 7px;
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    .student-info-item strong {
+        color: #1f2937;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+
+/* =========================================================
+   Subjects
+   ========================================================= */
+
+.student-subjects {
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   Subjects Tabs
+   ========================================================= */
+
+.subjects-tabs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 8px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+    .subjects-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+.subject-tab {
+    position: relative;
+    padding: 14px 20px;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+    .subject-tab:hover {
+        color: #111827;
+    }
+
+    .subject-tab.active {
+        color: #4f46e5;
+        font-weight: 700;
+    }
+
+        .subject-tab.active::after {
+            content: "";
+            position: absolute;
+            right: 12px;
+            left: 12px;
+            bottom: -1px;
+            height: 3px;
+            border-radius: 3px 3px 0 0;
+            background: #4f46e5;
+        }
+
+
+/* =========================================================
+   Subject Content
+   ========================================================= */
+
+.subject-content {
+    margin-top: 4px;
+}
+
+.subject-empty,
+.subject-loading,
+.subject-error {
+    padding: 40px 20px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-top: none;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.subject-error {
+    color: #dc2626;
+}
+
+
+/* =========================================================
+   Subject Info
+   ========================================================= */
+
+.subject-info {
+    width: 100%;
+    direction: rtl;
+}
+
+
+/* =========================================================
+   Subject Header
+   ========================================================= */
+
+.subject-info-header {
+    margin-top: 20px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+}
+
+    .subject-info-header h2 {
+        margin: 0 0 8px;
+        color: #1f2937;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .subject-info-header p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+
+/* =========================================================
+   Subject Statistics
+   ========================================================= */
+
+.subject-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.subject-stat {
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    text-align: center;
+}
+
+    .subject-stat span {
+        display: block;
+        margin-bottom: 8px;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .subject-stat strong {
+        display: block;
+        color: #111827;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+
+/* =========================================================
+   Scores
+   ========================================================= */
+
+.subject-scores {
+    margin-top: 20px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+}
+
+    .subject-scores h3 {
+        margin: 0 0 20px;
+        color: #1f2937;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+
+/* =========================================================
+   Score List
+   ========================================================= */
+
+.scores-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.score-item {
+    display: grid;
+    grid-template-columns: 80px 1fr 150px;
+    align-items: center;
+    gap: 20px;
+    padding: 16px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+
+/* =========================================================
+   Score Value
+   ========================================================= */
+
+.score-value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   Score Reason & Date
+   ========================================================= */
+
+.score-reason span,
+.score-date span {
+    display: block;
+    margin-bottom: 4px;
+    color: #9ca3af;
+    font-size: 12px;
+}
+
+.score-reason strong,
+.score-date strong {
+    color: #374151;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   No Scores
+   ========================================================= */
+
+.no-scores {
+    padding: 30px;
+    background: #f9fafb;
+    border-radius: 12px;
+    color: #6b7280;
+    font-size: 14px;
+    text-align: center;
+}
+
+
+/* =========================================================
+   Responsive - Tablet
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+    .student-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .subject-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* =========================================================
+   Responsive - Mobile
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+    .student-info-card {
+        padding: 18px;
+    }
+
+    .student-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student-info-header h2 {
+        font-size: 19px;
+    }
+
+    .subject-tab {
+        padding: 13px 16px;
+        font-size: 14px;
+    }
+
+    .subject-info-header {
+        padding: 18px;
+    }
+
+    .subject-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .subject-scores {
+        padding: 18px;
+    }
+
+    .score-item {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .score-value {
+        width: 50px;
+        height: 50px;
+    }
+}

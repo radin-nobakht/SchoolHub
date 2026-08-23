@@ -226,6 +226,10 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
             x.ManagerUserId == managerUserId);
     }
 
+    public bool IsTeacherOfschool(int teacherUserId,int schoolId)
+    {
+        return db.TeachingAssignments.Any(x => x.TeacherUserId ==teacherUserId && db.Classes.Any(z => z.Id == x.ClassId && z.SchoolId == schoolId));
+    }
     public SchoolDto? GetSchoolById(int id)
     {
         var school = db.Schools
@@ -252,7 +256,7 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
     }
 
 
-    public List<ClassDto> GetClasses(int schoolId)
+    public List<ClassDto> GetAllClasses(int schoolId)
     {
         return
             (
@@ -288,19 +292,7 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
     }
 
 
-    public List<ClassDto> GetManagerClasses(
-        int schoolId,
-        int managerUserId)
-    {
-        var isManager = db.Schools.Any(x =>
-            x.Id == schoolId &&
-            x.ManagerUserId == managerUserId);
-
-        if (!isManager)
-            return [];
-
-        return GetClasses(schoolId);
-    }
+   
 
 
     public UserDto? GetManagerById(int id)

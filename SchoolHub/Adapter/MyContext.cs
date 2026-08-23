@@ -19,7 +19,6 @@ namespace SchoolHub.Adapter
         public DbSet<AttendanceEntity> Attendances { get; set; }
         public DbSet<DistrictEntity> Districts { get; set; }
         public DbSet<GeneralItemEntity> GeneralItems { get; set; }
-        public DbSet<SubjectEntity> Subjects { get; set; }
         public DbSet<TeachingAssignmentEntity> TeachingAssignments { get; set; }
         public DbSet<GradeEntity> Grades { get; set; }
         public DbSet<GradeSubjectEntity> GradeSubjects { get; set; }

@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace SchoolHub.Controllers;
 
 [Authorize]
-public class SchoolController(ISchoolService schoolService , IGeneralService generalService) : Controller
+public class SchoolController(ISchoolService schoolService, IGeneralService generalService) : Controller
 {
     // =========================================================
     // Teacher - اطلاعات یک کلاس
@@ -67,72 +67,6 @@ public class SchoolController(ISchoolService schoolService , IGeneralService gen
     }
 
 
-    // =========================================================
-    // اطلاعات مدرسه
-    // Manager / Teacher
-    // =========================================================
-
-    public async Task<IActionResult> SchoolInfo(
-        int id,
-        string mode = "manager")
-    {
-        if (!int.TryParse(
-            User.FindFirstValue(ClaimTypes.NameIdentifier),
-            out int userId))
-        {
-            return Unauthorized();
-        }
-
-        // ابتدا اطلاعات مدرسه را دریافت می‌کنیم
-        var school = await generalService.GetFullDataOfSchoolById(id);
-
-        if (school == null)
-            return NotFound();
-
-        var model = new AllDatailAboutSchool
-        {
-            School = school
-        };
-
-        // -----------------------------------------------------
-        // Manager
-        // -----------------------------------------------------
-
-        if (mode == "manager")
-        {
-            if (school.MangerUserId != userId)
-                return Forbid();
-
-            model.Classes = schoolService.GetClasses(id);
-        }
-
-        // -----------------------------------------------------
-        // Teacher
-        // -----------------------------------------------------
-
-        else if (mode == "teacher")
-        {
-            model.Classes = schoolService.GetTeacherClasses(
-                id,
-                userId);
-
-            // Teacher در این مدرسه هیچ کلاسی ندارد
-            if (model.Classes.Count == 0)
-                return Forbid();
-        }
-
-        // -----------------------------------------------------
-        // Mode نامعتبر
-        // -----------------------------------------------------
-
-        else
-        {
-            return BadRequest();
-        }
-
-        return View(model);
-    }
-
 
     // =========================================================
     // اطلاعات کلاس - Manager
@@ -187,32 +121,25 @@ public class SchoolController(ISchoolService schoolService , IGeneralService gen
     // افزودن کلاس
     // =========================================================
 
-    [HttpPost]
-    public IActionResult AddClass(ClassDto classDto)
-    {
-        var validation = schoolService.AddClass(classDto);
+    //[HttpPost]
+    //public IActionResult AddClass(ClassDto classDto)
+    //{
+    //    var validation = schoolService.AddClass(classDto);
 
-        if (!validation)
-        {
-            TempData["Error"] = "کلاس تکراری است.";
+    //    if (!validation)
+    //        TempData["Error"] = "کلاس تکراری است.";
 
-            return RedirectToAction(
-                nameof(SchoolInfo),
-                new
-                {
-                    id = classDto.SchoolId,
-                    mode = "manager"
-                });
-        }
+    //        return RedirectToAction(
+    //            "SchoolInfo","",
+    //            new
+    //            {
+    //                id = classDto.SchoolId,
+    //                mode = "manager"
+    //            });
+        
 
-        return RedirectToAction(
-            nameof(SchoolInfo),
-            new
-            {
-                id = classDto.SchoolId,
-                mode = "manager"
-            });
-    }
+       
+    //}
 
 
     // =========================================================
@@ -224,7 +151,7 @@ public class SchoolController(ISchoolService schoolService , IGeneralService gen
     {
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-        var validation = schoolService.DeleteClass(id,userId);
+        var validation = schoolService.DeleteClass(id, userId);
 
         return Json(validation);
     }
@@ -241,7 +168,7 @@ public class SchoolController(ISchoolService schoolService , IGeneralService gen
             {
                 "نوع",
                 "استان",
-                "جنسیت",
+                "جنسیت پذیرش",
                 "دوره تحصیلی",
                 "مقطع تحصیلی",
                 "شیفت"

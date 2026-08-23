@@ -1,5 +1,20 @@
-﻿@model List<SchoolListItemViewModel>
+﻿@using System.Text.Json
+@model List<SchoolListItemViewModel>
 
+
+@if (TempData["Message"] is string message)
+    {
+        <script>
+            window.onload = function() {
+                Swal.fire({
+                    icon: "error",
+                    title: "خطا",
+                    text: @Html.Raw(JsonSerializer.Serialize(message)),
+                });
+            };
+        </script>
+    }
+}
 <div class="container mt-4">
 
     <div class="row g-4">
@@ -57,23 +72,22 @@
                         @if (item.IsTeacher)
                         {
                             <a asp-action="SchoolInfo"
-                               asp-route-id="@item.School.Id"
-                               asp-route-mode="teacher"
+                               asp-controller="Teacher"
+                               asp-route-schoolId="@item.School.Id"
                                class="btn btn-success flex-fill">
 
                                 👨‍🏫  معلم
-
                             </a>
                         }
 
                         @if (item.IsStudent)
                         {
-                            <a asp-action="SchoolInfo"
-                               asp-route-id="@item.School.Id"
-                               asp-route-mode="student"
+                            <a asp-action="ClassInfo"
+                               asp-controller="Student"
+                               asp-route-schoolId="@item.School.Id"
                                class="btn btn-warning flex-fill">
 
-                                🎓  دانش اموز
+                                👨‍🎓  دانش اموز
 
                             </a>
                         }
