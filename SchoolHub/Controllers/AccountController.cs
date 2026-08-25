@@ -14,18 +14,16 @@ namespace SchoolHub.Controllers
 
             return RedirectToAction("SchoolPage", "School");
         }
+
         [HttpGet]
         public IActionResult SignIn()
         {
             return View();
-
         }
 
         [HttpPost]
         public async Task<IActionResult> SignIn(UserDto user)
         {
-
-
             user = userService.Register(user);
             if (user.Validation.IsCorrect == false)
             {
@@ -37,10 +35,10 @@ namespace SchoolHub.Controllers
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                principal);
+                principal
+            );
             ViewBag.Code = user.Password;
             return RedirectToAction("SchoolPage", "School");
-
         }
 
         [HttpGet]
@@ -52,8 +50,6 @@ namespace SchoolHub.Controllers
         [HttpPost]
         public async Task<IActionResult> LogIn(UserDto user)
         {
-
-
             user = userService.LogIn(user);
             if (user.Validation.IsCorrect == false)
             {
@@ -65,10 +61,9 @@ namespace SchoolHub.Controllers
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                principal);
+                principal
+            );
             return RedirectToAction("SchoolPage", "School");
         }
-
-
     }
 }

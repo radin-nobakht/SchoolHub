@@ -32,6 +32,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     border-radius: 50%;
     background: #eef2ff;
     font-size: 28px;
@@ -96,25 +97,33 @@
 
 .subjects-tabs {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 6px;
-    padding: 0 8px;
+    width: 100%;
+    padding: 8px;
     background: #ffffff;
     border-bottom: 1px solid #e5e7eb;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    overflow: hidden;
 }
 
-    .subjects-tabs::-webkit-scrollbar {
-        display: none;
-    }
+
+/* =========================================================
+   Base Subject Tab
+   ========================================================= */
 
 .subject-tab {
     position: relative;
+    /*
+       اجازه می‌دهد تب‌ها در صورت کمبود فضا
+       به ردیف بعدی منتقل شوند.
+    */
+    flex: 0 1 auto;
+    min-width: 100px;
+    max-width: 220px;
     padding: 14px 20px;
     border: none;
+    border-bottom: 3px solid transparent;
     background: transparent;
     color: #6b7280;
     font-family: inherit;
@@ -122,28 +131,111 @@
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
 
     .subject-tab:hover {
-        color: #111827;
+        background-color: #f9fafb;
     }
 
+    .subject-tab:active {
+        transform: translateY(1px);
+    }
+
+
+    /* =========================================================
+   Subject Score Colors
+   ========================================================= */
+
+    /* بالاتر از 17 */
+    .subject-tab.subject-good {
+        color: #198754;
+    }
+
+    /* از 10 تا 17 */
+    .subject-tab.subject-medium {
+        color: #d97706;
+    }
+
+    /* کمتر از 10 */
+    .subject-tab.subject-bad {
+        color: #dc3545;
+    }
+
+    /* بدون نمره */
+    .subject-tab.subject-none {
+        color: #9ca3af;
+    }
+
+
+    /* =========================================================
+   Active Subject Tab
+   ========================================================= */
+
     .subject-tab.active {
-        color: #4f46e5;
         font-weight: 700;
     }
 
-        .subject-tab.active::after {
-            content: "";
-            position: absolute;
-            right: 12px;
-            left: 12px;
-            bottom: -1px;
-            height: 3px;
-            border-radius: 3px 3px 0 0;
-            background: #4f46e5;
+
+        /* =========================================================
+   Active - Good
+   ========================================================= */
+
+        .subject-tab.active.subject-good {
+            color: #198754;
+            border-bottom-color: #198754;
         }
+
+
+        /* =========================================================
+   Active - Medium
+   ========================================================= */
+
+        .subject-tab.active.subject-medium {
+            color: #b58900;
+            border-bottom-color: #e0b400;
+        }
+
+
+        /* =========================================================
+   Active - Bad
+   ========================================================= */
+
+        .subject-tab.active.subject-bad {
+            color: #dc3545;
+            border-bottom-color: #dc3545;
+        }
+
+
+        /* =========================================================
+   Active - No Score
+   ========================================================= */
+
+        .subject-tab.active.subject-none {
+            color: #9ca3af;
+            border-bottom-color: #9ca3af;
+        }
+
+
+    /* =========================================================
+   Hover + Score Colors
+   ========================================================= */
+
+    .subject-tab.subject-good:hover {
+        background-color: #e8f7ee;
+    }
+
+    .subject-tab.subject-medium:hover {
+        background-color: #fff8dc;
+    }
+
+    .subject-tab.subject-bad:hover {
+        background-color: #fdeaea;
+    }
+
+    .subject-tab.subject-none:hover {
+        background-color: #f3f4f6;
+    }
 
 
 /* =========================================================
@@ -347,6 +439,16 @@
     .subject-stats {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .subject-tab {
+        min-width: 90px;
+        padding: 13px 16px;
+    }
+
+    .score-item {
+        grid-template-columns: 70px 1fr 130px;
+        gap: 15px;
+    }
 }
 
 
@@ -360,6 +462,17 @@
         padding: 18px;
     }
 
+    .student-info-header {
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+
+    .student-avatar {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+
     .student-info-grid {
         grid-template-columns: 1fr;
     }
@@ -368,18 +481,50 @@
         font-size: 19px;
     }
 
-    .subject-tab {
-        padding: 13px 16px;
-        font-size: 14px;
+    /* -----------------------------------------
+       Subject Tabs - Mobile
+       ----------------------------------------- */
+
+    .subjects-tabs {
+        gap: 4px;
+        padding: 6px;
     }
+
+    .subject-tab {
+        flex: 1 1 calc(50% - 4px);
+        min-width: 0;
+        max-width: none;
+        padding: 12px 10px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+
+    /* -----------------------------------------
+       Subject Header
+       ----------------------------------------- */
 
     .subject-info-header {
         padding: 18px;
     }
 
+        .subject-info-header h2 {
+            font-size: 20px;
+        }
+
+
+    /* -----------------------------------------
+       Subject Statistics
+       ----------------------------------------- */
+
     .subject-stats {
         grid-template-columns: 1fr;
     }
+
+
+    /* -----------------------------------------
+       Scores
+       ----------------------------------------- */
 
     .subject-scores {
         padding: 18px;
@@ -393,5 +538,25 @@
     .score-value {
         width: 50px;
         height: 50px;
+    }
+}
+
+
+/* =========================================================
+   Very Small Mobile
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .subject-tab {
+        flex: 1 1 100%;
+    }
+
+    .subject-info-header {
+        padding: 16px;
+    }
+
+    .subject-scores {
+        padding: 14px;
     }
 }

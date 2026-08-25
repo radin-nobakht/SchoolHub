@@ -6,9 +6,6 @@ namespace SchoolHub.Interface
 {
     public interface ISchoolService
     {
-        bool IsManagerOfSchool(int managerUserId, int schoolId);
-        bool IsTeacherAssignedToClass(int teacherUserId, int classId);
-
         ClassDto? GetClassById(int classId);
 
         List<TeacherDto> GetTeacherByClassId(int classId);
@@ -27,21 +24,10 @@ namespace SchoolHub.Interface
 
         SchoolDto? GetManagerSchoolById(int schoolId, int managerUserId);
 
-        List<ClassDto> GetAllClasses(int schoolId);
-
         UserDto? GetManagerById(int id);
 
         bool AddSchool(SchoolDto school);
 
-        List<ClassDto> GetTeacherClasses(int schoolId, int teacherUserId);
-
-        bool AddClass(ClassDto classDto);
-
-        bool DeleteClass(int classId, int managerUserId);
-
-        List<TeacherDto> GetMySubjectsByClassId(
-            int classId,
-            int teacherUserId);
-        bool IsTeacherOfschool(int teacherUserId, int schoolId);
+        List<TeacherDto> GetMySubjectsByClassId(int classId, int teacherUserId);
     }
 }

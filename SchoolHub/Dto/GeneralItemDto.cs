@@ -4,7 +4,6 @@ namespace SchoolHub.Entity
 {
     public class GeneralItemDto
     {
-       
         public int Id { get; set; }
 
         public int? ParentId { get; set; }

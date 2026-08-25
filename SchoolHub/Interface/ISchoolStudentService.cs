@@ -4,9 +4,10 @@ using SchoolHub.Entity;
 
 namespace SchoolHub.Interface
 {
-    public interface IStudentService
+    public interface ISchoolStudentService
     {
-        List<ScoreDto> GetScores(int studentUserId, int subjectId);
+        List<AverageScoresDto> GetAverages(int studentUserId, int classId);
+        List<ScoreDto> GetScores(int studentUserId, int subjectId,int classId);
         int? GetStudentClassId(int studentUserId, int schoolId);
         StudentInfoDto GetStudentInfo(int userId, int classId, int schoolId);
         SubjectInfoDto GetSubjectInfo(SubjectInfoDto subjectInfo, int classId, int userId);

@@ -7,9 +7,7 @@ using SchoolHub.Interface;
 namespace SchoolHub.Service;
 
 public class MenuService(MyContext db) : IMenuService
-
 {
-
     //public List<SchoolEntity> Filter(string? name, string? desc)
     //{
 
@@ -39,59 +37,51 @@ public class MenuService(MyContext db) : IMenuService
             select new
             {
                 Type = type.Title,
-                School = new School
-                {
-                    Id = school.Id,
-                    Name = school.Name
-                }
-            })
+                School = new School { Id = school.Id, Name = school.Name },
+            }
+        )
             .GroupBy(x => x.Type)
             .Select(g => new SchoolBarDto
             {
                 SchoolType = g.Key,
-                Schools = g.Select(x => x.School).ToList()
+                Schools = g.Select(x => x.School).ToList(),
             })
             .ToList();
 
         return result;
-
     }
+
     public List<SchoolBarDto> GetSchoolThatTeacherBar(int userId)
     {
         var result = (
-  from assignment in db.TeachingAssignments
-  where assignment.TeacherUserId == userId
+            from assignment in db.TeachingAssignments
+            where assignment.TeacherUserId == userId
 
-  join schoolClass in db.Classes
-      on assignment.ClassId equals schoolClass.Id
+            join schoolClass in db.Classes on assignment.ClassId equals schoolClass.Id
 
-  join school in db.Schools
-      on schoolClass.SchoolId equals school.Id
+            join school in db.Schools on schoolClass.SchoolId equals school.Id
 
-  join type in db.GeneralItems
-      on school.TypeGeneralId equals type.Id
+            join type in db.GeneralItems on school.TypeGeneralId equals type.Id
 
-  where type.TitleType == "Type"
+            where type.TitleType == "Type"
 
-  select new
-  {
-      Type = type.Title,
-      SchoolId = school.Id,
-      SchoolName = school.Name
-  })
-  .Distinct()
-  .AsEnumerable()
-  .GroupBy(x => x.Type)
-  .Select(g => new SchoolBarDto
-  {
-      SchoolType = g.Key,
-      Schools = g.Select(x => new School
-      {
-          Id = x.SchoolId,
-          Name = x.SchoolName
-      }).ToList()
-  })
-  .ToList();
+            select new
+            {
+                Type = type.Title,
+                SchoolId = school.Id,
+                SchoolName = school.Name,
+            }
+        )
+            .Distinct()
+            .AsEnumerable()
+            .GroupBy(x => x.Type)
+            .Select(g => new SchoolBarDto
+            {
+                SchoolType = g.Key,
+                Schools = g.Select(x => new School { Id = x.SchoolId, Name = x.SchoolName })
+                    .ToList(),
+            })
+            .ToList();
 
         return result;
     }
@@ -102,14 +92,11 @@ public class MenuService(MyContext db) : IMenuService
             from student in db.Students
             where student.StudentUserId == userId
 
-            join schoolClass in db.Classes
-                on student.ClassId equals schoolClass.Id
+            join schoolClass in db.Classes on student.ClassId equals schoolClass.Id
 
-            join school in db.Schools
-                on schoolClass.SchoolId equals school.Id
+            join school in db.Schools on schoolClass.SchoolId equals school.Id
 
-            join type in db.GeneralItems
-                on school.TypeGeneralId equals type.Id
+            join type in db.GeneralItems on school.TypeGeneralId equals type.Id
 
             where type.TitleType == "Type"
 
@@ -117,8 +104,9 @@ public class MenuService(MyContext db) : IMenuService
             {
                 Type = type.Title,
                 SchoolId = school.Id,
-                SchoolName = school.Name
-            })
+                SchoolName = school.Name,
+            }
+        )
             .AsNoTracking()
             .Distinct()
             .AsEnumerable()
@@ -127,15 +115,11 @@ public class MenuService(MyContext db) : IMenuService
             {
                 SchoolType = g.Key,
 
-                Schools = g.Select(x => new School
-                {
-                    Id = x.SchoolId,
-                    Name = x.SchoolName
-                }).ToList()
+                Schools = g.Select(x => new School { Id = x.SchoolId, Name = x.SchoolName })
+                    .ToList(),
             })
             .ToList();
 
         return result;
     }
 }
-

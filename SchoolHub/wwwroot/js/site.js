@@ -1,8 +1,11 @@
-﻿$(document).on("click", "#btnOpenAddSchool" ,function () { 
+﻿const { ajax } = require("jquery");
+
+$(document).on("click", "#btnOpenAddSchool" ,function () { 
     const modal = new bootstrap.Modal($("#addSchoolModal")[0]);
     generalItems();
     modal.show();
 });
+
 
 function city() {
     let provinceId = $("#provinceGeneral").val();
@@ -177,16 +180,18 @@ function generalItems() {
         }
     });
 };
+
 $(document).on("click", "#btnOpenAddClass", function () {
     const modal = new bootstrap.Modal($("#addClassModal")[0]);
     Grades();
     modal.show();
 });
+
 function Grades() {
     let schoolId = $("#schoolId").val();
 
     $.ajax({
-        url: "/school/GetGrades",
+        url: "/SchoolManager/GetGrades",
         type: "GET",
         data: {
             schoolId: schoolId
@@ -216,7 +221,7 @@ function Major() {
     let generalGradeId = $("#gradeGeneral").val();
 
     $.ajax({
-        url: "/school/GetMajor",
+        url: "/SchoolManager/GetMajor",
         type: "GET",
         data: {
             generalGradeId: generalGradeId

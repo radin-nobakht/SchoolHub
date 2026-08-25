@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace SchoolHub.Entity
 {
@@ -16,10 +16,12 @@ namespace SchoolHub.Entity
         public string Reason { get; set; } = string.Empty;
 
         [Required]
+        public bool Status { get; set; } 
+
+        [Required]
         public DateTime Date { get; set; }
 
         [Required]
         public int GeneralSubjectId { get; set; }
-
     }
 }

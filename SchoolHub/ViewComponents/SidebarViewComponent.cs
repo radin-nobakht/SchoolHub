@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using SchoolHub.Interface;
 using SchoolHub.Models;
 using SchoolHub.ViewComponents;
-using System.Security.Claims;
+
 namespace SchoolHub.ViewComponents
 {
     public class SidebarViewComponent(IMenuService menuService) : ViewComponent
@@ -12,19 +13,19 @@ namespace SchoolHub.ViewComponents
         {
             var claimsPrincipal = User as ClaimsPrincipal;
 
-
             int.TryParse(
-             claimsPrincipal?.FindFirstValue(ClaimTypes.NameIdentifier),
-              out var userId
+                claimsPrincipal?.FindFirstValue(ClaimTypes.NameIdentifier),
+                out var userId
             );
 
-
-            return View(new MenuViewModel
-            {
-                MangerSchool= menuService.GetSchoolThatManagerBar(userId),
-                TeacherSchool=menuService.GetSchoolThatTeacherBar(userId),
-                StudentSchool=menuService.GetSchoolThatStudentrBar(userId)
-            });
+            return View(
+                new MenuViewModel
+                {
+                    MangerSchool = menuService.GetSchoolThatManagerBar(userId),
+                    TeacherSchool = menuService.GetSchoolThatTeacherBar(userId),
+                    StudentSchool = menuService.GetSchoolThatStudentrBar(userId),
+                }
+            );
         }
     }
 }

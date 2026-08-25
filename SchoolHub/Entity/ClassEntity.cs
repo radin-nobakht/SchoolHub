@@ -18,5 +18,4 @@ public class ClassEntity
     public int GradeGeneralId { get; set; }
 
     public int? MajorGeneralId { get; set; }
-
 }

@@ -10,10 +10,13 @@ var loggerFactory = LoggerFactory.Create(builder => { });
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-var mapperConfig = new MapperConfiguration(mc =>
-{
-    mc.AddProfile(new MappingProfile());
-}, loggerFactory);
+var mapperConfig = new MapperConfiguration(
+    mc =>
+    {
+        mc.AddProfile(new MappingProfile());
+    },
+    loggerFactory
+);
 builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
 builder.Services.AddDbContext<MyContext>(option =>
@@ -24,10 +27,12 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IGeneralService, GeneralService>();
 builder.Services.AddScoped<ISchoolService, SchoolService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
-builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ISchoolStudentService, SchoolStudentService>();
+builder.Services.AddScoped<ISchoolTeacherService, SchoolTeacherService>();
+builder.Services.AddScoped<ISchoolManagerService, SchoolManagerService>();
 
-builder.Services
-    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+builder
+    .Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Account/Login";
@@ -52,10 +57,7 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=School}/{action=SchoolPage}/{id?}")
+app.MapControllerRoute(name: "default", pattern: "{controller=School}/{action=SchoolPage}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();

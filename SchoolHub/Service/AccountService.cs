@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using SchoolHub.Adapter;
 using SchoolHub.Dto;
 using SchoolHub.Entity;
 using SchoolHub.Interface;
-using System.Security.Claims;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace SchoolHub.Service
@@ -13,7 +13,13 @@ namespace SchoolHub.Service
     {
         public UserDto Register(UserDto userDto)
         {
-            userDto.Validation.IsCorrect = db.Users.FirstOrDefault(x => x.NationalIdNumber == userDto.NationalIdNumber && x.IsStudent == userDto.IsStudent) == null ? true : false;
+            userDto.Validation.IsCorrect =
+                db.Users.FirstOrDefault(x =>
+                    x.NationalIdNumber == userDto.NationalIdNumber
+                    && x.IsStudent == userDto.IsStudent
+                ) == null
+                    ? true
+                    : false;
             if (userDto.Validation.IsCorrect)
             {
                 db.Users.Add(mapper.Map<UserEntity>(userDto));
@@ -24,13 +30,14 @@ namespace SchoolHub.Service
                 userDto.Validation.Message = "کد ملی شما تکراری هست";
 
             return userDto;
-
         }
+
         public UserDto LogIn(UserDto userDto)
         {
-
             var validationDto = new ValidationDto();
-            var userEntity = db.Users.FirstOrDefault(x => x.NationalIdNumber == userDto.NationalIdNumber && x.Password == userDto.Password);
+            var userEntity = db.Users.FirstOrDefault(x =>
+                x.NationalIdNumber == userDto.NationalIdNumber && x.Password == userDto.Password
+            );
             if (userEntity != null)
                 userDto.Validation.IsCorrect = true;
             else
@@ -45,18 +52,18 @@ namespace SchoolHub.Service
 
         public ClaimsPrincipal CreatePrincipal(UserDto userDto)
         {
-
             var claims = new List<Claim>
-          {
-        new Claim(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
-        new Claim(ClaimTypes.Name, userDto.Name),
-        new Claim("NationalIdNumber", userDto.NationalIdNumber),
-        new Claim("Password", userDto.Password)
-          };
+            {
+                new Claim(ClaimTypes.NameIdentifier, userDto.Id.ToString()),
+                new Claim(ClaimTypes.Name, userDto.Name),
+                new Claim("NationalIdNumber", userDto.NationalIdNumber),
+                new Claim("Password", userDto.Password),
+            };
 
             var identity = new ClaimsIdentity(
                 claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
+                CookieAuthenticationDefaults.AuthenticationScheme
+            );
 
             return new ClaimsPrincipal(identity);
         }

@@ -1,0 +1,512 @@
+# `teacher-class-info.css`
+
+```css
+/* =========================================================
+   Teacher Class Info
+   ========================================================= */
+.teacher-class-page {
+    width: 100%;
+    padding: 24px;
+    color: #1f2937;
+}
+
+
+/* =========================================================
+   Class Header
+   ========================================================= */
+
+.class-header-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    margin-bottom: 20px;
+}
+
+.class-header-icon {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #4e73df, #224abe);
+    color: #ffffff;
+    font-size: 27px;
+}
+
+.class-header-content {
+    min-width: 0;
+}
+
+    .class-header-content h1 {
+        margin: 0 0 10px;
+        font-size: 22px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+.class-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+    .class-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .class-meta i {
+        color: #4e73df;
+    }
+
+
+/* =========================================================
+   Statistics
+   ========================================================= */
+
+.class-statistics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.class-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 20px;
+}
+
+    .stat-icon.students {
+        background: #eef2ff;
+        color: #4e73df;
+    }
+
+    .stat-icon.subjects {
+        background: #ecfdf5;
+        color: #059669;
+    }
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-title {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.stat-content strong {
+    font-size: 22px;
+    line-height: 1;
+    color: #111827;
+}
+
+
+/* =========================================================
+   Sections
+   ========================================================= */
+
+.class-section {
+    margin-bottom: 24px;
+    padding: 22px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+    .section-header h2 {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 6px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+        .section-header h2 i {
+            color: #4e73df;
+        }
+
+    .section-header p {
+        margin: 0;
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+
+/* =========================================================
+   Subjects
+   ========================================================= */
+
+.subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.subject-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .subject-card:hover {
+        border-color: #c7d2fe;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+.subject-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #eef2ff;
+    color: #4e73df;
+}
+
+.subject-info {
+    min-width: 0;
+}
+
+    .subject-info h3 {
+        margin: 0 0 4px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .subject-info span {
+        display: block;
+        font-size: 12px;
+        color: #6b7280;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+
+/* =========================================================
+   Students
+   ========================================================= */
+
+.students-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 11px;
+    border-radius: 8px;
+    background: #eef2ff;
+    color: #4e73df;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.students-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.student-row {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.8fr) 90px 90px 130px 130px 100px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 11px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+    .student-row:hover {
+        background: #f9fafb;
+        border-color: #dbe3f0;
+    }
+
+
+/* =========================================================
+   Student Information
+   ========================================================= */
+
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+}
+
+.student-avatar {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #eef2ff;
+    color: #4e73df;
+}
+
+.student-details {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.student-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.student-label {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+
+/* =========================================================
+   Student Statistics
+   ========================================================= */
+
+.student-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+}
+
+    .student-stat .stat-label {
+        font-size: 11px;
+        color: #9ca3af;
+    }
+
+    .student-stat strong {
+        font-size: 14px;
+        color: #374151;
+    }
+
+    .student-stat.positive strong {
+        color: #059669;
+    }
+
+    .student-stat.negative strong {
+        color: #dc2626;
+    }
+
+
+/* =========================================================
+   Student Action
+   ========================================================= */
+
+.student-action-wrapper {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.student-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #eef2ff;
+    color: #4e73df;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+    .student-action:hover {
+        background: #4e73df;
+        color: #ffffff;
+    }
+
+
+/* =========================================================
+   Empty State
+   ========================================================= */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 45px 20px;
+    text-align: center;
+    border: 1px dashed #d1d5db;
+    border-radius: 12px;
+    color: #6b7280;
+}
+
+    .empty-state > i {
+        margin-bottom: 12px;
+        font-size: 32px;
+        color: #9ca3af;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 6px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .empty-state p {
+        margin: 0;
+        font-size: 13px;
+        color: #9ca3af;
+    }
+
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .subjects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .student-row {
+        grid-template-columns: minmax(200px, 1.5fr) 80px 80px 110px 100px;
+    }
+
+    .student-action-wrapper {
+        justify-content: flex-end;
+    }
+}
+
+
+@media (max-width: 850px) {
+
+    .teacher-class-page {
+        padding: 16px;
+    }
+
+    .class-statistics {
+        grid-template-columns: 1fr;
+    }
+
+    .student-row {
+        grid-template-columns: 1fr 1fr 1fr;
+        row-gap: 14px;
+    }
+
+    .student-info {
+        grid-column: 1 / -1;
+    }
+
+    .student-action-wrapper {
+        justify-content: center;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .class-header-card {
+        padding: 18px;
+    }
+
+    .class-header-icon {
+        width: 52px;
+        height: 52px;
+        font-size: 22px;
+    }
+
+    .class-header-content h1 {
+        font-size: 18px;
+    }
+
+    .class-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 7px;
+    }
+
+    .class-section {
+        padding: 16px;
+    }
+
+    .section-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .subjects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .student-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .student-info {
+        grid-column: 1 / -1;
+    }
+
+    .student-action-wrapper {
+        grid-column: 1 / -1;
+        justify-content: stretch;
+    }
+
+    .student-action {
+        width: 100%;
+    }
+}
+
+```

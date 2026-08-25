@@ -33,6 +33,5 @@ namespace SchoolHub.Entity
 
         [Required]
         public int EducationPeriodGeneralId { get; set; }
-
     }
 }

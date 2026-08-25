@@ -12,5 +12,5 @@ public class DistrictEntity
     public int CityId { get; set; }
 
     [Required]
-    public int District {  get; set; }
+    public int District { get; set; }
 }

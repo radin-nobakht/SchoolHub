@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -7,10 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\..\..\..\Downloads\schoolhub_icon_transparent_40x40 (1).png" Link="wwwroot\image\schoolhub_icon_transparent_40x40 %281%29.png" />
+    <Content
+      Include="..\..\..\..\Downloads\schoolhub_icon_transparent_40x40 (1).png"
+      Link="wwwroot\image\schoolhub_icon_transparent_40x40 %281%29.png"
+    />
   </ItemGroup>
-
-
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.2.0" />
@@ -23,10 +23,7 @@
     </PackageReference>
   </ItemGroup>
 
-
-
   <ItemGroup>
     <Folder Include="wwwroot\image\" />
   </ItemGroup>
-
 </Project>

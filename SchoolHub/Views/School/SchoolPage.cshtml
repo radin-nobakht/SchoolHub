@@ -60,7 +60,7 @@
                         @if (item.IsManager)
                         {
                             <a asp-action="SchoolInfo"
-                              asp-controller="Manager"
+                               asp-controller="SchoolManager"
                                asp-route-schoolId="@item.School.Id"
                                class="btn btn-primary flex-fill">
 
@@ -72,7 +72,7 @@
                         @if (item.IsTeacher)
                         {
                             <a asp-action="SchoolInfo"
-                               asp-controller="Teacher"
+                               asp-controller=" SchoolTeacher"
                                asp-route-schoolId="@item.School.Id"
                                class="btn btn-success flex-fill">
 
@@ -83,7 +83,7 @@
                         @if (item.IsStudent)
                         {
                             <a asp-action="ClassInfo"
-                               asp-controller="Student"
+                               asp-controller="SchoolStudent"
                                asp-route-schoolId="@item.School.Id"
                                class="btn btn-warning flex-fill">
 

@@ -14,7 +14,7 @@ namespace SchoolHub.Dto.School
         public int GenderGeneralId { get; set; }
         public int EducationLevelGeneralId { get; set; }
         public int EducationPeriodGeneralId { get; set; }
-        public string Province {  get; set; }
+        public string Province { get; set; }
         public string City { get; set; }
         public string District { get; set; }
     }

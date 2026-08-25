@@ -6,9 +6,9 @@
         public string Name { get; set; }
         public int MangerUserId { get; set; }
         public string MangerFullName { get; set; }
-        public string Province {  get; set; }
-        public string City {  get; set; }
-        public string District {  get; set; }
+        public string Province { get; set; }
+        public string City { get; set; }
+        public string District { get; set; }
         public string Type { get; set; }
         public string Gender { get; set; }
         public string Shift { get; set; }

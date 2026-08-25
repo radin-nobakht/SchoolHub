@@ -1,0 +1,338 @@
+﻿
+@model SchoolHub.Dto.Teacher.TeacherClassInfoDto
+
+@{
+    ViewData["Title"] = "اطلاعات کلاس";
+}
+
+<div class="teacher-class-page" dir="rtl">
+
+    <!-- ==================== Class Header ==================== -->
+
+    <div class="class-header-card">
+
+        <div class="class-header-icon">
+            <i class="bi bi-people-fill"></i>
+        </div>
+
+        <div class="class-header-content">
+
+            <h1>
+                @Model.ClassName
+            </h1>
+
+            <div class="class-meta">
+
+                <span>
+                    <i class="bi bi-building"></i>
+                    @Model.SchoolName
+                </span>
+
+                <span>
+                    <i class="bi bi-mortarboard-fill"></i>
+                    @Model.Grade
+                </span>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Major))
+                {
+                    <span>
+                        <i class="bi bi-book"></i>
+                        @Model.Major
+                    </span>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================== Statistics ==================== -->
+
+    <div class="class-statistics">
+
+        <!-- Students Count -->
+
+        <div class="class-stat-card">
+
+            <div class="stat-icon students">
+                <i class="bi bi-person-fill"></i>
+            </div>
+
+            <div class="stat-content">
+
+                <span class="stat-title">
+                    دانش‌آموزان
+                </span>
+
+                <strong>
+                    @Model.Students.Count
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- Subjects Count -->
+
+        <div class="class-stat-card">
+
+            <div class="stat-icon subjects">
+                <i class="bi bi-book-fill"></i>
+            </div>
+
+            <div class="stat-content">
+
+                <span class="stat-title">
+                    درس‌های من
+                </span>
+
+                <strong>
+                    @Model.Subjects.Count
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================== My Subjects ==================== -->
+
+    <section class="class-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    <i class="bi bi-book-fill"></i>
+                    درس‌های من
+                </h2>
+
+                <p>
+                    درس‌هایی که شما در این کلاس تدریس می‌کنید
+                </p>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.Subjects.Any())
+        {
+            <div class="subjects-grid">
+
+                @foreach (var subject in Model.Subjects)
+                {
+                    <div class="subject-card">
+
+                        <div class="subject-icon">
+
+                            <i class="bi bi-journal-bookmark-fill"></i>
+
+                        </div>
+
+                        <div class="subject-info">
+
+                            <h3>
+                                @subject.Name
+                            </h3>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+
+                <i class="bi bi-book"></i>
+
+                <h3>
+                    درسی ثبت نشده است
+                </h3>
+
+                <p>
+                    در حال حاضر درسی برای تدریس شما در این کلاس ثبت نشده است.
+                </p>
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- ==================== Students ==================== -->
+
+    <section class="class-section students-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    <i class="bi bi-people-fill"></i>
+                    دانش‌آموزان کلاس
+                </h2>
+
+                <p>
+                    وضعیت و عملکرد دانش‌آموزان این کلاس
+                </p>
+
+            </div>
+
+            <div class="students-count">
+
+                @Model.Students.Count
+
+                <span>
+                    نفر
+                </span>
+
+            </div>
+
+        </div>
+
+
+        @if (Model.Students.Any())
+        {
+            <div class="students-list">
+
+                @foreach (var student in Model.Students)
+                {
+                    <div class="student-row">
+
+                        <!-- Student Information -->
+
+                        <div class="student-info">
+
+                            <div class="student-avatar">
+
+                                <i class="bi bi-person-fill"></i>
+
+                            </div>
+
+                            <div class="student-details">
+
+                                <span class="student-name">
+                                    @student.FullName
+                                </span>
+
+                                <span class="student-label">
+                                    دانش‌آموز
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Positive -->
+
+                        <div class="student-stat positive">
+
+                            <span class="stat-label">
+                                مثبت
+                            </span>
+
+                            <strong>
+                                @student.Positives 
+                            </strong>
+
+                        </div>
+
+
+                        <!-- Negative -->
+
+                        <div class="student-stat negative">
+
+                            <span class="stat-label">
+                                منفی
+                            </span>
+
+                            <strong>
+                                @student.Negatives 
+                            </strong>
+
+                        </div>
+
+
+                        <!-- First Term GPA -->
+
+                        <div class="student-stat">
+
+                            <span class="stat-label">
+                                معدل نوبت اول
+                            </span>
+
+                            <strong>
+                                @student.FirstTermGPA
+                            </strong>
+
+                        </div>
+
+
+                        <!-- Second Term GPA -->
+
+                        <div class="student-stat">
+
+                            <span class="stat-label">
+                                معدل نوبت دوم
+                            </span>
+
+                            <strong>
+                                @student.SecondTermGPA
+                            </strong>
+
+                        </div>
+
+
+                        <!-- Student Action -->
+
+                        <div class="student-action-wrapper">
+
+                            <a asp-controller="Teacher"
+                               asp-action="StudentInfo"
+                               asp-route-id="@student.StudentId"
+                               class="student-action">
+
+                                <i class="bi bi-eye"></i>
+
+                                مشاهده
+
+                            </a>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+
+                <i class="bi bi-people"></i>
+
+                <h3>
+                    دانش‌آموزی وجود ندارد
+                </h3>
+
+                <p>
+                    هنوز دانش‌آموزی برای این کلاس ثبت نشده است.
+                </p>
+
+            </div>
+        }
+
+    </section>
+
+</div>

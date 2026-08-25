@@ -4,7 +4,6 @@ namespace SchoolHub.Dto.School
 {
     public class StudentDto
     {
-       
         public int Id { get; set; }
 
         public int StudentUserId { get; set; }

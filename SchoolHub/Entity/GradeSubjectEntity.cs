@@ -5,7 +5,7 @@ namespace SchoolHub.Entity
     public class GradeSubjectEntity
     {
         [Key]
-        [Required] 
+        [Required]
         public int Id { get; set; }
 
         [Required]

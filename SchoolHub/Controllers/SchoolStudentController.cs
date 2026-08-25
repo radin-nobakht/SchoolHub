@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SchoolHub.Dto.Student;
 using SchoolHub.Interface;
 using System.Security.Claims;
 
 namespace SchoolHub.Controllers;
 
-public class StudentController(IStudentService studentService) : Controller
+[Authorize]
+public class SchoolStudentController(ISchoolStudentService studentService) : Controller
 {
     public IActionResult ClassInfo(int schoolId)
     {
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var userId = int.Parse( User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
         var classId = studentService.GetStudentClassId(userId, schoolId);
         if (classId == 0 || classId == null)
         {
@@ -19,11 +21,18 @@ public class StudentController(IStudentService studentService) : Controller
         else
         {
             var studentHome = new StudentHomeDto { StudentInfo = new StudentInfoDto { ClassId = classId?? 0} };
+            
             studentHome.Subjects = studentService.GetSubjects(classId ?? 0);
-            studentHome.SubjectInfo.SubjectId = studentHome.Subjects.FirstOrDefault().Id;
-            studentHome.SubjectInfo.Scores = studentService.GetScores(userId, studentHome.SubjectInfo.SubjectId);
+
+            studentHome.SubjectInfo.SubjectId = studentHome.Subjects.FirstOrDefault()!.Id;
+
+            studentHome.SubjectInfo.Scores = studentService.GetScores(userId, studentHome.SubjectInfo.SubjectId, classId?? 0);
+
             studentHome.SubjectInfo = studentService.GetSubjectInfo(subjectInfo: studentHome.SubjectInfo,classId:classId??0,userId:userId);
+
             studentHome.StudentInfo = studentService.GetStudentInfo(userId: userId, classId: classId ?? 0, schoolId: schoolId);
+
+            studentHome.Averages = studentService.GetAverages(userId, classId!.Value);
             return View(studentHome);
         }
 
@@ -39,7 +48,7 @@ public class StudentController(IStudentService studentService) : Controller
         var model = new SubjectInfoDto
         {
             SubjectId = subjectId,
-            Scores = studentService.GetScores(userId,subjectId)
+            Scores = studentService.GetScores(userId,subjectId,classId)
         };
 
         model = studentService.GetSubjectInfo(

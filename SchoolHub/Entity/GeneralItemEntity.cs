@@ -20,6 +20,5 @@ namespace SchoolHub.Entity
         public bool Active { get; set; }
 
         public string? Description { get; set; }
-
     }
 }

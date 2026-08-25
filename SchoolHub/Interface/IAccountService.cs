@@ -1,5 +1,5 @@
-﻿using SchoolHub.Dto;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using SchoolHub.Dto;
 
 namespace SchoolHub.Interface
 {

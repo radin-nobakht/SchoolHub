@@ -15,11 +15,11 @@ namespace SchoolHub.Entity
         public int ClassId { get; set; }
 
         public int? Positives { get; set; }
-        
+
         public int? Negatives { get; set; }
-        
+
         public decimal? FirstTermGPA { get; set; }
-        
+
         public decimal? SecondTermGPA { get; set; }
     }
 }

@@ -9,15 +9,12 @@ namespace SchoolHub.Service
     {
         public MappingProfile()
         {
-
             CreateMap<UserDto, UserEntity>().ReverseMap();
             CreateMap<SchoolDto, SchoolEntity>().ReverseMap();
             CreateMap<ClassDto, ClassEntity>().ReverseMap();
             CreateMap<DistrictDto, DistrictEntity>().ReverseMap();
             CreateMap<GeneralItemDto, GeneralItemEntity>().ReverseMap();
             CreateMap<ScoreDto, ScoreEntity>().ReverseMap();
-
         }
     }
-
 }

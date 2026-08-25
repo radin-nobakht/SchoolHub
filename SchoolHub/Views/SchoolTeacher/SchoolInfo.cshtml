@@ -1,11 +1,25 @@
-﻿@model SchoolHub.Dto.School.AllDatailAboutSchool
+﻿@using System.Text.Json
+@model SchoolHub.Dto.School.AllDatailAboutSchool
 @{
-    ViewData["Title"] = "پنل مدیریت";
+    ViewData["Title"] = "پنل معلم";
 }
-<div class="manager-school-page">
+@if (TempData["Message"] is string message)
+{
+    <script>
+        window.onload = function() {
+            Swal.fire({
+                icon: "error",
+                title: "خطا",
+                text: @Html.Raw(JsonSerializer.Serialize(message)),
+            });
+        };
+    </script>
+}
+}
+<div class="teacher-school-page">
 
     <!-- ==================== School Header ==================== -->
-
+   
     <div class="school-card">
 
         <div class="school-header">
@@ -147,7 +161,7 @@
     </div>
 
 
-    <!-- ==================== Classes Header ==================== -->
+    <!-- ==================== My Classes Header ==================== -->
 
     <div class="classes-header">
 
@@ -158,28 +172,19 @@
             </div>
 
             <div>
-                <h3>کلاس‌های مدرسه</h3>
+                <h3>کلاس‌های من</h3>
+
                 <span>
-                    کلاس‌های ثبت شده در مدرسه
+                    کلاس‌هایی که در این مدرسه تدریس می‌کنید
                 </span>
             </div>
 
         </div>
 
-
-        <button type="button"
-                class="btn btn-success add-class-btn"
-                id="btnOpenAddClass">
-
-            <span>＋</span>
-            افزودن کلاس
-
-        </button>
-
     </div>
 
 
-    <!-- ==================== Classes ==================== -->
+    <!-- ==================== Teacher Classes ==================== -->
     @if (Model.Classes is not null && Model.Classes.Any())
     {
         <div class="row g-4">
@@ -252,35 +257,14 @@
 
                         <div class="buttons">
 
-                            <a asp-controller="Manager"
+                            <a asp-controller="Teacher"
                                asp-action="ClassInfo"
-                               asp-route-id="@item.Id"
+                               asp-route-ClassId="@item.Id"
                                class="btn btn-outline-primary btn-sm">
 
-                                👁 مشاهده
+                                👁 مشاهده کلاس
 
                             </a>
-
-
-                            <a asp-controller="Manager"
-                               asp-action="UpdateClass"
-                               asp-route-id="@item.Id"
-                               class="btn btn-outline-warning btn-sm">
-
-                                ✏️ ویرایش
-
-                            </a>
-
-
-                            <button type="button"
-                                    class="btn btn-outline-danger btn-sm btnDelete"
-                                    data-id="@item.Id"
-                                    data-grade="@item.Grade"
-                                    data-subject="@item.Name">
-
-                                🗑 حذف
-
-                            </button>
 
                         </div>
 
@@ -302,28 +286,14 @@
             </div>
 
             <h4>
-                هنوز کلاسی ثبت نشده است
+                کلاسی برای شما ثبت نشده است
             </h4>
 
             <p>
-                برای این مدرسه هنوز هیچ کلاسی ایجاد نشده است.
+                شما در این مدرسه در هیچ کلاسی به عنوان معلم ثبت نشده‌اید.
             </p>
-
-            <button type="button"
-                    class="btn btn-success"
-                    id="btnOpenAddClass">
-
-                ＋ افزودن اولین کلاس
-
-            </button>
 
         </div>
     }
 
 </div>
-
-
-<!-- ==================== Add Class Partial ==================== -->
-
-<partial name="~/Views/School/_AddClass.cshtml"
-         model="Model.School.Id" />

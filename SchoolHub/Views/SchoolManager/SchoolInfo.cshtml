@@ -1,12 +1,11 @@
 ﻿@model SchoolHub.Dto.School.AllDatailAboutSchool
 @{
-    ViewData["Title"] = "پنل معلم";
+    ViewData["Title"] = "پنل مدیریت";
 }
-
-<div class="teacher-school-page">
+<div class="manager-school-page">
 
     <!-- ==================== School Header ==================== -->
-   
+
     <div class="school-card">
 
         <div class="school-header">
@@ -148,7 +147,7 @@
     </div>
 
 
-    <!-- ==================== My Classes Header ==================== -->
+    <!-- ==================== Classes Header ==================== -->
 
     <div class="classes-header">
 
@@ -159,19 +158,28 @@
             </div>
 
             <div>
-                <h3>کلاس‌های من</h3>
-
+                <h3>کلاس‌های مدرسه</h3>
                 <span>
-                    کلاس‌هایی که در این مدرسه تدریس می‌کنید
+                    کلاس‌های ثبت شده در مدرسه
                 </span>
             </div>
 
         </div>
 
+
+        <button type="button"
+                class="btn btn-success add-class-btn"
+                id="btnOpenAddClass">
+
+            <span>＋</span>
+            افزودن کلاس
+
+        </button>
+
     </div>
 
 
-    <!-- ==================== Teacher Classes ==================== -->
+    <!-- ==================== Classes ==================== -->
     @if (Model.Classes is not null && Model.Classes.Any())
     {
         <div class="row g-4">
@@ -244,14 +252,33 @@
 
                         <div class="buttons">
 
-                            <a asp-controller="Teacher"
+                            <a asp-controller="Manager"
                                asp-action="ClassInfo"
                                asp-route-id="@item.Id"
                                class="btn btn-outline-primary btn-sm">
 
-                                👁 مشاهده کلاس
+                                👁 مشاهده
 
                             </a>
+
+
+                            <a asp-controller="Manager"
+                               asp-action="UpdateClass"
+                               asp-route-id="@item.Id"
+                               class="btn btn-outline-warning btn-sm">
+
+                                ✏️ ویرایش
+
+                            </a>
+
+
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm btnDelete"
+                                    data-id="@item.Id">
+
+                                🗑 حذف
+
+                            </button>
 
                         </div>
 
@@ -273,14 +300,104 @@
             </div>
 
             <h4>
-                کلاسی برای شما ثبت نشده است
+                هنوز کلاسی ثبت نشده است
             </h4>
 
             <p>
-                شما در این مدرسه در هیچ کلاسی به عنوان معلم ثبت نشده‌اید.
+                برای این مدرسه هنوز هیچ کلاسی ایجاد نشده است.
             </p>
+
+            <button type="button"
+                    class="btn btn-success"
+                    id="btnOpenAddClass">
+
+                ＋ افزودن اولین کلاس
+
+            </button>
 
         </div>
     }
 
 </div>
+
+
+<!-- ==================== Add Class Partial ==================== -->
+
+<partial name="_AddClass.cshtml"
+         model="@Model.School.Id" />
+
+@section Scripts {
+    <script>
+        $(document).on("click", ".btnDelete", function() {
+
+            const button = $(this);
+            const classId = button.data("id");
+            const classCard = button.closest(".class-card");
+
+            console.log("Class ID:", classId);
+
+            Swal.fire({
+                title: "حذف کلاس؟",
+                text: "آیا مطمئن هستید که می‌خواهید این کلاس را حذف کنید؟",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "بله، حذف کن",
+                cancelButtonText: "لغو",
+                reverseButtons: true
+            }).then((result) => {
+
+                if (!result.isConfirmed) {
+                    return;
+                }
+
+                $.ajax({
+                    url: "/SchoolManager/DeleteClass",
+                    type: "POST",
+                    data: {
+                        classId: classId
+                    },
+
+                    success: function(data) {
+
+                        if (data) {
+
+                            Swal.fire({
+                                title: "حذف شد",
+                                text: "کلاس با موفقیت حذف شد.",
+                                icon: "success",
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+
+                            // حذف کارت و آزاد شدن جای آن
+                            classCard.fadeOut(300, function() {
+                                $(this).remove();
+                            });
+
+                        } else {
+
+                            Swal.fire({
+                                title: "خطا",
+                                text: "حذف کلاس انجام نشد.",
+                                icon: "error",
+                                confirmButtonText: "باشه"
+                            });
+                        }
+                    },
+
+                    error: function(xhr, status, error) {
+
+                        console.error("Delete class error:", error);
+
+                        Swal.fire({
+                            title: "خطا",
+                            text: "در هنگام حذف کلاس مشکلی پیش آمد.",
+                            icon: "error",
+                            confirmButtonText: "باشه"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
