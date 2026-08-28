@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json
+@using System.Linq;
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="utf-8" />
@@ -18,8 +20,9 @@
 </head>
 
 <body>
-   <div class="layout">
-           @await Component.InvokeAsync("Sidebar")
+    <div class="layout">
+
+        @await Component.InvokeAsync("Sidebar")
 
   
         <!-- Main -->
@@ -108,6 +111,35 @@
     <script src="~/select2/js/i18n/fa.min.js"></script>
     <script src="~/select2/js/select2.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @if (TempData["Success"] is string success)
+    {
+        <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'موفق',
+                    text: @Html.Raw(JsonSerializer.Serialize(success)),
+                    confirmButtonText: 'باشه'
+                });
+        </script>
+    }
+
+    @if (TempData["Eror"] is string eror)
+    {
+        <script>
+                window.onload = function () {
+                    Swal.fire({
+                        icon: "error",
+                        title: "خطا",
+                        text: '@TempData["Success"]',
+                        text: @Html.Raw(JsonSerializer.Serialize(eror)),
+                    });
+                };
+
+                                            
+                            
+        </script>
+    }
+    }
 
 </body>
 </html>

@@ -3,19 +3,7 @@
 @{
     ViewData["Title"] = "پنل معلم";
 }
-@if (TempData["Message"] is string message)
-{
-    <script>
-        window.onload = function() {
-            Swal.fire({
-                icon: "error",
-                title: "خطا",
-                text: @Html.Raw(JsonSerializer.Serialize(message)),
-            });
-        };
-    </script>
-}
-}
+
 <div class="teacher-school-page">
 
     <!-- ==================== School Header ==================== -->
@@ -257,7 +245,7 @@
 
                         <div class="buttons">
 
-                            <a asp-controller="Teacher"
+                            <a asp-controller="SchoolTeacher"
                                asp-action="ClassInfo"
                                asp-route-ClassId="@item.Id"
                                class="btn btn-outline-primary btn-sm">

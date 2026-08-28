@@ -22,7 +22,7 @@ namespace SchoolHub.Controllers
 
             if (!isTeacher)
             {
-                TempData["Message"] = "شما اجازه دسترسی به این صفحه را ندارید.";
+                TempData["Eror"] = "شما اجازه دسترسی به این صفحه را ندارید.";
                 return RedirectToAction("SchoolPage", "School");
             }
             else
@@ -47,7 +47,7 @@ namespace SchoolHub.Controllers
             );
             if (!isTeacher)
             {
-                TempData["Message"] = "شما اجازه دسترسی به این کلاس را ندارید.";
+                TempData["Eror"] = "شما اجازه دسترسی به این کلاس را ندارید.";
                 return RedirectToAction("SchoolInfo", new { schoolId = schoolId, userId = userId });
             }
             else

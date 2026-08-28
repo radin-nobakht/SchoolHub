@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="SchoolHub/SchoolHub.csproj" />
+  <Project Path="SchoolHubTest/SchoolHubTest.csproj" Id="d7424e6e-85d5-4bac-8a36-761bd286b483" />
 </Solution>

@@ -1,10 +1,10 @@
-﻿const { ajax } = require("jquery");
-
-$(document).on("click", "#btnOpenAddSchool" ,function () { 
+﻿
+$(document).on("click", "#btnOpenAddSchool", function () {
     const modal = new bootstrap.Modal($("#addSchoolModal")[0]);
     generalItems();
     modal.show();
 });
+
 
 
 function city() {
@@ -80,18 +80,18 @@ function generalItems() {
         success: function (data) {
             //#region educationLevelGeneral
 
-                  let educationLevelGeneralSelect = $("#educationLevelGeneral");
+            let educationLevelGeneralSelect = $("#educationLevelGeneral");
             educationLevelGeneralSelect.empty();
 
             $.each(data.generalEducationLevels, function (index, item) {
 
                 educationLevelGeneralSelect.append(
-                        `<option value="${item.id}">
+                    `<option value="${item.id}">
                              ${item.title}
                          </option>`
-                    );
+                );
 
-                  })
+            })
             //#endregion
 
             //#region provinceGeneral
@@ -102,7 +102,7 @@ function generalItems() {
             $.each(data.generalProrvince, function (index, item) {
 
                 provinceGeneralSelect.append(
-                        `<option value="${item.id}">
+                    `<option value="${item.id}">
                              ${item.title}
                          </option>`
                 );
@@ -119,12 +119,12 @@ function generalItems() {
             $.each(data.generalTypes, function (index, item) {
 
                 typeGeneralSelect.append(
-                        `<option value="${item.id}">
+                    `<option value="${item.id}">
                              ${item.title}
                          </option>`
-                    );
+                );
 
-                  })
+            })
             //#endregion
 
             //#region shiftGeneral
@@ -135,12 +135,12 @@ function generalItems() {
             $.each(data.generalShifts, function (index, item) {
 
                 shiftGeneralSelect.append(
-                        `<option value="${item.id}">
+                    `<option value="${item.id}">
                              ${item.title}
                          </option>`
-                    );
+                );
 
-                  })
+            })
             //#endregion
 
             //#region educationPeriodGeneral
@@ -150,13 +150,13 @@ function generalItems() {
 
             $.each(data.generalEducationPeriods, function (index, item) {
 
-                      educationLevelSelect.append(
-                        `<option value="${item.id}">
+                educationLevelSelect.append(
+                    `<option value="${item.id}">
                              ${item.title}
                          </option>`
-                    );
+                );
 
-                  })
+            })
             //#endregion
 
             //#region genderGeneral
@@ -166,13 +166,13 @@ function generalItems() {
 
             $.each(data.generalGender, function (index, item) {
 
-                      genderGeneral.append(
-                        `<option value="${item.id}">
+                genderGeneral.append(
+                    `<option value="${item.id}">
                              ${item.title}
                          </option>`
-                    );
+                );
 
-                  })
+            })
             //#endregion
         },
         error: function (xhr, status, error) {
@@ -183,15 +183,16 @@ function generalItems() {
 
 $(document).on("click", "#btnOpenAddClass", function () {
     const modal = new bootstrap.Modal($("#addClassModal")[0]);
-    Grades();
+    GradesForAddClass();
     modal.show();
 });
 
-function Grades() {
+
+function GradesForAddClass() {
     let schoolId = $("#schoolId").val();
 
     $.ajax({
-        url: "/SchoolManager/GetGrades",
+        url: "/SchoolManager/GetGradesForAddClass",
         type: "GET",
         data: {
             schoolId: schoolId
@@ -209,7 +210,7 @@ function Grades() {
                 );
 
             });
-            Major();
+            MajorForAddClass();
         },
         error: function (xhr, status, error) {
             console.error(error);
@@ -217,11 +218,11 @@ function Grades() {
     });
 }
 
-function Major() {
+function MajorForAddClass() {
     let generalGradeId = $("#gradeGeneral").val();
 
     $.ajax({
-        url: "/SchoolManager/GetMajor",
+        url: "/SchoolManager/GetMajorForAddClass",
         type: "GET",
         data: {
             generalGradeId: generalGradeId
@@ -253,4 +254,77 @@ function Major() {
     });
 }
 
+$(document).on("click", "#btnOpenUpdateClass", function () {
+    const modal = new bootstrap.Modal($("#updateClassModal")[0]);
+    GradesForUpdateClass();
+    modal.show();
+});
 
+function GradesForUpdateClass() {
+    let schoolId = $("#schoolId").val();
+    let classId = $("#classId").val();
+
+    $.ajax({
+        url: "/SchoolManager/GetGradeForUpdateClass",
+        type: "GET",
+        data: {
+            schoolId: schoolId,
+            classId: classId
+        },
+        success: function (data) {
+            let select = $('#gradeGeneral');
+            select.empty();
+
+            $.each(data.grades, function (index, item) {
+
+                select.append(
+                    `<option value="${item.id}" ${item.title === data.cuurentItem ? "selected" : ""}>
+                             ${item.title}
+                         </option>`
+                );
+
+            });
+            MajorForUpdateClass();
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+function MajorForUpdateClass() {
+    let generalGradeId = $("#gradeGeneral").val();
+    let classId = $("#classId").val();
+    $.ajax({
+        url: "/SchoolManager/GetMajorForUpdateClass",
+        type: "GET",
+        data: {
+            generalGradeId: generalGradeId,
+            classId: classId
+        },
+        success: function (data) {
+            if (data.majors != null && data.majors.length > 0) {
+                // لیست حداقل یک آیتم دارد
+                let select = $("#majorGeneral");
+                select.empty();
+
+                $.each(data.majors, function (index, item) {
+
+                    select.append(
+                        `<option value="${item.id}" ${item.title === data.cuurentItem ? "selected" : ""}>
+                             ${item.title}
+                         </option>`
+                    );
+
+                });
+                $("#major").show();
+            }
+            else {
+                $("#major").hide();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}

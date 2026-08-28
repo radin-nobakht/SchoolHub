@@ -10,6 +10,7 @@ namespace SchoolHub.Interface
         Task<FullSchoolDataDto> GetFullDataOfSchoolById(int schoolId);
         Dictionary<string, List<GeneralItemDto>> GetGeneralItems(string[] titles);
         List<GeneralItemDto> GetGeneralGrades(int schoolId);
-        List<GeneralItemDto> GetGeneralMajor(int gradrId);
+        List<GeneralItemDto> GetGenerals(string type,int? parentId=null);
+        GeneralItemDto GetCurrentItem(int classId, string type);
     }
 }

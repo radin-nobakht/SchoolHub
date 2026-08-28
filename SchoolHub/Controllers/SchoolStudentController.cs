@@ -15,7 +15,7 @@ public class SchoolStudentController(ISchoolStudentService studentService) : Con
         var classId = studentService.GetStudentClassId(userId, schoolId);
         if (classId == 0 || classId == null)
         {
-            TempData["Message"] = "شما اجازه دسترسی به این صفحه را ندارید.";
+            TempData["Eror"] = "شما اجازه دسترسی به این صفحه را ندارید.";
             return RedirectToAction("SchoolPage", "School");
         }
         else

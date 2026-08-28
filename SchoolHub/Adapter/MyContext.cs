@@ -23,5 +23,6 @@ namespace SchoolHub.Adapter
         public DbSet<TeachingAssignmentEntity> TeachingAssignments { get; set; }
         public DbSet<GradeEntity> Grades { get; set; }
         public DbSet<GradeSubjectEntity> GradeSubjects { get; set; }
+        public DbSet<StudentSubjectRecordEntity> StudentSubjectRecords { get; set; }
     }
 }

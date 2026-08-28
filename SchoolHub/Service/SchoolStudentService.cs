@@ -4,6 +4,7 @@ using SchoolHub.Dto;
 using SchoolHub.Dto.Student;
 using SchoolHub.Entity;
 using SchoolHub.Interface;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SchoolHub.Service
 {
@@ -29,7 +30,7 @@ namespace SchoolHub.Service
             var gradeId = db.Classes.FirstOrDefault(x => x.Id == classId)?.GradeGeneralId ?? 0;
             var subjectIds = db.GradeSubjects.Where(x => x.GradeId == gradeId).Select(x => x.SubjectId).ToList();
             var studentId = db.Students.FirstOrDefault(x => x.StudentUserId == studentUserId && x.ClassId == classId)?.Id ?? 0;
-            var scores = db.Scores.Where(x => x.StudentId == studentId).ToList();
+            var scores = db.Scores.Where(x => x.StudentId == studentId && x.Status == true).ToList();
             var a = db.GeneralItems.Where(x => subjectIds.Contains(x.Id)).ToList();
             foreach (var s in a)
             {
@@ -72,12 +73,12 @@ namespace SchoolHub.Service
             subjectInfo.TeacherName = teacher != null ? teacher.Name + " " + teacher.LastName : "ناشناس";
 
             subjectInfo.ScoreCount = subjectInfo.Scores.Count();
-            subjectInfo.AverageScore = subjectInfo.ScoreCount != 0 ? subjectInfo.Scores.Average(x => x.Score) : 0.00;
+            subjectInfo.AverageScore =  Math.Round(subjectInfo.ScoreCount != 0 ? subjectInfo.Scores.Average(x => x.Score) : 0.00, 2);
 
-            var student = db.Students.FirstOrDefault(x => x.StudentUserId == userId);
-            subjectInfo.PositiveCount = student?.Positives ?? 0;
-            subjectInfo.NegativeCount = student?.Negatives ?? 0;
-
+            var studentId = db.Students.FirstOrDefault(x => x.StudentUserId == userId && x.ClassId == classId)?.Id ?? 0;
+            var studentSubjectRecords = db.StudentSubjectRecords.Where(x => x.SubjectGeneralId == subjectInfo.SubjectId && x.StudentUserId == studentId).ToList();
+            subjectInfo.PositiveCount = studentSubjectRecords.Where(x => x.Type == "Positive")?.Sum(x => x.Count) ?? 0;
+            subjectInfo.NegativeCount = studentSubjectRecords.Where(x => x.Type == "Negative")?.Sum(x => x.Count) ?? 0;
             return subjectInfo;
         }
 

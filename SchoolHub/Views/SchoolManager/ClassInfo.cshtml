@@ -1,0 +1,638 @@
+﻿@model SchoolHub.Dto.Manager.ManagerClassInfoDto
+
+@{
+    ViewData["Title"] = "اطلاعات کلاس";
+}
+
+<div class="manager-class-page">
+
+    <!-- =========================
+         Header
+    ========================== -->
+
+    <div class="class-header">
+
+        <div>
+
+            <a asp-controller="SchoolManager"
+               asp-action="SchoolInfo"
+               asp-route-schoolId="@Model.SchoolId"
+               class="back-button">
+
+                <i class="bi bi-arrow-right"></i>
+                بازگشت به مدرسه
+
+            </a>
+
+
+            <div class="class-title">
+
+                <div class="class-icon">
+                    <i class="bi bi-mortarboard-fill"></i>
+                </div>
+
+
+                <div>
+
+                    <h1>
+                        @Model.ClassName
+                    </h1>
+
+
+                    <div class="class-subtitle">
+
+                        <span>
+                            <i class="bi bi-building"></i>
+                            @Model.SchoolName
+                        </span>
+
+                        <span>•</span>
+
+                        <span>
+                            پایه @Model.GradeName
+                        </span>
+
+
+                        @if (!string.IsNullOrWhiteSpace(Model.MajorName))
+                        {
+                            <span>•</span>
+
+                            <span>
+                                @Model.MajorName
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button type="button"
+                class="btn btn-primary"
+                id="btnOpenUpdateClass">
+
+            <i class="bi bi-pencil-square"></i>
+
+            ویرایش کلاس
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =========================
+         Main Content
+    ========================== -->
+
+    <div class="class-content-grid">
+
+
+        <!-- =========================
+             Students
+        ========================== -->
+
+        <section class="content-card students-card">
+
+            <div class="content-card-header">
+
+                <div>
+
+                    <h3>
+
+                        <i class="bi bi-people-fill"></i>
+
+                        دانش‌آموزان
+
+                    </h3>
+
+
+                    <span>
+                        دانش‌آموزان این کلاس
+                    </span>
+
+                </div>
+
+
+                <button type="button"
+                        class="btn btn-success">
+
+                    <i class="bi bi-person-plus-fill"></i>
+
+                    افزودن دانش‌آموز
+
+                </button>
+
+            </div>
+
+
+
+            <!-- Search -->
+
+            <div class="search-box">
+
+                <i class="bi bi-search"></i>
+
+
+                <input type="text"
+                       id="studentSearch"
+                       class="form-control"
+                       placeholder="جستجوی دانش‌آموز..."
+                       autocomplete="off" />
+
+            </div>
+
+
+
+            <!-- Students List -->
+
+            <div class="students-list">
+
+                @if (Model.Students.Any())
+                {
+                    foreach (var student in Model.Students)
+                    {
+                        <div class="student-row">
+
+
+                            <!-- Avatar -->
+
+                            <div class="student-avatar">
+
+                                @if (student.Gender == "دختر")
+                                {
+                                    <i class="bi bi-person-standing-dress"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-person-standing"></i>
+                                }
+
+                            </div>
+
+
+
+                            <!-- Information -->
+
+                            <div class="student-info">
+
+                                <strong class="student-name">
+                                    @student.FullName
+                                </strong>
+
+
+                                <span>
+
+                                    شناسه:
+
+                                    @student.NationalIdNumber
+
+                                </span>
+
+                            </div>
+
+
+
+                            <!-- Average -->
+
+                            <div class="student-average">
+
+                                <span>
+                                    میانگین
+                                </span>
+
+
+                                <strong>
+                                    @student.Average
+                                </strong>
+
+                            </div>
+
+
+
+                            <!-- Actions -->
+
+                            <div class="student-actions">
+
+                                <button type="button"
+                                        class="btn btn-sm btn-light"
+                                        title="مشاهده دانش‌آموز">
+
+                                    <i class="bi bi-eye"></i>
+
+                                </button>
+
+
+                                <button type="button"
+                                        class="btn btn-sm btn-light text-danger"
+                                        title="حذف دانش‌آموز">
+
+                                    <i class="bi bi-trash3"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="empty-state">
+
+                        <i class="bi bi-people"></i>
+
+                        <h4>
+                            دانش‌آموزی وجود ندارد
+                        </h4>
+
+                        <p>
+                            هنوز دانش‌آموزی به این کلاس اضافه نشده است.
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             Sidebar
+        ========================== -->
+
+        <div class="class-sidebar">
+
+
+            <!-- =========================
+                 Class Information
+            ========================== -->
+
+            <section class="content-card class-info-card">
+
+                <div class="content-card-header">
+
+                    <div>
+
+                        <h3>
+
+                            <i class="bi bi-info-circle-fill"></i>
+
+                            اطلاعات کلاس
+
+                        </h3>
+
+
+                        <span>
+                            مشخصات کلاس
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="detail-list">
+
+
+                    <!-- Grade -->
+
+                    <div class="detail-item">
+
+                        <span>
+
+                            <i class="bi bi-mortarboard"></i>
+
+                            پایه
+
+                        </span>
+
+
+                        <strong>
+                            @Model.GradeName
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- Major -->
+                    @if (!string.IsNullOrWhiteSpace(Model.MajorName))
+                    {
+                        <div class="detail-item">
+
+                            <span>
+
+                                <i class="bi bi-journal-text"></i>
+
+                                رشته
+
+                            </span>
+
+
+                            <strong>
+                                @Model.MajorName
+                            </strong>
+
+                        </div>
+                    }
+
+
+
+                    <!-- Students -->
+
+                    <div class="detail-item">
+
+                        <span>
+
+                            <i class="bi bi-people"></i>
+
+                            دانش‌آموزان
+
+                        </span>
+
+
+                        <strong>
+                            @Model.Students.Count
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- Teachers -->
+
+                    <div class="detail-item">
+
+                        <span>
+
+                            <i class="bi bi-person-workspace"></i>
+
+                            معلمان
+
+                        </span>
+
+
+                        <strong>
+                            @Model.Teachers.Count
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- Average -->
+
+                    <div class="detail-item">
+
+                        <span>
+
+                            <i class="bi bi-bar-chart"></i>
+
+                            میانگین کلاس
+
+                        </span>
+
+
+                        <strong>
+                            @Model.Average
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================
+                 Teachers
+            ========================== -->
+
+            <section class="content-card teachers-card">
+
+                <div class="content-card-header">
+
+                    <div>
+
+                        <h3>
+
+                            <i class="bi bi-person-workspace"></i>
+
+                            معلمان کلاس
+
+                        </h3>
+
+
+                        <span>
+                            معلم و درس‌هایی که تدریس می‌کند
+                        </span>
+
+                    </div>
+
+
+                    <button type="button"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-person-plus-fill"></i>
+
+                        تعیین معلم
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- Teachers List -->
+
+                <div class="teachers-list">
+
+                    @if (Model.Teachers.Any())
+                    {
+                        foreach (var teacher in Model.Teachers)
+                        {
+                            <div class="teacher-row">
+
+
+                                <!-- Avatar -->
+
+                                <div class="teacher-avatar">
+
+                                    <i class="bi bi-person-fill"></i>
+
+                                </div>
+
+
+
+                                <!-- Teacher Info -->
+
+                                <div class="teacher-info">
+
+                                    <strong>
+                                        @teacher.FullName
+                                    </strong>
+
+
+                                    <span>
+
+                                        شناسه:
+
+                                        @teacher.NationalIdNumber
+
+                                    </span>
+
+                                </div>
+
+
+
+                                <!-- Subjects -->
+
+                                <div class="teacher-subjects">
+
+                                    @if (teacher.Subjects.Any())
+                                    {
+                                        foreach (var subject in teacher.Subjects)
+                                        {
+                                            <span class="subject-badge">
+
+                                                <i class="bi bi-book"></i>
+
+                                                @subject.Title
+
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            بدون درس
+                                        </span>
+                                    }
+
+                                </div>
+
+
+
+                                <!-- Actions -->
+
+                                <div class="teacher-actions">
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-light"
+                                            title="ویرایش">
+
+                                        <i class="bi bi-pencil"></i>
+
+                                    </button>
+
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-light text-danger"
+                                            title="حذف">
+
+                                        <i class="bi bi-trash3"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+
+                            <i class="bi bi-person-workspace"></i>
+
+                            <h4>
+                                معلمی برای این کلاس ثبت نشده است
+                            </h4>
+
+                            <p>
+                                هنوز معلمی به این کلاس اختصاص داده نشده است.
+                            </p>
+
+                        </div>
+                    }
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     Update Class
+========================== -->
+
+<partial name="_UpdateClass.cshtml"
+         model="@Model.Class" />
+
+
+
+@section Scripts
+{
+    <script>
+
+        const searchInput =
+            document.getElementById("studentSearch");
+
+
+        if (searchInput) {
+
+            searchInput.addEventListener("input", function () {
+
+                const value =
+                    this.value
+                        .trim()
+                        .toLowerCase();
+
+
+                document
+                    .querySelectorAll(".student-row")
+                    .forEach(row => {
+
+                        const studentName =
+                            row.querySelector(".student-name");
+
+
+                        if (!studentName) {
+                            return;
+                        }
+
+
+                        const name =
+                            studentName.innerText
+                                .trim()
+                                .toLowerCase();
+
+
+                        row.style.display =
+                            name.includes(value)
+                                ? ""
+                                : "none";
+
+                    });
+
+            });
+
+        }
+
+    </script>
+}

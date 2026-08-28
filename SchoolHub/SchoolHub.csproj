@@ -6,17 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content
-      Include="..\..\..\..\Downloads\schoolhub_icon_transparent_40x40 (1).png"
-      Link="wwwroot\image\schoolhub_icon_transparent_40x40 %281%29.png"
-    />
+    <Content Include="..\..\..\..\Downloads\schoolhub_icon_transparent_40x40 (1).png" Link="wwwroot\image\schoolhub_icon_transparent_40x40 %281%29.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.2.0" />
     <PackageReference Include="bootstrap" Version="5.3.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

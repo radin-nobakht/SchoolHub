@@ -1,7 +1,8 @@
-﻿@model int
+﻿@using SchoolHub.Dto.School
+@model ClassDto
 
-<div class="modal fade add-class-modal"
-     id="addClassModal"
+<div class="modal fade update-class-modal"
+     id="updateClassModal"
      tabindex="-1"
      aria-hidden="true">
 
@@ -20,11 +21,11 @@
 
                     <div>
                         <h5 class="modal-title">
-                            افزودن کلاس
+                            ویرایش کلاس
                         </h5>
 
                         <span class="modal-subtitle">
-                            اطلاعات کلاس جدید را وارد کنید
+                            اطلاعات جدید کلاس را وارد کنید
                         </span>
                     </div>
 
@@ -40,7 +41,7 @@
 
 
             <!-- Form -->
-            <form action="/Manager/AddClass"
+            <form action="/SchoolManager/UpdateClass"
                   method="post">
 
                 <div class="modal-body">
@@ -48,7 +49,12 @@
                     <input type="hidden"
                            name="schoolId"
                            id="schoolId"
-                           value="@Model" />
+                           value="@Model.SchoolId" />
+
+                    <input type="hidden"
+                           name="id"
+                           id="classId"
+                           value="@Model.Id" />
 
 
                     <!-- Class Name -->
@@ -68,6 +74,7 @@
                                    class="form-control custom-input"
                                    name="name"
                                    required
+                                   value="@(Model.Name)"
                                    autocomplete="off"
                                    placeholder="مثلاً کلاس ۹۰۱">
 
@@ -87,7 +94,7 @@
                                 class="form-select select2 custom-select"
                                 name="gradeGeneralId"
                                 required
-                                onchange="MajorForAddClass()">
+                                onchange="MajorForUpdateClass()">
                         </select>
 
                     </div>

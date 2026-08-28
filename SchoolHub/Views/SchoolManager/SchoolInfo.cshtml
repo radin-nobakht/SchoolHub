@@ -1,7 +1,9 @@
-﻿@model SchoolHub.Dto.School.AllDatailAboutSchool
+﻿@using System.Text.Json
+@model SchoolHub.Dto.School.AllDatailAboutSchool
 @{
     ViewData["Title"] = "پنل مدیریت";
 }
+
 <div class="manager-school-page">
 
     <!-- ==================== School Header ==================== -->
@@ -252,9 +254,9 @@
 
                         <div class="buttons">
 
-                            <a asp-controller="Manager"
+                            <a asp-controller="SchoolManager"
                                asp-action="ClassInfo"
-                               asp-route-id="@item.Id"
+                               asp-route-classId="@item.Id"
                                class="btn btn-outline-primary btn-sm">
 
                                 👁 مشاهده

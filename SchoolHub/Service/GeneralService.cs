@@ -118,10 +118,15 @@ namespace SchoolHub.Service
             );
         }
 
-        public List<GeneralItemDto> GetGeneralMajor(int gradrId)
+        public List<GeneralItemDto> GetGenerals(string type, int? parentId = null) => mapper.Map<List<GeneralItemDto>>(db.GeneralItems.Where(x => x.TitleType == type && (parentId != null ? x.ParentId == parentId : true)).ToList());
+        
+
+        public GeneralItemDto GetCurrentItem(int classId, string type)
         {
-            var a = db.GeneralItems.Where(x => x.ParentId == gradrId).ToList();
-            return mapper.Map<List<GeneralItemDto>>(a);
+            var clas = db.Classes.FirstOrDefault(x => x.Id == classId) ?? new ClassEntity();
+            var generalItem = db.GeneralItems.FirstOrDefault(x => (x.Id == clas.GradeGeneralId || x.Id == clas.MajorGeneralId) && x.TitleType == type);
+
+            return mapper.Map<GeneralItemDto>(generalItem);
         }
     }
 }

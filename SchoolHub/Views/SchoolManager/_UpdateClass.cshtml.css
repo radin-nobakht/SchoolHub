@@ -1,0 +1,366 @@
+/* =========================================
+   Add Class Modal
+   ========================================= */
+
+.update-class-modal {
+    direction: rtl;
+}
+
+
+    /* =========================================
+   Modal
+   ========================================= */
+
+    .update-class-modal .modal-dialog {
+        max-width: 520px;
+    }
+
+.update-class-modal .modal-content {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+
+    /* =========================================
+   Header
+   ========================================= */
+
+    .update-class-modal .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 24px;
+        border-bottom: 1px solid #eef1f5;
+        background: linear-gradient( 135deg, #f8fbff, #ffffff );
+    }
+
+
+.modal-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+
+.modal-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: linear-gradient( 135deg, #0d6efd, #4f8dfd );
+    color: white;
+    font-size: 23px;
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.22);
+}
+
+
+.modal-title-wrapper .modal-title {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+
+.modal-subtitle {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #8a94a6;
+}
+
+
+/* =========================================
+   Close Button
+   ========================================= */
+
+.update-class-modal .btn-close {
+    margin: 0;
+    opacity: 0.5;
+    transition: all 0.2s ease;
+}
+
+    .update-class-modal .btn-close:hover {
+        opacity: 1;
+        transform: rotate(90deg);
+    }
+
+
+/* =========================================
+   Body
+   ========================================= */
+
+.update-class-modal .modal-body {
+    padding: 25px 24px 10px;
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+
+/* =========================================
+   Input
+   ========================================= */
+
+.input-wrapper {
+    position: relative;
+}
+
+
+.input-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 17px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+
+.custom-input {
+    height: 48px;
+    padding-right: 44px;
+    padding-left: 14px;
+    border: 1px solid #dfe4ea;
+    border-radius: 11px;
+    font-size: 14px;
+    background: #fafbfc;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+
+    .custom-input::placeholder {
+        color: #a5adba;
+    }
+
+
+    .custom-input:hover {
+        background: #ffffff;
+        border-color: #cbd2dc;
+    }
+
+
+    .custom-input:focus {
+        background: #ffffff;
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.10);
+        outline: none;
+    }
+
+
+/* =========================================
+   Select
+   ========================================= */
+
+.custom-select {
+    min-height: 48px;
+    border: 1px solid #dfe4ea;
+    border-radius: 11px;
+    background-color: #fafbfc;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+    .custom-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.10);
+    }
+
+
+/* =========================================
+   Select2
+   ========================================= */
+
+.update-class-modal .select2-container {
+    width: 100% !important;
+}
+
+
+.update-class-modal
+.select2-container--default
+.select2-selection--single {
+    height: 48px;
+    border: 1px solid #dfe4ea;
+    border-radius: 11px;
+    background: #fafbfc;
+}
+
+
+    .update-class-modal
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered {
+        line-height: 46px;
+        padding-right: 14px;
+        padding-left: 40px;
+        color: #374151;
+        font-size: 14px;
+    }
+
+
+    .update-class-modal
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__placeholder {
+        color: #a5adba;
+    }
+
+
+    .update-class-modal
+    .select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow {
+        height: 46px;
+        left: 10px;
+        right: auto;
+    }
+
+
+    .update-class-modal
+    .select2-container--default
+    .select2-selection--single:focus {
+        border-color: #0d6efd;
+    }
+
+
+/* =========================================
+   Error
+   ========================================= */
+
+.form-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    margin-top: 5px;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   Footer
+   ========================================= */
+
+.update-class-modal .modal-footer {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 18px 24px 22px;
+    border-top: 1px solid #eef1f5;
+    background: #fafbfc;
+}
+
+
+/* =========================================
+   Cancel Button
+   ========================================= */
+
+.modal-cancel-btn {
+    min-width: 100px;
+    height: 43px;
+    border: 1px solid #dfe4ea;
+    border-radius: 10px;
+    color: #596273;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+
+    .modal-cancel-btn:hover {
+        background: #ffffff;
+        border-color: #cbd2dc;
+        color: #374151;
+    }
+
+
+/* =========================================
+   Submit Button
+   ========================================= */
+
+.modal-submit-btn {
+    min-width: 125px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 6px 15px rgba(13, 110, 253, 0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+    .modal-submit-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(13, 110, 253, 0.25);
+    }
+
+
+    .modal-submit-btn:active {
+        transform: translateY(0);
+    }
+
+
+/* =========================================
+   Responsive
+   ========================================= */
+
+@media (max-width: 576px) {
+
+    .update-class-modal .modal-dialog {
+        margin: 12px;
+    }
+
+    .update-class-modal .modal-header {
+        padding: 18px;
+    }
+
+    .update-class-modal .modal-body {
+        padding: 20px 18px 8px;
+    }
+
+    .update-class-modal .modal-footer {
+        padding: 16px 18px 18px;
+    }
+
+    .modal-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+    }
+
+    .modal-title-wrapper .modal-title {
+        font-size: 17px;
+    }
+
+    .modal-subtitle {
+        font-size: 11px;
+    }
+}

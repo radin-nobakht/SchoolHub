@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SchoolHub.Adapter;
+using SchoolHub.Dto.Manager;
 using SchoolHub.Dto.School;
 using SchoolHub.Entity;
 using SchoolHub.Interface;
@@ -89,4 +91,168 @@ public class SchoolManagerService(MyContext db, IMapper mapper) : ISchoolManager
 
     public int? GetSchoolIdByClassId(int classId) =>
         db.Classes.FirstOrDefault(x => x.Id == classId)?.SchoolId;
+
+    //
+    public ManagerClassInfoDto GetManagerClassDetail(ManagerClassInfoDto managerClass)
+    {
+        var clas = db.Classes.FirstOrDefault(x => x.Id == managerClass.ClassId);
+        managerClass.SchoolName = db.Schools.FirstOrDefault(x => x.Id == managerClass.SchoolId)?.Name?? "نامشخص";
+        managerClass.ClassName= clas?.Name?? "نامشخص";
+        managerClass.MajorName = db.GeneralItems.FirstOrDefault(x => x.Id == (clas != null ? clas.MajorGeneralId : 0))?.Title;
+        managerClass.GradeName = db.GeneralItems.FirstOrDefault(x => x.Id == (clas != null ? clas.GradeGeneralId : 0))?.Title ?? "نامشخص";
+        
+
+        return managerClass;
+    }
+
+    public double GetClassAverage(int classId)
+    {
+        var studentIds = db.Students.Where(x => x.ClassId == classId).ToList().Select(x=> x.Id)?? [];
+        var scores =db.Scores.Where(x=> studentIds.Contains(x.StudentId) && x.Status == true).ToList();
+        return Math.Round(scores?.Select(x => (double?)double.Parse(x.Score)).Average() ?? 0, 2);
+    }
+
+
+    public ClassDto GetClassDetail(int classId) => mapper.Map<ClassDto>(db.Classes.FirstOrDefault(x=> x.Id == classId));
+
+    public List<ManagerClassStudentDto> GetStudentsDetail(int classId)
+    {
+        var students = db.Students
+            .Where(s => s.ClassId == classId)
+            .Select(s => new
+            {
+                StudentId = s.Id,
+
+                FullName = db.Users
+                    .Where(u => u.Id == s.StudentUserId)
+                    .Select(u => u.Name + " " + u.LastName)
+                    .FirstOrDefault() ?? "نامشخص",
+
+                Gender = db.Users
+                    .Where(u => u.Id == s.StudentUserId)
+                    .Join(
+                        db.GeneralItems,
+                        u => u.GenderGeneralId,
+                        g => g.Id,
+                        (u, g) => g.Title
+                    )
+                    .FirstOrDefault(),
+                NationalIdNumber= db.Users.Where(u => u.Id == s.StudentUserId).Select(u => u.NationalIdNumber).FirstOrDefault() ?? "0"
+            })
+            .ToList();
+
+        var studentIds = students
+            .Select(x => x.StudentId)
+            .ToList();
+
+        var averages = db.Scores
+            .Where(x => studentIds.Contains(x.StudentId)&& x.Status == true)
+            .AsEnumerable()
+            .GroupBy(x => x.StudentId)
+            .ToDictionary(
+                g => g.Key,
+                g => Math.Round(
+                    g.Select(x => double.Parse(x.Score))
+                     .DefaultIfEmpty(0)
+                     .Average(),
+                    2
+                )
+            );
+
+        return students
+            .Select(s => new ManagerClassStudentDto
+            {
+                StudentId = s.StudentId,
+                FullName = s.FullName,
+                Gender = s.Gender,
+                NationalIdNumber = s.NationalIdNumber,
+                Average = averages.TryGetValue(s.StudentId, out var average)
+                    ? average
+                    : 0
+            })
+            .ToList();
+    }
+   
+    public List<ManagerClassTeacherDto> GetTeachersDetail(int classId)
+    {
+        var assignments = db.TeachingAssignments
+            .Where(x => x.ClassId == classId)
+            .Select(x => new
+            {
+                x.TeacherUserId
+            })
+            .ToList();
+
+        var teacherIds = assignments
+            .Select(x => x.TeacherUserId)
+            .Distinct()
+            .ToList();
+
+        var teachers = db.Users
+            .Where(x => teacherIds.Contains(x.Id))
+            .Select(x => new
+            {
+                TeacherUserId = x.Id,
+                FullName = x.Name + " " + x.LastName,
+                NationalIdNumber = x.NationalIdNumber
+            })
+            .ToList();
+
+        var subjects = db.TeachingAssignments
+            .Where(x => teacherIds.Contains(x.TeacherUserId))
+            .Join(
+                db.GeneralItems,
+                x => x.SubjectId,
+                g => g.Id,
+                (x, g) => new
+                {
+                    x.TeacherUserId,
+                    Subject = new GeneralItemDto
+                    {
+                        Id = g.Id,
+                        Title = g.Title
+                    }
+                }
+            )
+            .ToList();
+
+        return teachers
+            .Select(teacher => new ManagerClassTeacherDto
+            {
+                TeacherUserId = teacher.TeacherUserId,
+                FullName = teacher.FullName,
+                NationalIdNumber = teacher.NationalIdNumber,
+                Subjects = subjects
+                    .Where(x => x.TeacherUserId == teacher.TeacherUserId)
+                    .Select(x => x.Subject)
+                    .DistinctBy(x => x.Id)
+                    .ToList()
+            })
+            .ToList();
+    }
+
+
+    public (bool success,string message) UpdateClass(ClassDto clas)
+    {
+        var isEnable = db.Classes.Any(x=> x.Id ==clas.Id);
+        if (!isEnable)
+        {
+            return (false,"کلاسی یافت نشد");
+        }
+        else
+        {
+            try
+            {
+                db.Classes.Update(mapper.Map<ClassEntity>(clas));
+                db.SaveChanges();
+                return (true,"ویرایش موفقیت میز بود");
+            }
+            catch
+            {
+                return (true,"ویرایش با شکست مواجه شد");
+            }
+        }
+
+    }
+
 }

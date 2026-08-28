@@ -3,20 +3,19 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolHub.Dto.School;
 using SchoolHub.Interface;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
+using SchoolHub.Dto.Manager;
 
 namespace SchoolHub.Controllers
 {
     [Authorize]
     public class SchoolManagerController(
-        ISchoolService schoolService,
         IGeneralService generalService,
         ISchoolManagerService schoolManagerService
     ) : Controller
     {
         public async Task<IActionResult> SchoolInfo(int schoolId)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var isManager = schoolManagerService.IsManagerOfSchool(
                 managerUserId: userId,
@@ -24,7 +23,7 @@ namespace SchoolHub.Controllers
             );
             if (!isManager)
             {
-                TempData["Message"] = "شما اجازه دسترسی به این صفحه را ندارید.";
+                TempData["Eror"] = "شما اجازه دسترسی به این صفحه را ندارید.";
                 return RedirectToAction("SchoolPage", "School");
             }
             else
@@ -40,7 +39,7 @@ namespace SchoolHub.Controllers
         [HttpPost]
         public IActionResult AddClass(ClassDto classDto)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var schoolId = schoolManagerService.GetSchoolIdByClassId(classDto.Id);
 
             var isManager = schoolManagerService.IsManagerOfSchoolClass(schoolId ?? 0, userId);
@@ -64,14 +63,14 @@ namespace SchoolHub.Controllers
             );
         }
 
-        public IActionResult GetMajor(int generalGradeId)
+        public IActionResult GetMajorForAddClass(int generalGradeId)
         {
-            var majors = generalService.GetGeneralMajor(generalGradeId);
+            var majors = generalService.GetGenerals("Major",generalGradeId);
 
             return Json(majors);
         }
 
-        public IActionResult GetGrades(int schoolId)
+        public IActionResult GetGradesForAddClass(int schoolId)
         {
             var grades = generalService.GetGeneralGrades(schoolId);
 
@@ -81,7 +80,7 @@ namespace SchoolHub.Controllers
         [HttpPost]
         public IActionResult DeleteClass(int classId)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var schoolId = schoolManagerService.GetSchoolIdByClassId(classId);
             var isManager = schoolManagerService.IsManagerOfSchoolClass(schoolId ?? 0, userId);
@@ -95,5 +94,71 @@ namespace SchoolHub.Controllers
                 return Json(validation);
             }
         }
+
+        public IActionResult ClassInfo(int classId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var schoolId = schoolManagerService.GetSchoolIdByClassId(classId) ??0;
+            var isManager = schoolManagerService.IsManagerOfSchoolClass(schoolId , userId);
+            if (!isManager)
+            {
+                TempData["Eror"] = "شما اجازه دسترسی به این کلاس را ندارید.";
+                return RedirectToAction("SchoolInfo", "Manager", new { schoolId = schoolId });
+            }
+            else
+            {
+                var managerClassInfo = new ManagerClassInfoDto { ClassId = classId , SchoolId =schoolId };
+                managerClassInfo.Average = schoolManagerService.GetClassAverage(classId);
+                managerClassInfo.Students = schoolManagerService.GetStudentsDetail(classId);
+                managerClassInfo.Teachers = schoolManagerService.GetTeachersDetail(classId);
+                managerClassInfo.Class= schoolManagerService.GetClassDetail(classId);
+                managerClassInfo = schoolManagerService.GetManagerClassDetail(managerClassInfo);
+                return View(managerClassInfo);
+            }
+        }
+
+
+        public IActionResult UpdateClass(ClassDto clas)
+        {
+            var msg = schoolManagerService.UpdateClass(clas);
+            if (msg.success)
+                TempData["Success"] = msg.message;
+            else
+                TempData["Eror"] = msg.message;
+
+
+
+            return RedirectToAction("ClassInfo", "SchoolManager", new { classId = clas.Id });
+        }
+
+
+        public IActionResult GetMajorForUpdateClass(int classId,int generalGradeId)
+        {
+
+            var currentIem = generalService.GetCurrentItem(classId, "Major");
+            var majors = generalService.GetGenerals("Major", generalGradeId);
+
+            return Json(new
+            {
+                Majors = majors,
+                CurrentIem = currentIem
+            });
+        }
+        public IActionResult GetGradeForUpdateClass(int classId,int schoolId)
+        {
+            var currentIem = generalService.GetCurrentItem(classId ,"Grade");
+            var grades = generalService.GetGeneralGrades(schoolId);
+
+            return Json(new { 
+            Grades = grades,
+            CurrentIem = currentIem 
+            });
+        }
+
+
+        
+
+
+
     }
 }
