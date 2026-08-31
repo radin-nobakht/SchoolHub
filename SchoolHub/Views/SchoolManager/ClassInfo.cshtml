@@ -119,7 +119,7 @@
 
 
                 <button type="button"
-                        class="btn btn-success">
+                        class="btn btn-success" id="Addbtn">
 
                     <i class="bi bi-person-plus-fill"></i>
 
@@ -583,6 +583,9 @@
 
 <partial name="_UpdateClass.cshtml"
          model="@Model.Class" />
+
+<partial name="_AddStudent.cshtml"
+         model="@Model.Class.Id" />
 
 
 

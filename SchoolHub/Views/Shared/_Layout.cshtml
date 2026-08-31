@@ -130,7 +130,6 @@
                     Swal.fire({
                         icon: "error",
                         title: "خطا",
-                        text: '@TempData["Success"]',
                         text: @Html.Raw(JsonSerializer.Serialize(eror)),
                     });
                 };

@@ -10,6 +10,43 @@ namespace SchoolHub.Service;
 
 public class SchoolManagerService(MyContext db, IMapper mapper) : ISchoolManagerService
 {
+
+    public (bool IsCorrect,string message) AddStudent(StudentDto student,string nationalIdNumber)
+    {
+        if (!IsClassExist(student.ClassId))
+            return (false, "");
+
+        var user = IsUserExist(nationalIdNumber);
+        if (!user.Exist)
+            return (false, "");
+        student.StudentUserId = user.Id;
+        if (IsStudentInClass(student.ClassId, student.StudentUserId))
+            return (false, "");
+
+        try
+        {
+            db.Students.Add(mapper.Map<StudentEntity>(student));
+            db.SaveChanges();
+            return (true, "");
+        }
+        catch
+        {
+            return (false, "");
+        }
+    }
+
+
+    public bool IsClassExist(int classId) => db.Classes.Any(x => x.Id == classId);
+
+    public (int Id, bool Exist) IsUserExist(string nationalIdNumber)
+    {
+        var user = db.Users.FirstOrDefault(x => x.NationalIdNumber == nationalIdNumber);
+        return (user?.Id ?? 0, user != null);
+    }
+
+    public bool IsStudentInClass(int classId, int studentUserId) => db.Students.Any(x => x.ClassId == classId && x.StudentUserId == studentUserId);
+  
+
     public bool IsManagerOfSchool(int managerUserId, int schoolId)
     {
         return db.Schools.Any(x => x.Id == schoolId && x.ManagerUserId == managerUserId);

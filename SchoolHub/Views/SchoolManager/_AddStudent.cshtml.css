@@ -1,0 +1,107 @@
+.add-student-modal .modal-content {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.add-student-modal .modal-header {
+    border-bottom: 1px solid #eee;
+    padding: 20px 24px;
+}
+
+.add-student-modal .modal-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.add-student-modal .modal-icon {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f6ff;
+    border-radius: 12px;
+    font-size: 22px;
+}
+
+.add-student-modal .modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.add-student-modal .modal-subtitle {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    color: #888;
+}
+
+.add-student-modal .modal-body {
+    padding: 24px;
+}
+
+.add-student-modal .form-group {
+    margin-bottom: 0;
+}
+
+.add-student-modal .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.add-student-modal .input-wrapper {
+    position: relative;
+}
+
+.add-student-modal .input-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    font-size: 18px;
+}
+
+.add-student-modal .custom-input {
+    padding-right: 45px;
+    height: 48px;
+    border-radius: 10px;
+}
+
+    .add-student-modal .custom-input:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+    }
+
+.add-student-modal .form-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #fff1f1;
+    color: #dc3545;
+    font-size: 14px;
+}
+
+.add-student-modal .modal-footer {
+    border-top: 1px solid #eee;
+    padding: 16px 24px;
+}
+
+.add-student-modal .modal-cancel-btn,
+.add-student-modal .modal-submit-btn {
+    border-radius: 9px;
+    padding: 9px 18px;
+}
+
+.add-student-modal .modal-submit-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}

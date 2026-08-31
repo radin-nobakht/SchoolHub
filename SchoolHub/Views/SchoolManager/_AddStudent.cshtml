@@ -1,5 +1,4 @@
-﻿```cshtml
-@model int
+﻿@model int
 
 <div class="modal fade add-student-modal"
      id="addStudentModal"
@@ -41,14 +40,14 @@
 
 
             <!-- Form -->
-            <form action="/Manager/AddStudent"
+            <form action="/SchoolManager/AddStudent"
                   method="post">
 
                 <div class="modal-body">
 
                     <!-- School Id -->
                     <input type="hidden"
-                           name="schoolId"
+                           name="classId"
                            value="@Model" />
 
 
@@ -66,6 +65,7 @@
                             </span>
 
                             <input type="text"
+                                   id="nationalIdInput"
                                    class="form-control custom-input"
                                    name="nationalId"
                                    required

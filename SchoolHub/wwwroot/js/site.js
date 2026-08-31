@@ -328,3 +328,21 @@ function MajorForUpdateClass() {
         }
     });
 }
+
+$(document).on("click", "#Addbtn", function () {
+
+    const modal = new bootstrap.Modal($("#addStudentModal")[0]);
+
+    modal.show();
+});
+
+
+$(document).on("input", "#nationalIdInput", function () {
+
+    $(this).val(
+        $(this).val()
+            .replace(/\D/g, "")
+            .slice(0, 10)
+    );
+
+});
