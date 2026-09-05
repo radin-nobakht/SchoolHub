@@ -364,3 +364,10 @@
         font-size: 11px;
     }
 }
+.select2-container {
+    z-index: 9999 !important;
+}
+
+.modal .select2-container {
+    z-index: 1056 !important;
+}

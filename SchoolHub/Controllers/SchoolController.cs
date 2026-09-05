@@ -12,15 +12,12 @@ public class SchoolController(ISchoolService schoolService, IGeneralService gene
     : Controller
 {
     // =========================================================
-    // لیست مدارس کاربر
+    // لیست مدارس کاربر 
     // =========================================================
 
     public IActionResult SchoolPage()
     {
-        if (!int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out int userId))
-        {
-            return Unauthorized();
-        }
+        int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
         var schools = schoolService.GetSchools(userId);
 
@@ -92,7 +89,7 @@ public class SchoolController(ISchoolService schoolService, IGeneralService gene
 
             GeneralEducationPeriods = generals.FirstOrDefault(x => x.Key == "دوره تحصیلی").Value,
 
-            GeneralGender = generals.FirstOrDefault(x => x.Key == "جنسیت").Value,
+            GeneralGender = generals.FirstOrDefault(x => x.Key == "جنسیت پذیرش").Value,
 
             GeneralProrvince = generals.FirstOrDefault(x => x.Key == "استان").Value,
 

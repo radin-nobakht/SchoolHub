@@ -1,0 +1,114 @@
+.assign-teacher-modal .modal-content {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.assign-teacher-modal .modal-header {
+    border-bottom: 1px solid #eee;
+    padding: 20px 24px;
+}
+
+.assign-teacher-modal .modal-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.assign-teacher-modal .modal-icon {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f6ff;
+    border-radius: 12px;
+    font-size: 22px;
+}
+
+.assign-teacher-modal .modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.assign-teacher-modal .modal-subtitle {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    color: #888;
+}
+
+.assign-teacher-modal .modal-body {
+    padding: 24px;
+}
+
+.assign-teacher-modal .form-group {
+    margin-bottom: 0;
+}
+
+.assign-teacher-modal .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.assign-teacher-modal .input-wrapper {
+    position: relative;
+}
+
+.assign-teacher-modal .input-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    font-size: 18px;
+}
+
+.assign-teacher-modal .custom-input {
+    height: 48px;
+    padding-right: 45px;
+    border-radius: 10px;
+}
+
+    .assign-teacher-modal .custom-input:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+    }
+
+
+/* Select2 */
+
+.assign-teacher-modal .select2-container {
+    width: 100% !important;
+}
+
+.assign-teacher-modal .select2-container--default
+.select2-selection--multiple {
+    min-height: 48px;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 5px 8px;
+}
+
+    .assign-teacher-modal .select2-container--default
+    .select2-selection--multiple:focus-within {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+    }
+
+    .assign-teacher-modal .select2-container--default
+    .select2-selection--multiple
+    .select2-selection__choice {
+        border: none;
+        border-radius: 6px;
+        padding: 4px 8px;
+        margin-top: 4px;
+        margin-right: 4px;
+    }
+
+.assign-teacher-modal .select2-container--default
+.select2-search--inline
+.select2-search__field {
+    margin-top: 5px

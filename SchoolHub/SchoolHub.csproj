@@ -4,9 +4,15 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Views\School\SchoolPage.cshtml.css" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="..\..\..\..\Downloads\schoolhub_icon_transparent_40x40 (1).png" Link="wwwroot\image\schoolhub_icon_transparent_40x40 %281%29.png" />
+    <Content Include="Views\School\SchoolPage.cshtml.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

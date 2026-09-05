@@ -1,0 +1,139 @@
+﻿@model int
+
+<div class="modal fade assign-teacher-modal"
+     id="assignTeacherModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header">
+
+                <div class="modal-title-wrapper">
+
+                    <div class="modal-icon">
+                        👨‍🏫
+                    </div>
+
+                    <div>
+                        <h5 class="modal-title">
+                            تعیین معلم
+                        </h5>
+
+                        <span class="modal-subtitle">
+                            معلم و درس‌های موردنظر را انتخاب کنید
+                        </span>
+                    </div>
+
+                </div>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+
+            <!-- Form -->
+            <form action="/SchoolManager/AddTeacher"
+                  method="post">
+
+                <div class="modal-body">
+
+                    <!-- Class Id -->
+                    <input type="hidden"
+                        id="classId"
+                           name="classId"
+                           value="@Model" />
+
+
+                    <!-- Teacher National Id -->
+                    <div class="form-group">
+
+                        <label class="form-label">
+                            کد ملی معلم
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                🪪
+                            </span>
+
+                            <input type="text"
+                                   id="nationalIdInput"
+                                   class="form-control custom-input"
+                                   name="nationalId"
+                                   required
+                                   maxlength="10"
+                                   minlength="10"
+                                   inputmode="numeric"
+                                   autocomplete="off"
+                                   placeholder="مثلاً 0012345678">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Subjects -->
+                    <div class="form-group mt-3">
+
+                        <label class="form-label">
+                            درس‌ها
+                        </label>
+
+                        <select id="teacherSubjects"
+                                name="subjectIds"
+                                class="form-select select2 custom-select"
+                                multiple
+                                required>
+
+                            <!-- Subjects will be loaded here -->
+
+                        </select>
+
+                    </div>
+
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="form-error">
+                            <span>⚠️</span>
+                            <span>@ViewBag.Error</span>
+                        </div>
+                    }
+
+                </div>
+
+
+                <!-- Footer -->
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-light modal-cancel-btn"
+                            data-bs-dismiss="modal">
+                        انصراف
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-primary modal-submit-btn">
+                        <span>✓</span>
+                        ثبت
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+```

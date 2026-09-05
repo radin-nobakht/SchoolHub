@@ -21,5 +21,8 @@ namespace SchoolHub.Entity
         public decimal? FirstTermGPA { get; set; }
 
         public decimal? SecondTermGPA { get; set; }
+
+        public bool IsDeleted { get; set; }
+
     }
 }

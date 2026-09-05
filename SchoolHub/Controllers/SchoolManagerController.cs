@@ -121,10 +121,10 @@ namespace SchoolHub.Controllers
         public IActionResult UpdateClass(ClassDto clas)
         {
             var msg = schoolManagerService.UpdateClass(clas);
-            if (msg.success)
-                TempData["Success"] = msg.message;
+            if (msg.Success)
+                TempData["Success"] = msg.Message;
             else
-                TempData["Eror"] = msg.message;
+                TempData["Eror"] = msg.Message;
 
 
 
@@ -161,17 +161,50 @@ namespace SchoolHub.Controllers
         public IActionResult AddStudent(int classId,string nationalId)
         {
             var isAdd= schoolManagerService.AddStudent(new StudentDto { ClassId = classId} , nationalId);
-            if (isAdd.IsCorrect)
+            if (isAdd.Success)
             {
-                TempData["Success"] = isAdd.message;
+                TempData["Success"] = isAdd.Message;
             }
             else
             {
-                TempData["Eror"] = isAdd.message;
+                TempData["Eror"] = isAdd.Message;
             }
             return RedirectToAction("ClassInfo", "SchoolManager", new { classId = classId });
         }
 
+
+        public IActionResult GetAvailableSubjects(int classId)
+        {
+            var gradeId = schoolManagerService.GetGradeIdByClassId(classId);
+            var scores = generalService.GetAvailableSubjectsByGradeId(gradeId:gradeId??0,classId:classId);
+            return Json(scores);
+        }
+
+
+
+        public IActionResult AddTeacher(AddTeacherDto addTeacher, string nationalId)
+        {
+            var isAdd = schoolManagerService.AddTeacher(new AddTeacherDto { ClassId = addTeacher.ClassId , SubjectIds = addTeacher.SubjectIds }, nationalId);
+            if (isAdd.Success)
+                TempData["Success"] = isAdd.Message;
+            else
+                TempData["Eror"] = isAdd.Message;
+            
+            return RedirectToAction("ClassInfo", "SchoolManager", new { classId = addTeacher.ClassId });
+        }
+
+
+        public IActionResult DeleteStudent(int studentId)
+        {
+            var isDeleted = schoolManagerService.DeleteStudent(studentId);
+            return Json(isDeleted);
+        }
+
+        public IActionResult DeleteTeacher(int classId,int teacherUserId)
+        {
+            var isDeleted = schoolManagerService.DeleteTeacher(classId: classId, teacherUserId: teacherUserId);
+            return Json(isDeleted);
+        }
 
 
 

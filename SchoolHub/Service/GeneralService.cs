@@ -4,6 +4,7 @@ using SchoolHub.Adapter;
 using SchoolHub.Dto.School;
 using SchoolHub.Entity;
 using SchoolHub.Interface;
+using System.Security.Cryptography.Xml;
 
 namespace SchoolHub.Service
 {
@@ -119,7 +120,7 @@ namespace SchoolHub.Service
         }
 
         public List<GeneralItemDto> GetGenerals(string type, int? parentId = null) => mapper.Map<List<GeneralItemDto>>(db.GeneralItems.Where(x => x.TitleType == type && (parentId != null ? x.ParentId == parentId : true)).ToList());
-        
+
 
         public GeneralItemDto GetCurrentItem(int classId, string type)
         {
@@ -128,5 +129,32 @@ namespace SchoolHub.Service
 
             return mapper.Map<GeneralItemDto>(generalItem);
         }
+
+
+        public bool IsSubjectExistForThisGrade(List<int> subjectIds, int GradeId)
+        {
+            if (subjectIds?.Count() <= 0)
+                return true;
+
+
+            var uniqueSubjectIds = subjectIds.Distinct().ToList();
+
+            return db.GradeSubjects.Where(x => uniqueSubjectIds.Contains(x.SubjectId) && x.GradeId == GradeId)
+             .Select(x => x.SubjectId)
+             .Distinct().ToList()
+             .Count() == uniqueSubjectIds.Count();
+             
+
+        }
+
+
+        public List<GeneralItemDto> GetAvailableSubjectsByGradeId(int gradeId,int classId)
+        {
+            var assignedSubjects = db.TeachingAssignments.Where(x => x.ClassId == classId).Select(x=> x.SubjectId).ToList();
+            var subjectIds = db.GradeSubjects.Where(x => x.GradeId == gradeId && !assignedSubjects.Contains(x.SubjectId)).Select(x=> x.SubjectId).ToList();
+            var subjects = db.GeneralItems.Where(x => subjectIds.Contains(x.Id) && x.TitleType == "Subject").ToList();
+            return mapper.Map<List<GeneralItemDto>>(subjects);
+        }
+
     }
 }

@@ -1,4 +1,29 @@
-﻿
+﻿$(document).ready(function () {
+
+    $(".select2").each(function () {
+
+        const $select = $(this);
+        const $modal = $select.closest(".modal");
+
+        $select.select2({
+            width: "100%",
+            dir: "rtl",
+            dropdownParent: $modal.length ? $modal : $(document.body),
+
+            language: {
+                noResults: function () {
+                    return "موردی پیدا نشد";
+                },
+                searching: function () {
+                    return "در حال جستجو...";
+                }
+            }
+        });
+
+    });
+
+});
+
 $(document).on("click", "#btnOpenAddSchool", function () {
     const modal = new bootstrap.Modal($("#addSchoolModal")[0]);
     generalItems();
@@ -329,7 +354,7 @@ function MajorForUpdateClass() {
     });
 }
 
-$(document).on("click", "#Addbtn", function () {
+$(document).on("click", "#AddStudentbtn", function () {
 
     const modal = new bootstrap.Modal($("#addStudentModal")[0]);
 
@@ -345,4 +370,189 @@ $(document).on("input", "#nationalIdInput", function () {
             .slice(0, 10)
     );
 
+});
+
+$(document).on("click", "#btnAddTeacher", function () {
+
+    const modal = new bootstrap.Modal($("#assignTeacherModal")[0]);
+    Subjects();
+    modal.show();
+});
+
+function Subjects() {
+    let classId = $("#classId").val();
+    $.ajax({
+        url: "/SchoolManager/GetAvailableSubjects",
+        type: "GET",
+        data: {
+            classId: classId
+        },
+        success: function (data) {
+         
+                // لیست حداقل یک آیتم دارد
+                let select = $("#teacherSubjects");
+                select.empty();
+
+                $.each(data, function (index, item) {
+
+                    select.append(
+                        `<option value="${item.id}">
+                             ${item.title}
+                         </option>`
+                    );
+
+                });
+             
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+
+$(document).on("click", ".btnDeleteStudent", function () {
+
+    const button = $(this);
+    const studentId = button.attr("data-studentid");
+    const studentRow = button.closest(".student-row");
+
+    console.log(studentId);
+    Swal.fire({
+        title: "حذف کلاس؟",
+        text: "آیا مطمئن هستید که می‌خواهید این دانش آموز را حذف کنید؟",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "بله، حذف کن",
+        cancelButtonText: "لغو",
+        reverseButtons: true
+    }).then((result) => {
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        $.ajax({
+            url: "/SchoolManager/DeleteStudent",
+            type: "POST",
+            data: {
+                studentId: studentId
+            },
+
+            success: function (data) {
+
+                if (data) {
+
+                    Swal.fire({
+                        title: "حذف شد",
+                        text: "داننش آموز با موفقیت حذف شد.",
+                        icon: "success",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    // حذف کارت و آزاد شدن جای آن
+                    studentRow.fadeOut(300, function () {
+                        $(this).remove();
+                    });
+
+                } else {
+
+                    Swal.fire({
+                        title: "خطا",
+                        text: "حذف دانش آموز انجام نشد.",
+                        icon: "error",
+                        confirmButtonText: "باشه"
+                    });
+                }
+            },
+
+            error: function (xhr, status, error) {
+
+                console.error("Delete class error:", error);
+
+                Swal.fire({
+                    title: "خطا",
+                    text: "در هنگام حذف کلاس مشکلی پیش آمد.",
+                    icon: "error",
+                    confirmButtonText: "باشه"
+                });
+            }
+        });
+    });
+});
+
+
+
+$(document).on("click", ".btnDeleteTeacher", function () {
+
+    const button = $(this);
+    const classId = button.data("class-id");
+    const teacherUserId = button.data("teacher-user-id");
+    const teacherRow = button.closest(".teacher-row");
+
+
+    Swal.fire({
+        title: "حذف کلاس؟",
+        text: "آیا مطمئن هستید که می‌خواهید این دانش آموز را حذف کنید؟",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "بله، حذف کن",
+        cancelButtonText: "لغو",
+        reverseButtons: true
+    }).then((result) => {
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        $.ajax({
+            url: "/SchoolManager/DeleteTeacher",
+            type: "POST",
+            data: {
+                teacherUserId: teacherUserId,
+                classId: classId
+            },
+
+            success: function (data) {
+
+                if (data) {
+
+                    Swal.fire({
+                        title: "حذف شد",
+                        text: "داننش آموز با موفقیت حذف شد.",
+                        icon: "success",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    // حذف کارت و آزاد شدن جای آن
+                    teacherRow.fadeOut(300, function () {
+                        $(this).remove();
+                    });
+
+                } else {
+
+                    Swal.fire({
+                        title: "خطا",
+                        text: "حذف دانش آموز انجام نشد.",
+                        icon: "error",
+                        confirmButtonText: "باشه"
+                    });
+                }
+            },
+
+            error: function (xhr, status, error) {
+
+                console.error("Delete class error:", error);
+
+                Swal.fire({
+                    title: "خطا",
+                    text: "در هنگام حذف کلاس مشکلی پیش آمد.",
+                    icon: "error",
+                    confirmButtonText: "باشه"
+                });
+            }
+        });
+    });
 });

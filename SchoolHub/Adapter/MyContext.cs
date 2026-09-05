@@ -24,5 +24,17 @@ namespace SchoolHub.Adapter
         public DbSet<GradeEntity> Grades { get; set; }
         public DbSet<GradeSubjectEntity> GradeSubjects { get; set; }
         public DbSet<StudentSubjectRecordEntity> StudentSubjectRecords { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<TeachingAssignmentEntity>()
+                .HasKey(x => new
+                {
+                    x.TeacherUserId,
+                    x.ClassId,
+                    x.SubjectId
+                });
+        }
     }
 }
