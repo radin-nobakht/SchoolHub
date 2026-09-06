@@ -74,12 +74,12 @@ namespace SchoolHubTest.TestServices
             // =========================
             // Services
             // =========================
-            generalService = new GeneralService(db,mapper);
-            testGeneralService = new GeneralService(testDb,mapper);
+            generalService = new GeneralService(db, mapper);
+            testGeneralService = new GeneralService(testDb, mapper);
 
-            service = new SchoolManagerService(db, mapper,generalService);
+            service = new SchoolManagerService(db, mapper, generalService);
 
-            testService = new SchoolManagerService(testDb, mapper,testGeneralService);
+            testService = new SchoolManagerService(testDb, mapper, testGeneralService);
         }
 
 
@@ -124,7 +124,7 @@ namespace SchoolHubTest.TestServices
             var result = testService.IsClassExist(7);
 
             // Assert
-            Assert.True( result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -137,32 +137,32 @@ namespace SchoolHubTest.TestServices
             var result = testService.IsClassExist(6);
 
             // Assert
-            Assert.False( result);
+            Assert.False(result);
         }
 
 
         [Fact]
-        public void IsUserExist_WhenNationalIdNumberIsCorrect_ReturnsTrueAndCorrectId()
+        public void IsUserExistByNationalId_WhenNationalIdNumberIsCorrect_ReturnsTrueAndCorrectId()
         {
             // Arrange
-            testDb.Users.Add(new UserEntity {GenderGeneralId=4 ,IsStudent=true , NationalIdNumber="0153054352",Name="mamad" , Id = 5, LastName="یس",Password="dddd" });
+            testDb.Users.Add(new UserEntity { GenderGeneralId = 4, IsStudent = true, NationalIdNumber = "0153054352", Name = "mamad", Id = 5, LastName = "یس", Password = "dddd" });
             testDb.SaveChanges();
             // Act
-            var result = testService.IsUserExist("0153054352");
+            var result = testService.IsUserExistByNationalId("0153054352");
 
             // Assert
             Assert.True(result.Exist);
-            Assert.Equal(5 , result.Id);
+            Assert.Equal(5, result.Id);
         }
 
         [Fact]
-        public void IsUserExist_WhenNationalIdNumberIsNotCorrect_ReturnsFalseAndNotCorrectId()
+        public void IsUserExistByNationalId_WhenNationalIdNumberIsNotCorrect_ReturnsFalseAndNotCorrectId()
         {
             // Arrange
-            testDb.Users.Add(new UserEntity {GenderGeneralId=4 ,IsStudent=true , NationalIdNumber="0153054352",Name="mamad" , Id = 5, LastName="یس",Password="dddd" });
+            testDb.Users.Add(new UserEntity { GenderGeneralId = 4, IsStudent = true, NationalIdNumber = "0153054352", Name = "mamad", Id = 5, LastName = "یس", Password = "dddd" });
             testDb.SaveChanges();
             // Act
-            var result = testService.IsUserExist("415545");
+            var result = testService.IsUserExistByNationalId("415545");
 
             // Assert
             Assert.False(result.Exist);
@@ -173,11 +173,11 @@ namespace SchoolHubTest.TestServices
         public void IsStudentInClass_WhenStudentInClass_ReturnsTrue()
         {
             // Arrange
-            testDb.Students.Add(new StudentEntity { Id = 3, ClassId =7, StudentUserId = 5 });
+            testDb.Students.Add(new StudentEntity { Id = 3, ClassId = 7, StudentUserId = 5 });
             testDb.SaveChanges();
 
             // Act
-            var result = testService.IsStudentInClass(7,5);
+            var result = testService.IsStudentInClass(7, 5);
 
             // Assert
             Assert.True(result);
@@ -187,10 +187,10 @@ namespace SchoolHubTest.TestServices
         public void IsStudentInClass_WhenStudentDoesntInClass_ReturnsFalse()
         {
             // Arrange
-            testDb.Students.Add(new StudentEntity { Id = 3, ClassId =7, StudentUserId = 5 });
+            testDb.Students.Add(new StudentEntity { Id = 3, ClassId = 7, StudentUserId = 5 });
             testDb.SaveChanges();
             // Act
-            var result = service.IsStudentInClass(5,8);
+            var result = service.IsStudentInClass(5, 8);
 
             // Assert
             Assert.False(result);
@@ -207,7 +207,7 @@ namespace SchoolHubTest.TestServices
             testDb.SaveChanges();
 
             // Act
-            var result = testService.AddStudent(new StudentDto { Id = 1,ClassId=7 }, "0153054352");
+            var result = testService.AddStudent(new StudentDto { Id = 1, ClassId = 7 }, "0153054352");
 
             // Assert
             Assert.True(result.Success);
@@ -234,7 +234,7 @@ namespace SchoolHubTest.TestServices
             testDb.SaveChanges();
 
             // Act
-            var result = testService.AddTeacher(new AddTeacherDto {TeacherUserId= 0,ClassId=7,SubjectIds = [1567, 1568, 1569] }, "0153054352");
+            var result = testService.AddTeacher(new SchoolHub.Dto.Manager.TeacherDto { TeacherUserId = 0, ClassId = 7, SubjectIds = [1567, 1568, 1569] }, "0153054352");
 
             // Assert
             Assert.True(result.Success);
@@ -277,7 +277,7 @@ namespace SchoolHubTest.TestServices
             testDb.SaveChanges();
 
             // Act
-            var result = testService.IsTeacherInClass(5,8);
+            var result = testService.IsTeacherInClass(5, 8);
 
             // Assert
             Assert.True(result);
@@ -291,7 +291,7 @@ namespace SchoolHubTest.TestServices
             testDb.SaveChanges();
 
             // Act
-            var result = testService.IsTeacherInClass(4,6);
+            var result = testService.IsTeacherInClass(4, 6);
 
             // Assert
             Assert.False(result);
@@ -302,56 +302,159 @@ namespace SchoolHubTest.TestServices
         public void DeleteStudent_WhenStudentIsAvailable_ReturnsTrue()
         {
             // Arrange
-            testDb.Students.Add(new StudentEntity { Id = 9 ,ClassId= 5,StudentUserId=3});
+            testDb.Students.Add(new StudentEntity { Id = 9, ClassId = 5, StudentUserId = 3 });
             testDb.SaveChanges();
             // Act
             var result = testService.DeleteStudent(9);
 
             // Assert
-            Assert.True( result);
+            Assert.True(result);
         }
 
         [Fact]
         public void DeleteStudent_WhenStudentIsNotAvailable_ReturnsFalse()
         {
             // Arrange
-            testDb.Students.Add(new StudentEntity { Id = 9 ,ClassId= 5,StudentUserId=3});
+            testDb.Students.Add(new StudentEntity { Id = 9, ClassId = 5, StudentUserId = 3 });
             testDb.SaveChanges();
             // Act
             var result = testService.DeleteStudent(20);
 
             // Assert
-            Assert.False( result);
+            Assert.False(result);
         }
 
         [Fact]
         public void DeleteTeaccher_WhenDataIsCorrect_ReturnsTrue()
         {
             // Arrange
-            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity {ClassId= 5,TeacherUserId=8,SubjectId=2});
-            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity {ClassId= 5,TeacherUserId=8,SubjectId=7});
-            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity {ClassId= 5,TeacherUserId=8,SubjectId=6});
+            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity { ClassId = 5, TeacherUserId = 8, SubjectId = 2 });
+            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity { ClassId = 5, TeacherUserId = 8, SubjectId = 7 });
+            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity { ClassId = 5, TeacherUserId = 8, SubjectId = 6 });
             testDb.SaveChanges();
             // Act
-            var result = testService.DeleteTeacher(5,8);
+            var result = testService.DeleteTeacher(5, 8);
 
             // Assert
-            Assert.True( result);
+            Assert.True(result);
         }
 
         [Fact]
         public void DeleteTeacher_WhenDataIsNotCorrect_ReturnsFalse()
         {
             // Arrange
-            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity {ClassId= 5,TeacherUserId=8,SubjectId=2});
-            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity {ClassId= 5,TeacherUserId=8,SubjectId=7});
-            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity {ClassId= 5,TeacherUserId=8,SubjectId=6});
+            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity { ClassId = 5, TeacherUserId = 8, SubjectId = 2 });
+            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity { ClassId = 5, TeacherUserId = 8, SubjectId = 7 });
+            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity { ClassId = 5, TeacherUserId = 8, SubjectId = 6 });
             testDb.SaveChanges();
             // Act
-            var result = testService.DeleteTeacher(6,8);
+            var result = testService.DeleteTeacher(6, 8);
 
             // Assert
-            Assert.False( result);
+            Assert.False(result);
+        }
+
+
+        [Fact]
+        public void IsStudentInSchool_WhenStudentInClass_ReturnsTrue()
+        {
+            // Arrange
+            testDb.Classes.AddRange(
+             
+                new ClassEntity { Id = 4, SchoolId = 7, Name = "کلاس چهارم", GradeGeneralId = 10, MajorGeneralId = 2 },
+                new ClassEntity { Id = 5, SchoolId = 7, Name = "کلاس پنجم", GradeGeneralId = 11, MajorGeneralId = 2 }
+            );
+            testDb.Students.AddRange(
+               
+                new StudentEntity { StudentUserId = 10, ClassId = 4, IsDeleted = false },
+                new StudentEntity { StudentUserId = 11, ClassId = 4, IsDeleted = false },
+                new StudentEntity { StudentUserId = 12, ClassId = 4, IsDeleted = false },
+                new StudentEntity { StudentUserId = 13, ClassId = 5, IsDeleted = false },
+                new StudentEntity { StudentUserId = 14, ClassId = 5, IsDeleted = false },
+                new StudentEntity { StudentUserId = 15, ClassId = 5, IsDeleted = false }
+                );
+            testDb.Schools.Add(new SchoolEntity {Id=7, Name = "مدرسه 1", ManagerUserId = 1, CityId = 1, DistrictId = 1, ShiftGeneralId = 1, TypeGeneralId = 1, GenderGeneralId = 1, EducationLevelGeneralId = 1, EducationPeriodGeneralId = 1 });
+            testDb.SaveChanges();
+
+            // Act
+            var result = testService.IsStudentInSchool(classId:5,studentUserId:11);
+
+            // Assert
+            Assert.True( result);
+        }
+
+        [Fact]
+        public void IsStudentInSchool_WhenStudentIsntInClass_ReturnsFalse()
+        {
+            // Arrange
+            testDb.Schools.Add(new SchoolEntity {Id=7, Name = "مدرسه 1", ManagerUserId = 1, CityId = 1, DistrictId = 1, ShiftGeneralId = 1, TypeGeneralId = 1, GenderGeneralId = 1, EducationLevelGeneralId = 1, EducationPeriodGeneralId = 1 });
+            testDb.Classes.AddRange(
+
+              new ClassEntity { Id = 4, SchoolId = 7, Name = "کلاس چهارم", GradeGeneralId = 10, MajorGeneralId = 2 },
+              new ClassEntity { Id = 5, SchoolId = 7, Name = "کلاس پنجم", GradeGeneralId = 11, MajorGeneralId = 2 }
+            );
+            testDb.SaveChanges();
+            // Act
+            var result = testService.IsStudentInSchool(classId: 5, studentUserId: 11);
+
+            // Assert
+            Assert.False(result);
+        }
+
+
+        [Fact]
+        public void IsUserExistById_WhenUserExist_ReturnsTrue()
+        {
+            // Arrange
+            testDb.Users.Add(new UserEntity { Id =4 , GenderGeneralId=4,IsStudent=true,LastName="d",NationalIdNumber="",Name="",Password=""});
+            testDb.SaveChanges();
+            // Act
+            var result = testService.IsUserExistById(4);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsUserExistById_WhenUserIsntExist_ReturnsFalse()
+        {
+
+            // Act
+            var result = testService.IsUserExistById(4);
+
+            // Assert
+            Assert.False(result);
+        }
+
+
+        [Fact]
+        public void UpdateTeacher_WhenDataIsCorrect_ReturnsTrue()
+        {
+            // Arrange
+            testDb.Users.Add(new UserEntity { GenderGeneralId = 4, IsStudent = true, NationalIdNumber = "0153054352", Name = "mamad", Id = 5, LastName = "یس", Password = "dddd" });
+            testDb.Classes.Add(new ClassEntity { Id = 7, GradeGeneralId = 21, MajorGeneralId = 8, SchoolId = 4, Name = "10.1" });
+            testDb.GradeSubjects.AddRange(
+               new GradeSubjectEntity { Id = 360, GradeId = 21, SubjectId = 1567 },
+               new GradeSubjectEntity { Id = 361, GradeId = 21, SubjectId = 1568 },
+               new GradeSubjectEntity { Id = 362, GradeId = 21, SubjectId = 1569 },
+               new GradeSubjectEntity { Id = 363, GradeId = 21, SubjectId = 1570 },
+               new GradeSubjectEntity { Id = 364, GradeId = 21, SubjectId = 1571 },
+               new GradeSubjectEntity { Id = 365, GradeId = 21, SubjectId = 1572 },
+               new GradeSubjectEntity { Id = 366, GradeId = 21, SubjectId = 1573 },
+               new GradeSubjectEntity { Id = 367, GradeId = 21, SubjectId = 1575 },
+               new GradeSubjectEntity { Id = 368, GradeId = 21, SubjectId = 1576 }
+           );
+            testDb.TeachingAssignments.AddRange(
+                new() { TeacherUserId = 5, ClassId = 7, SubjectId = 1567 },
+                new() { TeacherUserId = 5, ClassId = 7, SubjectId = 1571 },
+                new() { TeacherUserId = 5, ClassId = 7, SubjectId = 1576 }
+            );
+            testDb.SaveChanges();
+            // Act
+            var result = testService.UpdateTeacher(new SchoolHub.Dto.Manager.TeacherDto { ClassId = 7, TeacherUserId = 5, SubjectIds = [1567, 1571, 1568] });
+
+            // Assert
+            Assert.True( result.Success);
         }
 
         // =====================================================

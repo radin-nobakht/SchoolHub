@@ -30,8 +30,6 @@ $(document).on("click", "#btnOpenAddSchool", function () {
     modal.show();
 });
 
-
-
 function city() {
     let provinceId = $("#provinceGeneral").val();
 
@@ -212,7 +210,6 @@ $(document).on("click", "#btnOpenAddClass", function () {
     modal.show();
 });
 
-
 function GradesForAddClass() {
     let schoolId = $("#schoolId").val();
 
@@ -361,7 +358,6 @@ $(document).on("click", "#AddStudentbtn", function () {
     modal.show();
 });
 
-
 $(document).on("input", "#nationalIdInput", function () {
 
     $(this).val(
@@ -375,11 +371,11 @@ $(document).on("input", "#nationalIdInput", function () {
 $(document).on("click", "#btnAddTeacher", function () {
 
     const modal = new bootstrap.Modal($("#assignTeacherModal")[0]);
-    Subjects();
+    SubjectsForAddTeacher();
     modal.show();
 });
 
-function Subjects() {
+function SubjectsForAddTeacher() {
     let classId = $("#classId").val();
     $.ajax({
         url: "/SchoolManager/GetAvailableSubjects",
@@ -409,7 +405,6 @@ function Subjects() {
         }
     });
 }
-
 
 $(document).on("click", ".btnDeleteStudent", function () {
 
@@ -481,8 +476,6 @@ $(document).on("click", ".btnDeleteStudent", function () {
         });
     });
 });
-
-
 
 $(document).on("click", ".btnDeleteTeacher", function () {
 
@@ -556,3 +549,45 @@ $(document).on("click", ".btnDeleteTeacher", function () {
         });
     });
 });
+
+$(document).on("click", ".btnUpdateTeacher", function () {
+
+    const modal = new bootstrap.Modal($("#updateTeacherModal")[0]);
+    $("#teacherUserId").val($(this).data("teacher-user-id"));
+    SubjectsForUpdateSchool();
+    modal.show();
+});
+
+function SubjectsForUpdateSchool() {
+    let teacherUserId = $("#teacherUserId").val();
+    let classId = $("#classId").val();
+    $.ajax({
+        url: "/SchoolManager/GetSubjectsForUpdateTeacher",
+        type: "GET",
+        data: {
+            classId: classId,
+            teacherUserId: teacherUserId
+        },
+        success: function (data) {
+
+            // لیست حداقل یک آیتم دارد
+            let select = $("#teacherSubjectsUpdate");
+            select.empty();
+       
+            $.each(data.availableSubjects, function (index, item) {
+                
+                const isSelected = data.teacherSubjectIds.includes(item.id);
+
+                select.append(
+                    `<option value="${item.id}" ${isSelected ? "selected" : ""}>
+                         ${item.title}
+                    </option>`
+                );
+            });
+
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}

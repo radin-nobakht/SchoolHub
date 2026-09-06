@@ -1,7 +1,7 @@
 ﻿@model int
 
-<div class="modal fade add-student-modal"
-     id="addStudentModal"
+<div class="modal fade assign-teacher-modal"
+     id="updateTeacherModal"
      tabindex="-1"
      aria-hidden="true">
 
@@ -15,16 +15,16 @@
                 <div class="modal-title-wrapper">
 
                     <div class="modal-icon">
-                        🎓
+                        👨‍🏫
                     </div>
 
                     <div>
                         <h5 class="modal-title">
-                            افزودن دانش‌آموز
+                            ویرایش درس‌های معلم
                         </h5>
 
                         <span class="modal-subtitle">
-                            کد ملی دانش‌آموز را وارد کنید
+                            درس‌های معلم را اضافه یا حذف کنید
                         </span>
                     </div>
 
@@ -38,46 +38,36 @@
 
             </div>
 
-
-            <!-- Form -->
-            <form action="/Manager/AddStudent"
+            <form action="/SchoolManager/UpdateTeacher"
                   method="post">
 
                 <div class="modal-body">
 
-                    <!-- School Id -->
                     <input type="hidden"
-                           name="schoolId"
+                           name="classId"
+                           id="classId"
                            value="@Model" />
 
+                    <input type="hidden"
+                           name="teacherUserId"
+                           id="teacherUserId"
+                           value="" />
 
-                    <!-- National Id -->
+                    <!-- Subjects -->
                     <div class="form-group">
 
                         <label class="form-label">
-                            کد ملی دانش‌آموز
+                            درس‌ها
                         </label>
 
-                        <div class="input-wrapper">
-
-                            <span class="input-icon">
-                                🪪
-                            </span>
-
-                            <input type="text"
-                                   class="form-control custom-input"
-                                   name="nationalId"
-                                   required
-                                   maxlength="10"
-                                   minlength="10"
-                                   inputmode="numeric"
-                                   autocomplete="off"
-                                   placeholder="مثلاً 0012345678">
-
-                        </div>
+                        <select id="teacherSubjectsUpdate"
+                                name="SubjectIds"
+                                class="form-select select2 custom-select"
+                                multiple
+                                required>
+                        </select>
 
                     </div>
-
 
                     @if (ViewBag.Error != null)
                     {
@@ -89,8 +79,6 @@
 
                 </div>
 
-
-                <!-- Footer -->
                 <div class="modal-footer">
 
                     <button type="button"
@@ -102,7 +90,7 @@
                     <button type="submit"
                             class="btn btn-primary modal-submit-btn">
                         <span>✓</span>
-                        افزودن دانش‌آموز
+                        ذخیره تغییرات
                     </button>
 
                 </div>
@@ -114,4 +102,3 @@
     </div>
 
 </div>
-```

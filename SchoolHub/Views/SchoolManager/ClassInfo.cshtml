@@ -1,4 +1,5 @@
-﻿@model SchoolHub.Dto.Manager.ManagerClassInfoDto
+﻿@using SchoolHub.Dto.Manager
+@model ManagerClassInfoDto
 
 @{
     ViewData["Title"] = "اطلاعات کلاس";
@@ -528,7 +529,8 @@
                                 <div class="teacher-actions">
 
                                     <button type="button"
-                                            class="btn btn-sm btn-light"
+                                            class="btn btn-sm btn-light btnUpdateTeacher"
+                                            data-teacher-user-id="@teacher.TeacherUserId"
                                             title="ویرایش">
 
                                         <i class="bi bi-pencil"></i>
@@ -592,6 +594,9 @@
 
 <partial name="_AddTeacher.cshtml"
          model="@Model.Class.Id" />
+
+<partial name="_UpdateTeacher.cshtml"
+         model="@Model.ClassId" />
 
 
 

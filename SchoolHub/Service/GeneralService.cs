@@ -10,6 +10,17 @@ namespace SchoolHub.Service
 {
     public class GeneralService(MyContext db, IMapper mapper) : IGeneralService
     {
+
+        public List<GeneralItemDto> GetTeacherSubjects(int classId, int teacherUserId)
+        {
+            var subjectIds = db.TeachingAssignments.Where(x => x.ClassId == classId && x.TeacherUserId == teacherUserId).Select(x => x.SubjectId).ToList();
+            if (subjectIds.Count == 0)
+                return new List<GeneralItemDto>();
+            return mapper.Map<List<GeneralItemDto>>(db.GeneralItems.Where(x => subjectIds.Contains(x.Id)).ToList());
+
+        }
+
+
         public List<GeneralItemDto> GetCitiesByProvinceId(int provinceId)
         {
             return mapper.Map<List<GeneralItemDto>>(
@@ -39,10 +50,10 @@ namespace SchoolHub.Service
                 )
                 .ToList();
             return generalCategory.ToDictionary(
-                category => category.Title,
-                category =>
+                c => c.Title,
+                c =>
                     generalItems
-                        .Where(item => item.ParentId == category.Id)
+                        .Where(item => item.ParentId == c.Id)
                         .Select(item => new GeneralItemDto { Id = item.Id, Title = item.Title })
                         .ToList()
             );
@@ -143,15 +154,22 @@ namespace SchoolHub.Service
              .Select(x => x.SubjectId)
              .Distinct().ToList()
              .Count() == uniqueSubjectIds.Count();
-             
+
 
         }
 
 
-        public List<GeneralItemDto> GetAvailableSubjectsByGradeId(int gradeId,int classId)
+        public List<GeneralItemDto> GetAvailableSubjectsByGradeId(int gradeId, int classId)
         {
-            var assignedSubjects = db.TeachingAssignments.Where(x => x.ClassId == classId).Select(x=> x.SubjectId).ToList();
-            var subjectIds = db.GradeSubjects.Where(x => x.GradeId == gradeId && !assignedSubjects.Contains(x.SubjectId)).Select(x=> x.SubjectId).ToList();
+            var assignedSubjects = db.TeachingAssignments.Where(x => x.ClassId == classId).Select(x => x.SubjectId).ToList();
+            var subjectIds = db.GradeSubjects.Where(x => x.GradeId == gradeId && !assignedSubjects.Contains(x.SubjectId)).Select(x => x.SubjectId).ToList();
+            var subjects = db.GeneralItems.Where(x => subjectIds.Contains(x.Id) && x.TitleType == "Subject").ToList();
+            return mapper.Map<List<GeneralItemDto>>(subjects);
+        }
+        public List<GeneralItemDto> GetAvailableSubjectsByGradeIdForUpdateTeacher(int gradeId, int classId,int teacherUserId)
+        {
+            var assignedSubjects = db.TeachingAssignments.Where(x => x.ClassId == classId && teacherUserId != x.TeacherUserId).Select(x => x.SubjectId).ToList();
+            var subjectIds = db.GradeSubjects.Where(x => x.GradeId == gradeId && !assignedSubjects.Contains(x.SubjectId)).Select(x => x.SubjectId).ToList();
             var subjects = db.GeneralItems.Where(x => subjectIds.Contains(x.Id) && x.TitleType == "Subject").ToList();
             return mapper.Map<List<GeneralItemDto>>(subjects);
         }

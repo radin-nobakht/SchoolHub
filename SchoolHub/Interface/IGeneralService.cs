@@ -14,5 +14,7 @@ namespace SchoolHub.Interface
         GeneralItemDto GetCurrentItem(int classId, string type);
         bool IsSubjectExistForThisGrade(List<int> subjectIds, int GradeId);
         List<GeneralItemDto> GetAvailableSubjectsByGradeId(int gradeId, int classId);
+        List<GeneralItemDto> GetTeacherSubjects(int classId, int teacherUserId);
+        List<GeneralItemDto> GetAvailableSubjectsByGradeIdForUpdateTeacher(int gradeId, int classId, int teacherUserId);
     }
 }

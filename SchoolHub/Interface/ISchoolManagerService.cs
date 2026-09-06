@@ -9,7 +9,7 @@ namespace SchoolHub.Interface
     {
         bool AddClass(ClassDto classDto);
         OperationResultDto AddStudent(StudentDto student, string nationalIdNumber);
-        OperationResultDto AddTeacher(AddTeacherDto teacher, string nationalId);
+        OperationResultDto AddTeacher(Dto.Manager.TeacherDto teacher, string nationalId);
         bool DeleteClass(int classId);
         bool DeleteStudent(int studentId);
         bool DeleteTeacher(int classId, int teacherUserId);
@@ -25,8 +25,11 @@ namespace SchoolHub.Interface
         bool IsManagerOfSchool(int managerUserId, int schoolId);
         bool IsManagerOfSchoolClass(int schoolId, int managerUserId);
         bool IsStudentInClass(int classId, int studentUserId);
+        bool IsStudentInSchool(int classId, int studentUserId);
         bool IsTeacherInClass(int classId, int teacherUserId);
-        (int Id, bool Exist) IsUserExist(string nationalIdNumber);
-        OperationResultDto UpdateClass(ClassDto clas);    
+        bool IsUserExistById(int userId);
+        (int Id, bool Exist) IsUserExistByNationalId(string nationalIdNumber);
+        OperationResultDto UpdateClass(ClassDto clas);
+        OperationResultDto UpdateTeacher(Dto.Manager.TeacherDto teacher);
     }
 }

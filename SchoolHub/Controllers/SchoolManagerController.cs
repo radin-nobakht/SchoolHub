@@ -182,9 +182,9 @@ namespace SchoolHub.Controllers
 
 
 
-        public IActionResult AddTeacher(AddTeacherDto addTeacher, string nationalId)
+        public IActionResult AddTeacher(Dto.Manager.TeacherDto addTeacher, string nationalId)
         {
-            var isAdd = schoolManagerService.AddTeacher(new AddTeacherDto { ClassId = addTeacher.ClassId , SubjectIds = addTeacher.SubjectIds }, nationalId);
+            var isAdd = schoolManagerService.AddTeacher(new Dto.Manager.TeacherDto { ClassId = addTeacher.ClassId , SubjectIds = addTeacher.SubjectIds }, nationalId);
             if (isAdd.Success)
                 TempData["Success"] = isAdd.Message;
             else
@@ -204,6 +204,27 @@ namespace SchoolHub.Controllers
         {
             var isDeleted = schoolManagerService.DeleteTeacher(classId: classId, teacherUserId: teacherUserId);
             return Json(isDeleted);
+        }
+
+
+        public IActionResult UpdateTeacher(Dto.Manager.TeacherDto teacher)
+        {
+            var isAdd = schoolManagerService.UpdateTeacher(teacher);
+            if (isAdd.Success)
+                TempData["Success"] = isAdd.Message;
+            else
+                TempData["Eror"] = isAdd.Message;
+
+            return RedirectToAction("ClassInfo", "SchoolManager", new { classId = teacher.ClassId }); 
+        }
+
+
+        public IActionResult GetSubjectsForUpdateTeacher(int classId,int teacherUserId)
+        {
+            var gradeId = schoolManagerService.GetGradeIdByClassId(classId);
+            var subjects = generalService.GetAvailableSubjectsByGradeIdForUpdateTeacher(gradeId??0,classId,teacherUserId);
+            var teacherSubjectIds = generalService.GetTeacherSubjects(classId, teacherUserId).Select(x=> x.Id);
+            return Json(new { AvailableSubjects = subjects, TeacherSubjectIds=teacherSubjectIds});
         }
 
 

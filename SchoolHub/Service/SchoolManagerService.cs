@@ -6,21 +6,41 @@ using SchoolHub.Dto.School;
 using SchoolHub.Dto;
 using SchoolHub.Entity;
 using SchoolHub.Interface;
+using System.Reflection.Metadata.Ecma335;
 
 namespace SchoolHub.Service;
 
 public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService generalService) : ISchoolManagerService
 {
-    
+
+    public bool IsStudentInSchool(int classId,int studentUserId)
+    {
+        var schoolId = db.Classes.FirstOrDefault(c => c.Id == classId)?.SchoolId;
+        if (schoolId == null)
+            return true;
+
+        var classIds = db.Classes.Where(x => x.SchoolId == schoolId).Select(x=> x.Id).ToList();
+        if (classIds == null|| classIds.Count ==0)
+            return true;
+
+        return db.Students.Any(x => classIds.Contains(x.ClassId)&& x.StudentUserId == studentUserId && x.IsDeleted == false);
+    }
+
     public OperationResultDto AddStudent(StudentDto student,string nationalIdNumber)
     {
         if (!IsClassExist(student.ClassId))
             return new OperationResultDto { Success =false ,Message= "کلاس وجود ندارد" };
 
-        var user = IsUserExist(nationalIdNumber);
+        var user = IsUserExistByNationalId(nationalIdNumber);
         if (!user.Exist)
             return new OperationResultDto { Success =false ,Message= "کاربری با این کد ملی وجود ندارد" };
         student.StudentUserId = user.Id;
+
+      
+
+        if(IsStudentInSchool(student.ClassId,student.StudentUserId))
+            return new OperationResultDto { Success = false, Message = "دانش آموز قبلا در این مدرسه ثبت شده" };
+
         if (IsStudentInClass(student.ClassId, student.StudentUserId))
         {
             try
@@ -50,18 +70,16 @@ public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService g
         }
     }
 
-
     public bool IsClassExist(int classId) => db.Classes.Any(x => x.Id == classId);
 
-    public (int Id, bool Exist) IsUserExist(string nationalIdNumber)
+    public (int Id, bool Exist) IsUserExistByNationalId(string nationalIdNumber)
     {
         var user = db.Users.FirstOrDefault(x => x.NationalIdNumber == nationalIdNumber);
         return (user?.Id ?? 0, user != null);
     }
 
-    public bool IsStudentInClass(int classId, int studentUserId) => db.Students.Any(x => x.ClassId == classId && x.StudentUserId == studentUserId);
+    public bool IsStudentInClass(int classId, int studentUserId) => db.Students.Any(x => x.ClassId == classId && x.StudentUserId == studentUserId );
   
-
     public bool IsManagerOfSchool(int managerUserId, int schoolId)
     {
         return db.Schools.Any(x => x.Id == schoolId && x.ManagerUserId == managerUserId);
@@ -144,7 +162,6 @@ public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService g
     public int? GetSchoolIdByClassId(int classId) =>
         db.Classes.FirstOrDefault(x => x.Id == classId)?.SchoolId;
 
-    //
     public ManagerClassInfoDto GetManagerClassDetail(ManagerClassInfoDto managerClass)
     {
         var clas = db.Classes.FirstOrDefault(x => x.Id == managerClass.ClassId);
@@ -163,7 +180,6 @@ public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService g
         var scores =db.Scores.Where(x=> studentIds.Contains(x.StudentId) && x.Status == true).ToList();
         return Math.Round(scores?.Select(x => (double?)double.Parse(x.Score)).Average() ?? 0, 2);
     }
-
 
     public ClassDto GetClassDetail(int classId) => mapper.Map<ClassDto>(db.Classes.FirstOrDefault(x=> x.Id == classId));
 
@@ -279,7 +295,6 @@ public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService g
             .ToList();
     }
 
-
     public OperationResultDto UpdateClass(ClassDto clas)
     {
         var isEnable = db.Classes.Any(x=> x.Id ==clas.Id);
@@ -303,20 +318,17 @@ public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService g
 
     }
 
-
     public int? GetGradeIdByClassId(int classId) => db.Classes.FirstOrDefault(x => x.Id == classId)?.GradeGeneralId;
-
 
     public bool IsTeacherInClass(int classId, int teacherUserId) => db.TeachingAssignments.Any(x => x.ClassId==classId && x.TeacherUserId == teacherUserId);
 
-
-    public OperationResultDto AddTeacher(AddTeacherDto teacher,string nationalId)
+    public OperationResultDto AddTeacher(Dto.Manager.TeacherDto teacher,string nationalId)
     {
 
         if (!IsClassExist(teacher.ClassId))
             return new OperationResultDto { Success = false, Message = "کلاس وجود ندارد" };
 
-        var user = IsUserExist(nationalId);
+        var user = IsUserExistByNationalId(nationalId);
         if (!user.Exist)
             return new OperationResultDto{Success = false,Message ="کاربری با این کد ملی وجود ندارد"};
 
@@ -338,10 +350,9 @@ public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService g
         catch
         {
 
-            return new OperationResultDto { Success=false,Message = "اضافه شدن معلم با حطا روبرو شد"};
+            return new OperationResultDto { Success=false,Message = "اضافه شدن معلم با خطا روبرو شد"};
         }
     }
-
 
     public bool DeleteStudent(int studentId)
     {
@@ -375,6 +386,48 @@ public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService g
             return false;
         }
     }
-    
+
+    public bool IsUserExistById(int userId) => db.Users.Any(x => x.Id == userId);
+
+
+    public OperationResultDto UpdateTeacher(Dto.Manager.TeacherDto teacher)
+    {
+        if (!IsClassExist(teacher.ClassId))
+            return new OperationResultDto { Success = false, Message = "کلاس وجود ندارد" };
+
+        var user = IsUserExistById(teacher.TeacherUserId);
+        if (!user)
+            return new OperationResultDto { Success = false, Message = "کاربر وجود ندارد" };
+
+        if (!generalService.IsSubjectExistForThisGrade(teacher.SubjectIds, GetGradeIdByClassId(teacher.ClassId) ?? 0))
+            return new OperationResultDto { Success = false, Message = "همچین درسی وجود ندارد" };
+
+        try
+        {
+            var removedSubjects= db.TeachingAssignments.Where(x=> x.ClassId == teacher.ClassId && x.TeacherUserId == teacher.TeacherUserId &&!teacher.SubjectIds.Contains(x.SubjectId)).ToList();
+            db.TeachingAssignments.RemoveRange(removedSubjects);
+            db.SaveChanges();
+        }
+        catch 
+        {
+
+            return new OperationResultDto { Success = false, Message ="حذف درس های کم شده با خطا روبرو شد"};
+        }
+
+        try
+        {
+            var duplicateSubjectIds = db.TeachingAssignments.Where(x => x.ClassId == teacher.ClassId && x.TeacherUserId == teacher.TeacherUserId && teacher.SubjectIds.Contains(x.SubjectId)).Select(x => x.SubjectId).ToList();
+            teacher.SubjectIds.RemoveAll(x=> duplicateSubjectIds.Contains(x));
+            foreach (var ts in teacher.SubjectIds)
+                db.TeachingAssignments.Add(new TeachingAssignmentEntity { ClassId = teacher.ClassId, SubjectId = ts, TeacherUserId = teacher.TeacherUserId });
+            db.SaveChanges();
+            return new OperationResultDto { Success = true, Message = "درس ها با موفقیت اضافه شد" };
+        }
+        catch
+        {
+
+            return new OperationResultDto { Success = false, Message = "اضافه شدن درس ها با خطا روبرو شد" };
+        }
+    }
 
 }

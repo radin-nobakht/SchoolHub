@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SchoolHub.Entity;
+using SchoolHub.Dto.Manager;
 
 namespace SchoolHubTest.TestServices
 {
@@ -197,8 +198,8 @@ namespace SchoolHubTest.TestServices
                 new() { Id = 1576, TitleType = "Subject", ParentId = 1566, Title = "ورزش", Active = true }
             );
             testDb.TeachingAssignments.AddRange(
-                new TeachingAssignmentEntity { ClassId = 4, SubjectId = 1567, TeacherUserId = 5},
-                new TeachingAssignmentEntity { ClassId = 4, SubjectId = 1568, TeacherUserId = 5}
+                new TeachingAssignmentEntity { ClassId = 4, SubjectId = 1567, TeacherUserId = 5 },
+                new TeachingAssignmentEntity { ClassId = 4, SubjectId = 1568, TeacherUserId = 5 }
             );
 
             testDb.SaveChanges();
@@ -218,6 +219,57 @@ namespace SchoolHubTest.TestServices
             );
         }
 
+        [Fact]
+        public void GetTeacherSubjects_WhenTeacherHasSubject_ReturnsTeacherSubjects()
+        {
+            // Arrange
+            testDb.TeachingAssignments.AddRange(
+                new TeachingAssignmentEntity { TeacherUserId = 8, ClassId = 5, SubjectId = 1569 },
+                new TeachingAssignmentEntity { TeacherUserId = 8, ClassId = 5, SubjectId = 1570 },
+                new TeachingAssignmentEntity { TeacherUserId = 8, ClassId = 5, SubjectId = 1571 },
+                new TeachingAssignmentEntity { TeacherUserId = 8, ClassId = 5, SubjectId = 1572 },
+                new TeachingAssignmentEntity { TeacherUserId = 8, ClassId = 5, SubjectId = 1573 },
+                new TeachingAssignmentEntity { TeacherUserId = 8, ClassId = 5, SubjectId = 1575 },
+                new TeachingAssignmentEntity { TeacherUserId = 8, ClassId = 5, SubjectId = 1576 }
+            );
+            testDb.GeneralItems.AddRange(
+                new GeneralItemEntity { Id = 1569, TitleType = "Subject", ParentId = 1566, Title = "علوم", Active = true },
+                new GeneralItemEntity { Id = 1570, TitleType = "Subject", ParentId = 1566, Title = "قرآن", Active = true },
+                new GeneralItemEntity { Id = 1571, TitleType = "Subject", ParentId = 1566, Title = "هدیه‌های آسمانی", Active = true },
+                new GeneralItemEntity { Id = 1572, TitleType = "Subject", ParentId = 1566, Title = "نگارش", Active = true },
+                new GeneralItemEntity { Id = 1573, TitleType = "Subject", ParentId = 1566, Title = "مطالعات اجتماعی", Active = true },
+                new GeneralItemEntity { Id = 1575, TitleType = "Subject", ParentId = 1566, Title = "هنر", Active = true },
+                new GeneralItemEntity { Id = 1576, TitleType = "Subject", ParentId = 1566, Title = "ورزش", Active = true }
+            );
+
+            testDb.SaveChanges();
+            // Act
+            var result = testService.GetTeacherSubjects(classId: 5, teacherUserId: 8);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(7, result.Count());
+
+            var expectedIds = new[] { 1569, 1570, 1571, 1572, 1573, 1575, 1576 };
+
+            Assert.Equal(
+                expectedIds.OrderBy(x => x),
+                result.Select(x => x.Id).OrderBy(x => x)
+            );
+        }
+
+        [Fact]
+        public void GetTeacherSubjects_WhenTeacherHasntSubject_ReturnsEmpty()
+        {
+            // Arrange
+
+            // Act
+            var result = service.GetTeacherSubjects(classId: 5, teacherUserId: 8);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
 
 
     }
