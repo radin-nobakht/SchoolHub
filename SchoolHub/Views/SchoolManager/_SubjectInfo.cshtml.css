@@ -1,0 +1,180 @@
+﻿/* ==================== Subject Info ==================== */
+
+.subject-info {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ==================== Header ==================== */
+
+.subject-info-header {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+    .subject-info-header h2 {
+        margin: 0 0 8px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #212529;
+    }
+
+    .subject-info-header p {
+        margin: 0;
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+
+/* ==================== Statistics ==================== */
+
+.subject-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.subject-stat {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+}
+
+    .subject-stat span {
+        display: block;
+        color: #6c757d;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .subject-stat strong {
+        display: block;
+        font-size: 23px;
+        color: #212529;
+    }
+
+
+/* ==================== Scores ==================== */
+
+.subject-scores h3 {
+    margin: 0 0 16px;
+    font-size: 19px;
+    font-weight: 700;
+    color: #212529;
+}
+
+.scores-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.score-item {
+    display: grid;
+    grid-template-columns: 70px 1fr 150px;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 18px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 14px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .score-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+
+/* ==================== Score Value ==================== */
+
+.score-value {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #e9f2ff;
+    color: #0d6efd;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+
+/* ==================== Reason & Date ==================== */
+
+.score-reason,
+.score-date {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+    .score-reason span,
+    .score-date span {
+        font-size: 12px;
+        color: #8a8f98;
+    }
+
+    .score-reason strong,
+    .score-date strong {
+        font-size: 14px;
+        color: #343a40;
+    }
+
+
+/* ==================== No Scores ==================== */
+
+.no-scores {
+    padding: 30px 20px;
+    text-align: center;
+    border: 1px dashed #ced4da;
+    border-radius: 14px;
+    color: #6c757d;
+    background: #f8f9fa;
+}
+
+
+/* ==================== Responsive ==================== */
+
+@media (max-width: 768px) {
+
+    .subject-info {
+        padding: 18px;
+    }
+
+    .subject-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .score-item {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .score-value {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .subject-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .subject-info-header h2 {
+        font-size: 21px;
+    }
+}

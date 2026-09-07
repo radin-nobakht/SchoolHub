@@ -1,16 +1,18 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SchoolHub.Dto.School;
-using SchoolHub.Interface;
 using SchoolHub.Dto.Manager;
+using SchoolHub.Dto.School;
+using SchoolHub.Dto.Student;
+using SchoolHub.Interface;
+using System.Security.Claims;
 
 namespace SchoolHub.Controllers
 {
     [Authorize]
     public class SchoolManagerController(
         IGeneralService generalService,
-        ISchoolManagerService schoolManagerService
+        ISchoolManagerService schoolManagerService,
+        ISchoolStudentService studentService
     ) : Controller
     {
         public async Task<IActionResult> SchoolInfo(int schoolId)
@@ -108,11 +110,12 @@ namespace SchoolHub.Controllers
             else
             {
                 var managerClassInfo = new ManagerClassInfoDto { ClassId = classId, SchoolId = schoolId };
+                managerClassInfo = schoolManagerService.GetManagerClassDetail(managerClassInfo);
                 managerClassInfo.Average = schoolManagerService.GetClassAverage(classId);
                 managerClassInfo.Students = schoolManagerService.GetStudentsDetail(classId);
                 managerClassInfo.Teachers = schoolManagerService.GetTeachersDetail(classId);
                 managerClassInfo.Class = schoolManagerService.GetClassDetail(classId);
-                managerClassInfo = schoolManagerService.GetManagerClassDetail(managerClassInfo);
+
                 return View(managerClassInfo);
             }
         }
@@ -229,6 +232,56 @@ namespace SchoolHub.Controllers
 
 
 
+        public IActionResult StudentInfo(int schoolId,int studentId)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
+            var isManager = schoolManagerService.IsManagerOfSchoolClass(schoolId, userId);
+
+            var classId = studentService.GetStudentClassId(studentId, schoolId);
+            if ((classId == 0 || classId == null)&& !isManager)
+            {
+                TempData["Eror"] = "شما اجازه دسترسی به این صفحه را ندارید.";
+                return RedirectToAction("SchoolPage", "School");
+            }
+            else
+            {
+                var studentHome = new StudentHomeDto { StudentInfo = new StudentInfoDto { ClassId = classId ?? 0 } };
+
+                studentHome.Subjects = studentService.GetSubjects(classId ?? 0);
+
+                studentHome.SubjectInfo.SubjectId = studentHome.Subjects.FirstOrDefault()?.Id??0;
+
+                studentHome.SubjectInfo.Scores = studentService.GetScores(studentId, studentHome.SubjectInfo.SubjectId, classId ?? 0);
+
+                studentHome.SubjectInfo = studentService.GetSubjectInfo(subjectInfo: studentHome.SubjectInfo, classId: classId ?? 0, userId: studentId);
+
+                studentHome.StudentInfo = studentService.GetStudentInfo(userId: studentId, classId: classId ?? 0, schoolId: schoolId);
+
+                studentHome.Averages = studentService.GetAverages(studentId, classId!.Value);
+                return View(studentHome);
+            }
+
+
+        }
+
+        [HttpGet]
+        public IActionResult SubjectInfo(int subjectId, int classId,int studentId)
+        {
+
+            var model = new SubjectInfoDto
+            {
+                SubjectId = subjectId,
+                Scores = studentService.GetScores(studentId, subjectId, classId)
+            };
+
+            model = studentService.GetSubjectInfo(
+                model,
+                classId,
+                studentId
+            );
+
+            return PartialView("_SubjectInfo", model);
+        }
     }
 }

@@ -219,13 +219,17 @@
 
                             <div class="student-actions">
 
-                                <button type="button"
+                                <a 
+                                        asp-action="StudentInfo"
+                                        asp-controller="SchoolManager"
+                                        asp-route-studentId="@student.StudentUserId"
+                                        asp-route-schoolId="@Model.SchoolId"
                                         class="btn btn-sm btn-light"
                                         title="مشاهده دانش‌آموز">
 
                                     <i class="bi bi-eye"></i>
 
-                                </button>
+                                </a>
 
 
                                 <button type="button"

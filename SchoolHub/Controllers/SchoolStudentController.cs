@@ -9,7 +9,7 @@ namespace SchoolHub.Controllers;
 [Authorize]
 public class SchoolStudentController(ISchoolStudentService studentService) : Controller
 {
-    public IActionResult ClassInfo(int schoolId)
+    public IActionResult StudentInfo(int schoolId)
     {
         var userId = int.Parse( User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
         var classId = studentService.GetStudentClassId(userId, schoolId);

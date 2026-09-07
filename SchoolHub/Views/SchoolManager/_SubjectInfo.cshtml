@@ -1,0 +1,119 @@
+﻿@model SchoolHub.Dto.Student.SubjectInfoDto
+
+<div class="subject-info">
+
+    <!-- ==================== Subject Header ==================== -->
+
+    <div class="subject-info-header">
+
+        <h2>
+            @Model.Name
+        </h2>
+
+        <p>
+            معلم: @Model.TeacherName
+        </p>
+
+    </div>
+
+
+    <!-- ==================== Subject Statistics ==================== -->
+
+    <div class="subject-stats">
+
+        <div class="subject-stat">
+            <span>تعداد نمرات</span>
+            <strong>
+                @Model.ScoreCount
+            </strong>
+        </div>
+
+
+        <div class="subject-stat">
+            <span>میانگین نمرات</span>
+            <strong>
+                @Model.AverageScore
+            </strong>
+        </div>
+
+
+        <div class="subject-stat">
+            <span>مثبت‌های کلاس</span>
+            <strong>
+                @Model.PositiveCount
+            </strong>
+        </div>
+
+
+        <div class="subject-stat">
+            <span>منفی‌های کلاس</span>
+            <strong>
+                @Model.NegativeCount
+            </strong>
+        </div>
+
+    </div>
+
+
+    <!-- ==================== Scores ==================== -->
+
+    <div class="subject-scores">
+
+        <h3>
+            نمرات
+        </h3>
+
+
+        @if (Model.Scores is not null && Model.Scores.Any())
+        {
+            <div class="scores-list">
+
+                @foreach (var score in Model.Scores)
+                {
+                    <div class="score-item">
+
+                        <div class="score-value">
+                            @score.Score
+                        </div>
+
+
+                        <div class="score-reason">
+
+                            <span>
+                                دلیل
+                            </span>
+
+                            <strong>
+                                @score.Reason
+                            </strong>
+
+                        </div>
+
+
+                        <div class="score-date">
+
+                            <span>
+                                تاریخ
+                            </span>
+
+                            <strong>
+                                @score.Date.ToString("yyyy/MM/dd")
+                            </strong>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="no-scores">
+                هنوز نمره‌ای برای این درس ثبت نشده است.
+            </div>
+        }
+
+    </div>
+
+</div>

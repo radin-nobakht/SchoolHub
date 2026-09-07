@@ -187,7 +187,7 @@ public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService g
     {
         var students = db.Students
             .Where(s => s.ClassId == classId&& s.IsDeleted == false)
-            .Select(s => new
+            .Select(s => new 
             {
                 StudentId = s.Id,
 
@@ -205,7 +205,8 @@ public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService g
                         (u, g) => g.Title
                     )
                     .FirstOrDefault(),
-                NationalIdNumber= db.Users.Where(u => u.Id == s.StudentUserId).Select(u => u.NationalIdNumber).FirstOrDefault() ?? "0"
+                NationalIdNumber= db.Users.Where(u => u.Id == s.StudentUserId).Select(u => u.NationalIdNumber).FirstOrDefault() ?? "0",
+                StudentUserId = s.StudentUserId
             })
             .ToList();
 
@@ -236,7 +237,8 @@ public class SchoolManagerService(MyContext db, IMapper mapper,IGeneralService g
                 NationalIdNumber = s.NationalIdNumber,
                 Average = averages.TryGetValue(s.StudentId, out var average)
                     ? average
-                    : 0
+                    : 0,
+                StudentUserId=s.StudentUserId
             })
             .ToList();
     }
