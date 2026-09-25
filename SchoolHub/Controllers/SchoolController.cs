@@ -1,6 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.Collections;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SchoolHub.Dto.School;
 using SchoolHub.Interface;
 using SchoolHub.Models;
@@ -85,17 +87,17 @@ public class SchoolController(ISchoolService schoolService, IGeneralService gene
 
         var model = new AddSchoolViewModel
         {
-            GeneralEducationLevels = generals.FirstOrDefault(x => x.Key == "مقطع تحصیلی").Value,
+             GeneralEducationLevels = generals.FirstOrDefault(x => x.Key == "EducationLevel").Value,
 
-            GeneralEducationPeriods = generals.FirstOrDefault(x => x.Key == "دوره تحصیلی").Value,
+            GeneralEducationPeriods = generals.FirstOrDefault(x => x.Key == "EducationPeriod").Value,
 
-            GeneralGender = generals.FirstOrDefault(x => x.Key == "جنسیت پذیرش").Value,
+            GeneralGender = generals.FirstOrDefault(x => x.Key == "AdmissionGender").Value,
 
-            GeneralProrvince = generals.FirstOrDefault(x => x.Key == "استان").Value,
+            GeneralProrvince = generals.FirstOrDefault(x => x.Key == "Province").Value,
 
-            GeneralShifts = generals.FirstOrDefault(x => x.Key == "شیفت").Value,
+            GeneralShifts = generals.FirstOrDefault(x => x.Key == "Shift").Value,
 
-            GeneralTypes = generals.FirstOrDefault(x => x.Key == "نوع").Value,
+            GeneralTypes = generals.FirstOrDefault(x => x.Key == "Type").Value,
         };
 
         return Json(model);

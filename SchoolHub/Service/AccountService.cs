@@ -16,7 +16,6 @@ namespace SchoolHub.Service
             userDto.Validation.IsCorrect =
                 db.Users.FirstOrDefault(x =>
                     x.NationalIdNumber == userDto.NationalIdNumber
-                    && x.IsStudent == userDto.IsStudent
                 ) == null
                     ? true
                     : false;

@@ -16,5 +16,7 @@ namespace SchoolHub.Interface
         List<GeneralItemDto> GetAvailableSubjectsByGradeId(int gradeId, int classId);
         List<GeneralItemDto> GetTeacherSubjects(int classId, int teacherUserId);
         List<GeneralItemDto> GetAvailableSubjectsByGradeIdForUpdateTeacher(int gradeId, int classId, int teacherUserId);
+        List<int> GetGradeSubJectIds(int classId);
+        Dictionary<string, int> GetGeneralIdsForSchool(int schoolId);
     }
 }

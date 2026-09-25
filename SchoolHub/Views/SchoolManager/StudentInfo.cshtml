@@ -1,224 +1,703 @@
-﻿@model SchoolHub.Dto.Student.StudentHomeDto
+﻿@model SchoolHub.Dto.Manager.StudentReportCardDto
 
-<div class="student-page">
+@{
+    ViewData["Title"] = "کارنامه دانش‌آموز";
 
-    <!-- ==================== Student Information ==================== -->
+    var subjects = Model.Subjects
+        ?? new List<SchoolHub.Dto.Manager.ReportCardSubjectDto>();
 
-    <div class="student-info-card">
+    var totalPositive = subjects.Sum(x => x.PositiveCount);
+    var totalNegative = subjects.Sum(x => x.NegativeCount);
+}
 
-        <div class="student-info-header">
+<div class="report-card-page" dir="rtl">
 
-            <input type="hidden"
-                   id="classId"
-                   value="@Model.StudentInfo.ClassId" />
+    <div class="report-card">
 
-            <input type="hidden"
-                   id="studentId"
-                   value="@Model.StudentInfo.StudentId" />
+        <!-- =========================
+             Header
+        ========================== -->
 
-            @if (Model.StudentInfo.Gender == "پسر")
-            {
-                <div class="student-avatar">
-                    👨‍🎓
+        <div class="report-header">
+
+            <div class="school-title">
+
+                <div class="school-logo">
+                    <i class="bi bi-mortarboard-fill"></i>
                 </div>
+
+                <div>
+                    <h1>کارنامه تحصیلی</h1>
+                    <p>
+                        @(string.IsNullOrWhiteSpace(Model.SchoolName)
+                            ? "-"
+                            : Model.SchoolName)
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             Student Mini Profile
+        ========================== -->
+
+        <div class="student-profile">
+
+            <div class="student-avatar">
+                <i class="bi bi-person-fill"></i>
+            </div>
+
+
+            <div class="student-profile-content">
+
+                <div class="student-profile-name">
+
+                    <span>
+                        دانش‌آموز
+                    </span>
+
+                    <strong>
+                        @Model.StudentName
+                    </strong>
+
+                </div>
+
+
+                <div class="student-profile-details">
+
+                    <!-- School -->
+
+                    <div class="profile-detail">
+
+                        <i class="bi bi-building"></i>
+
+                        <div>
+
+                            <span>
+                                مدرسه
+                            </span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.SchoolName)
+                                    ? "-"
+                                    : Model.SchoolName)
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Grade -->
+
+                    <div class="profile-detail">
+
+                        <i class="bi bi-mortarboard"></i>
+
+                        <div>
+
+                            <span>
+                                پایه
+                            </span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.Grade)
+                                    ? "-"
+                                    : Model.Grade)
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Major -->
+
+                    <div class="profile-detail">
+
+                        <i class="bi bi-book"></i>
+
+                        <div>
+
+                            <span>
+                                رشته
+                            </span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.Major)
+                                    ? "-"
+                                    : Model.Major)
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Gender -->
+
+                    <div class="profile-detail">
+
+                        <i class="bi bi-person"></i>
+
+                        <div>
+
+                            <span>
+                                جنسیت
+                            </span>
+
+                            <strong>
+                                @(string.IsNullOrWhiteSpace(Model.Gender)
+                                    ? "-"
+                                    : Model.Gender)
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             Subjects
+        ========================== -->
+
+        <div class="subjects-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <div class="section-title">
+
+                        <i class="bi bi-journal-text"></i>
+
+                        نمرات دروس
+
+                    </div>
+
+                    <p>
+                        وضعیت عملکرد دانش‌آموز در دروس مختلف
+                    </p>
+
+                </div>
+
+
+                <div class="subject-total">
+
+                    <strong>
+                        @subjects.Count
+                    </strong>
+
+                    <span>
+                        درس
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            @if (subjects.Any())
+            {
+
+                <div class="table-wrapper">
+
+                    <table class="report-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th class="number-column">
+                                    ردیف
+                                </th>
+
+                                <th>
+                                    نام درس
+                                </th>
+
+                                <th>
+                                    دبیر
+                                </th>
+
+                                <th>
+                                    تعداد نمرات
+                                </th>
+
+                                <th>
+                                    معدل درس
+                                </th>
+
+                                <th>
+                                    مثبت‌ها
+                                </th>
+
+                                <th>
+                                    منفی‌ها
+                                </th>
+
+                                <th>
+                                    وضعیت
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @{
+                                var rowNumber = 1;
+                            }
+
+
+                            @foreach (var subject in subjects)
+                            {
+
+                                var average = subject.AverageScore;
+
+                                string status;
+                                string statusClass;
+
+
+                                if (subject.ScoreCount == 0)
+                                {
+                                    status = "بدون نمره";
+                                    statusClass = "status-empty";
+                                }
+                                else if (average >= 10)
+                                {
+                                    status = "قبول";
+                                    statusClass = "status-success";
+                                }
+                                else
+                                {
+                                    status = "نیاز به تلاش";
+                                    statusClass = "status-danger";
+                                }
+
+
+                                <tr>
+
+                                    <!-- Row Number -->
+
+                                    <td class="number-column">
+                                        @rowNumber
+                                    </td>
+
+
+                                    <!-- Subject -->
+
+                                    <td class="subject-cell">
+
+                                        <strong>
+                                            @subject.SubjectName
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- Teacher -->
+
+                                    <td>
+
+                                        @if (!string.IsNullOrWhiteSpace(subject.TeacherName))
+                                        {
+                                            @subject.TeacherName
+                                        }
+                                        else
+                                        {
+                                            <span class="muted">
+                                                ثبت نشده
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- Score Count -->
+
+                                    <td>
+                                        @subject.ScoreCount
+                                    </td>
+
+
+                                    <!-- Average -->
+
+                                    <td>
+
+                                        <span class="score-value">
+                                            @average.ToString("0.##")
+                                        </span>
+
+                                        <small class="out-of">
+                                            / ۲۰
+                                        </small>
+
+                                    </td>
+
+
+                                    <!-- Positive -->
+
+                                    <td>
+
+                                        <span class="positive-count">
+
+                                            <i class="bi bi-hand-thumbs-up-fill"></i>
+
+                                            @subject.PositiveCount
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Negative -->
+
+                                    <td>
+
+                                        <span class="negative-count">
+
+                                            <i class="bi bi-hand-thumbs-down-fill"></i>
+
+                                            @subject.NegativeCount
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Status -->
+
+                                    <td>
+
+                                        <span class="status @statusClass">
+                                            @status
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+
+                                rowNumber++;
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
             }
             else
             {
-                <div class="student-avatar">
-                    👩‍🎓
+
+                <div class="empty-report">
+
+                    <i class="bi bi-journal-x"></i>
+
+                    <h3>
+                        کارنامه خالی است
+                    </h3>
+
+                    <p>
+                        برای این دانش‌آموز هنوز درسی ثبت نشده است.
+                    </p>
+
                 </div>
+
             }
 
-            <div class="student-name">
-                <h2>
-                    @Model.StudentInfo.FullName
-                </h2>
+        </div>
+
+
+        <!-- =========================
+             Summary
+        ========================== -->
+
+        <div class="summary-section">
+
+
+            <!-- Subjects Count -->
+
+            <div class="summary-box">
+
+                <span>
+
+                    <i class="bi bi-book"></i>
+
+                    تعداد دروس
+
+                </span>
+
+                <strong>
+                    @subjects.Count
+                </strong>
+
+                <small>
+                    درس
+                </small>
+
             </div>
 
-            <div class="student-info-grid">
 
-                <div class="student-info-item">
-                    <span>پایه</span>
+            <!-- Positive -->
 
-                    <strong>
-                        @Model.StudentInfo.Grade
-                    </strong>
-                </div>
+            <div class="summary-box positive-box">
 
-                @if (Model.StudentInfo.Major != null)
-                {
-                    <div class="student-info-item">
-                        <span>رشته</span>
+                <span>
 
-                        <strong>
-                            @Model.StudentInfo.Major
-                        </strong>
+                    <i class="bi bi-hand-thumbs-up"></i>
+
+                    امتیازات مثبت
+
+                </span>
+
+                <strong>
+                    @totalPositive
+                </strong>
+
+                <small>
+                    مورد
+                </small>
+
+            </div>
+
+
+            <!-- Negative -->
+
+            <div class="summary-box negative-box">
+
+                <span>
+
+                    <i class="bi bi-hand-thumbs-down"></i>
+
+                    امتیازات منفی
+
+                </span>
+
+                <strong>
+                    @totalNegative
+                </strong>
+
+                <small>
+                    مورد
+                </small>
+
+            </div>
+
+
+            <!-- Overall Average -->
+
+            <div class="summary-box average-box">
+
+                <span>
+
+                    <i class="bi bi-calculator"></i>
+
+                    معدل کل
+
+                </span>
+
+                <strong>
+                    @Model.OverallAverage.ToString("0.##")
+                </strong>
+
+                <small>
+                    از ۲۰
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             Score Details
+        ========================== -->
+        @if (subjects.Any(x => x.Scores != null && x.Scores.Any()))
+        {
+
+            <div class="details-section">
+
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <div class="section-title">
+
+                            <i class="bi bi-clipboard-data"></i>
+
+                            جزئیات نمرات
+
+                        </div>
+
+                        <p>
+                            نمرات ثبت‌شده برای هر درس
+                        </p>
+
                     </div>
-                }
 
-                <div class="student-info-item">
-                    <span>جنسیت</span>
-
-                    <strong>
-                        @Model.StudentInfo.Gender
-                    </strong>
                 </div>
 
-                <div class="student-info-item">
-                    <span>مدرسه</span>
 
-                    <strong>
-                        @Model.StudentInfo.SchoolName
-                    </strong>
+                <div class="accordion" id="scoreAccordion">
+
+                    @foreach (var subject in subjects)
+                    {
+
+                        if (subject.Scores == null ||
+                            !subject.Scores.Any())
+                        {
+                            continue;
+                        }
+
+
+                        var collapseId =
+                            $"subject-{subject.SubjectId}";
+
+
+                        <div class="accordion-item">
+
+
+                            <h2 class="accordion-header">
+
+                                <button class="accordion-button collapsed"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#@collapseId">
+
+                                    <span class="accordion-subject-name">
+                                        @subject.SubjectName
+                                    </span>
+
+
+                                    <span class="accordion-average">
+
+                                        معدل:
+
+                                        <strong>
+                                            @subject.AverageScore.ToString("0.##")
+                                        </strong>
+
+                                    </span>
+
+                                </button>
+
+                            </h2>
+
+
+                            <div id="@collapseId"
+                                 class="accordion-collapse collapse"
+                                 data-bs-parent="#scoreAccordion">
+
+
+                                <div class="accordion-body">
+
+
+                                    <div class="score-details-table">
+
+
+                                        <div class="score-details-header">
+
+                                            <span>
+                                                نمره
+                                            </span>
+
+                                            <span>
+                                                توضیحات
+                                            </span>
+
+                                            <span>
+                                                تاریخ
+                                            </span>
+
+                                        </div>
+
+
+                                        @foreach (var score in subject.Scores
+                                            .OrderByDescending(x => x.Date))
+                                        {
+
+                                            <div class="score-details-row">
+
+
+                                                <!-- Score -->
+
+                                                <div class="detail-score">
+
+                                                    <strong>
+                                                        @score.Score.ToString("0.##")
+                                                    </strong>
+
+                                                    <small>
+                                                        از ۲۰
+                                                    </small>
+
+                                                </div>
+
+
+                                                <!-- Reason -->
+
+                                                <div>
+
+                                                    @if (!string.IsNullOrWhiteSpace(score.Reason))
+                                                    {
+                                                        @score.Reason
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="muted">
+                                                            بدون توضیح
+                                                        </span>
+                                                    }
+
+                                                </div>
+
+
+                                                <!-- Date -->
+
+                                                <div class="detail-date">
+
+                                                    <i class="bi bi-calendar3"></i>
+
+                                                    @score.Date.ToString("yyyy/MM/dd")
+
+                                                </div>
+
+
+                                            </div>
+
+                                        }
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    }
+
                 </div>
 
             </div>
 
-        </div>
-
-    </div>
-
-    <!-- ==================== Subjects ==================== -->
-
-    <div class="student-subjects">
-
-        <div class="subjects-tabs">
-
-            @foreach (var subject in Model.Subjects)
-            {
-                var average = Model.Averages
-                    .FirstOrDefault(x => x.SubjectId == subject.Id)?
-                    .AverageScores;
-
-                string scoreClass;
-
-                if (average == null || average == 0)
-                {
-                    // هیچ نمره‌ای ثبت نشده
-                    scoreClass = "subject-none";
-                }
-                else if (average > 17)
-                {
-                    // بالاتر از 17
-                    scoreClass = "subject-good";
-                }
-                else if (average >= 10)
-                {
-                    // 10 تا 17
-                    scoreClass = "subject-medium";
-                }
-                else
-                {
-                    // کمتر از 10
-                    scoreClass = "subject-bad";
-                }
-
-                <button type="button"
-                        class="subject-tab @scoreClass @(subject.Id == Model.SubjectInfo.SubjectId ? "active" : "")"
-                        data-subject-id="@subject.Id">
-
-                    @subject.Title
-
-                </button>
-            }
-
-        </div>
-
-
-        <!-- ==================== Subject Information ==================== -->
-
-        <div id="subject-content"
-             class="subject-content">
-
-            <partial name="_SubjectInfo"
-                     model="Model.SubjectInfo" />
-
-        </div>
+        }
 
     </div>
 
 </div>
-
-
-@section Scripts {
-
-    <script>
-
-        $(document).ready(function() {
-
-            $(".subject-tab").on("click", function() {
-
-                const button = $(this);
-
-                const subjectId = button.data("subject-id");
-                const classId = $("#classId").val();
-                const studentId = $("#studentId").val();
-
-                if (!subjectId || !classId) {
-                    return;
-                }
-
-
-                // ==========================
-                // تغییر درس فعال
-                // ==========================
-
-                $(".subject-tab").removeClass("active");
-
-                button.addClass("active");
-
-
-                // ==========================
-                // نمایش Loading
-                // ==========================
-
-                $("#subject-content").html(`
-                                            <div class="subject-loading">
-                                                در حال دریافت اطلاعات درس...
-                                            </div>
-                                        `);
-
-
-                // ==========================
-                // دریافت اطلاعات درس
-                // ==========================
-
-                $.ajax({
-
-                    url: "/SchoolManager/SubjectInfo",
-
-                    type: "GET",
-
-                    data: {
-                        subjectId: subjectId,
-                        classId: classId,
-                        studentId: studentId
-                    },
-
-                    success: function(result) {
-
-                        $("#subject-content").html(result);
-
-                    },
-
-                    error: function(xhr, status, error) {
-
-                        console.error("SubjectInfo Error:", error);
-                        console.error(xhr);
-
-                        $("#subject-content").html(`
-                                                    <div class="subject-error">
-                                                        دریافت اطلاعات درس با خطا مواجه شد.
-                                                    </div>
-                                                `);
-
-                    }
-
-                });
-
-            });
-
-        });
-
-    </script>
-}

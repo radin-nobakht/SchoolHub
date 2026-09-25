@@ -1,117 +1,81 @@
 ﻿@model int
-
-<div class="modal fade add-student-modal"
-     id="addStudentModal"
-     tabindex="-1"
-     aria-hidden="true">
-
+<div class="modal fade" id="addClassModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-
         <div class="modal-content">
 
-            <!-- Header -->
             <div class="modal-header">
-
-                <div class="modal-title-wrapper">
-
-                    <div class="modal-icon">
-                        🎓
-                    </div>
-
-                    <div>
-                        <h5 class="modal-title">
-                            افزودن دانش‌آموز
-                        </h5>
-
-                        <span class="modal-subtitle">
-                            کد ملی دانش‌آموز را وارد کنید
-                        </span>
-                    </div>
-
-                </div>
+                <h5 class="modal-title">اضافه کردن کلاس</h5>
 
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="modal"
                         aria-label="Close">
                 </button>
-
             </div>
 
-
-            <!-- Form -->
-            <form action="/Manager/AddStudent"
+            <form asp-controller="SchoolManager"
+                  asp-action="AddClass"
                   method="post">
 
                 <div class="modal-body">
 
-                    <!-- School Id -->
                     <input type="hidden"
                            name="schoolId"
+                           id="schoolId"
                            value="@Model" />
 
+                    <div class="mb-3">
+                        <label class="form-label">نام</label>
+                        <input type="text"
+                               class="form-control"
+                               name="name"
+                               required
+                               placeholder="نام کلاس خود را وارد کنید">
+                    </div>
 
-                    <!-- National Id -->
-                    <div class="form-group">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">پایه</label>
 
-                        <label class="form-label">
-                            کد ملی دانش‌آموز
-                        </label>
-
-                        <div class="input-wrapper">
-
-                            <span class="input-icon">
-                                🪪
-                            </span>
-
-                            <input type="text"
-                                   class="form-control custom-input"
-                                   name="nationalId"
-                                   required
-                                   maxlength="10"
-                                   minlength="10"
-                                   inputmode="numeric"
-                                   autocomplete="off"
-                                   placeholder="مثلاً 0012345678">
-
-                        </div>
-
+                        <select id="gradeGeneral"
+                                class="form-select select2"
+                                name="gradeGeneralId"
+                                required
+                                onchange="Major()">
+                        </select>
                     </div>
 
 
-                    @if (ViewBag.Error != null)
-                    {
-                        <div class="form-error">
-                            <span>⚠️</span>
-                            <span>@ViewBag.Error</span>
-                        </div>
-                    }
+                    <div class="col-md-6 mb-3" id="major">
+                        <label class="form-label">رشته</label>
+
+                        <select id="majorGeneral"
+                                class="form-select select2"
+                                name="majorGeneralId">
+                        </select>
+                    </div>
+
+
+                    <p class="text-danger fw-bold">
+                        @ViewBag.Error
+                    </p>
 
                 </div>
 
-
-                <!-- Footer -->
                 <div class="modal-footer">
-
                     <button type="button"
-                            class="btn btn-light modal-cancel-btn"
+                            class="btn btn-secondary"
                             data-bs-dismiss="modal">
                         انصراف
                     </button>
 
                     <button type="submit"
-                            class="btn btn-primary modal-submit-btn">
-                        <span>✓</span>
-                        افزودن دانش‌آموز
+                            class="btn btn-primary">
+                        ثبت
                     </button>
-
                 </div>
 
             </form>
 
         </div>
-
     </div>
-
 </div>
-```

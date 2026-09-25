@@ -1,11 +1,12 @@
-﻿<div class="modal fade" id="addSchoolModal" tabindex="-1" aria-hidden="true">
+﻿@model int
+<div class="modal fade" id="updateSchoolModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content school-modal">
 
             <div class="modal-header school-modal-header">
                 <h5 class="modal-title">
-                    <i class="bi bi-building-add me-2"></i>
-                    اضافه کردن مدرسه
+                    <i class="bi bi-building-gear me-2"></i>
+                    ویرایش مدرسه
                 </h5>
 
                 <button type="button"
@@ -14,9 +15,18 @@
                 </button>
             </div>
 
-            <form action="/School/AddSchool" method="post">
+            <form action="/SchoolManager/UpdateSchool" method="post">
 
                 <div class="modal-body">
+
+                    <input type="hidden"
+                           id="updateSchoolId"
+                           name="schoolId"
+                           value="@Model">
+
+                    <input type="hidden"id="cityId" />
+
+                    <input type="hidden"id="DistrictId" />
 
                     <div class="row">
 
@@ -24,37 +34,55 @@
                             <label class="form-label">نام مدرسه</label>
 
                             <input type="text"
+                                   id="updateSchoolName"
                                    class="form-control"
+                                   value="@ViewBag.Name"
                                    name="name"
                                    required
                                    placeholder="مثلاً دبیرستان نمونه">
                         </div>
 
                         <div class="col-md-6 mb-3">
+                            <label class="form-label">کد ملی مدیر</label>
+
+                            <input type="text"
+                                   id="managerNationalId"
+                                   class="form-control"
+                                   name="managerNationalId"
+                                   inputmode="numeric"
+                                   maxlength="10"
+                                   minlength="10"
+                                   required
+                                   placeholder="کد ملی ۱۰ رقمی مدیر">
+                            <div id="managerSearchResult" class="mt-1"></div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
                             <label class="form-label">استان</label>
 
-                            <select id="provinceGeneral"
+                            <select id="updateProvinceGeneral"
                                     class="form-select select2"
                                     required
-                                    onchange="cityForAddSchool()">
+                                    onchange="cityForUpdateSchool()">
                             </select>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">شهر</label>
 
-                            <select id="schoolCity"
+                            <select id="updateSchoolCity"
                                     class="form-select select2"
                                     name="cityId"
                                     required
-                                    onchange="districtForAddSchool()">
+                                    onchange="districtForUpdateSchool()">
                             </select>
                         </div>
 
-                        <div class="col-md-6 mb-3" id="District">
+                        <div class="col-md-6 mb-3" id="UpdateDistrict">
                             <label class="form-label">منطقه</label>
 
-                            <select id="schoolDistrict"
+                            <select id="updateSchoolDistrict"
                                     class="form-select select2"
                                     name="districtId">
                             </select>
@@ -63,45 +91,45 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">نوع مدرسه</label>
 
-                            <select id="typeGeneral"
+                            <select id="updateTypeGeneral"
                                     class="form-select select2"
-                                    name="TypeGeneralId">
+                                    name="typeGeneralId">
                             </select>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">شیفت</label>
 
-                            <select id="shiftGeneral"
+                            <select id="updateShiftGeneral"
                                     class="form-select select2"
-                                    name="ShiftGeneralId">
+                                    name="shiftGeneralId">
                             </select>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">مقطع</label>
 
-                            <select id="educationLevelGeneral"
+                            <select id="updateEducationLevelGeneral"
                                     class="form-select select2"
-                                    name="EducationLevelGeneralId">
+                                    name="educationLevelGeneralId">
                             </select>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">دوره</label>
 
-                            <select id="educationPeriodGeneral"
+                            <select id="updateEducationPeriodGeneral"
                                     class="form-select select2"
-                                    name="EducationPeriodGeneralId">
+                                    name="educationPeriodGeneralId">
                             </select>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">جنسیت</label>
 
-                            <select id="genderGeneral"
+                            <select id="updateGenderGeneral"
                                     class="form-select select2"
-                                    name="GenderGeneralId">
+                                    name="genderGeneralId">
                             </select>
                         </div>
 
@@ -127,7 +155,7 @@
                     <button class="btn btn-primary px-4"
                             type="submit">
                         <i class="bi bi-check-circle ms-1"></i>
-                        ثبت مدرسه
+                        ذخیره تغییرات
                     </button>
 
                 </div>

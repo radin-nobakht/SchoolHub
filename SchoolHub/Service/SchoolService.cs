@@ -65,7 +65,7 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
         return (
             from student in db.Students
 
-            where student.ClassId == classId
+            where student.ClassId == classId && student.IsDeleted== false
 
             join studentUser in db.Users on student.StudentUserId equals studentUser.Id
 
@@ -101,23 +101,28 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
             .ToList();
     }
 
-    public List<int> GetManagerSchoolIds(int userId)
-    {
-        return db.Schools.Where(x => x.ManagerUserId == userId).Select(x => x.Id).ToList();
-    }
+  
 
     public List<int> GetStudentSchoolIds(int userId)
     {
         return (
             from student in db.Students
 
-            where student.StudentUserId == userId
+            where student.StudentUserId == userId && student.IsDeleted== false
 
             join clas in db.Classes on student.ClassId equals clas.Id
 
             select clas.SchoolId
         )
             .Distinct()
+            .ToList();
+    }
+
+    public List<int> GetManagerSchoolIds(int userId)
+    {
+        return db.Schools
+            .Where(x => x.ManagerUserId == userId)
+            .Select(x => x.Id)
             .ToList();
     }
 
@@ -131,11 +136,17 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
         var schools =
             from school in db.Schools
 
-            join district in db.GeneralItems on school.DistrictId equals district.Id
+            join city in db.GeneralItems
+                on school.CityId equals city.Id
 
-            join city in db.GeneralItems on district.ParentId equals city.Id
+            join province in db.GeneralItems
+                on city.ParentId equals province.Id
 
-            join province in db.GeneralItems on city.ParentId equals province.Id
+            // District اختیاری است
+            join district in db.GeneralItems
+                on school.DistrictId equals district.Id into districtGroup
+
+            from district in districtGroup.DefaultIfEmpty()
 
             where schoolIds.Contains(school.Id)
 
@@ -153,7 +164,9 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
 
                     City = city.Title,
 
-                    District = district.Title,
+                    District = district != null
+                        ? district.Title
+                        : "منطقه 1"
                 },
 
                 IsManager = school.ManagerUserId == userId,
@@ -161,21 +174,23 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
                 IsTeacher = db.TeachingAssignments.Any(assignment =>
                     assignment.TeacherUserId == userId
                     && db.Classes.Any(clas =>
-                        clas.Id == assignment.ClassId && clas.SchoolId == school.Id
+                        clas.Id == assignment.ClassId
+                        && clas.SchoolId == school.Id
                     )
                 ),
 
                 IsStudent = db.Students.Any(student =>
                     student.StudentUserId == userId
+                    && !student.IsDeleted
                     && db.Classes.Any(clas =>
-                        clas.Id == student.ClassId && clas.SchoolId == school.Id
+                        clas.Id == student.ClassId
+                        && clas.SchoolId == school.Id
                     )
-                ),
+                )
             };
 
         return schools.ToList();
     }
-
     public SchoolDto? GetSchoolById(int id)
     {
         var school = db.Schools.FirstOrDefault(x => x.Id == id);

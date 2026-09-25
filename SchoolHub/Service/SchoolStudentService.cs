@@ -14,7 +14,7 @@ namespace SchoolHub.Service
         {
             return (
                 from student in db.Students
-                where student.StudentUserId == studentUserId
+                where student.StudentUserId == studentUserId && student.IsDeleted==false
 
                 join clas in db.Classes
                 on student.ClassId equals clas.Id
@@ -29,7 +29,7 @@ namespace SchoolHub.Service
             var scoreAverage = new List<AverageScoresDto>();
             var gradeId = db.Classes.FirstOrDefault(x => x.Id == classId)?.GradeGeneralId ?? 0;
             var subjectIds = db.GradeSubjects.Where(x => x.GradeId == gradeId).Select(x => x.SubjectId).ToList();
-            var studentId = db.Students.FirstOrDefault(x => x.StudentUserId == studentUserId && x.ClassId == classId)?.Id ?? 0;
+            var studentId = db.Students.FirstOrDefault(x => x.StudentUserId == studentUserId && x.ClassId == classId && x.IsDeleted== false)?.Id ?? 0;
             var scores = db.Scores.Where(x => x.StudentId == studentId && x.Status == true).ToList();
             var a = db.GeneralItems.Where(x => subjectIds.Contains(x.Id)).ToList();
             foreach (var s in a)
@@ -47,7 +47,7 @@ namespace SchoolHub.Service
 
         public List<ScoreDto> GetScores(int studentUserId, int subjectId,int classId)
         {
-            var studentId = db.Students.FirstOrDefault(x => x.ClassId == classId && x.StudentUserId == studentUserId)?.Id;
+            var studentId = db.Students.FirstOrDefault(x => x.ClassId == classId && x.StudentUserId == studentUserId && x.IsDeleted == false)?.Id;
             var scores = db.Scores.Where(x => x.StudentId == studentId && x.GeneralSubjectId == subjectId && x.Status == true).ToList();
 
             return mapper.Map<List<ScoreDto>>(scores);
@@ -75,7 +75,7 @@ namespace SchoolHub.Service
             subjectInfo.ScoreCount = subjectInfo.Scores.Count();
             subjectInfo.AverageScore =  Math.Round(subjectInfo.ScoreCount != 0 ? subjectInfo.Scores.Average(x => x.Score) : 0.00, 2);
 
-            var studentId = db.Students.FirstOrDefault(x => x.StudentUserId == userId && x.ClassId == classId)?.Id ?? 0;
+            var studentId = db.Students.FirstOrDefault(x => x.StudentUserId == userId && x.ClassId == classId && x.IsDeleted == false)?.Id ?? 0;
             var studentSubjectRecords = db.StudentSubjectRecords.Where(x => x.SubjectGeneralId == subjectInfo.SubjectId && x.StudentUserId == studentId).ToList();
             subjectInfo.PositiveCount = studentSubjectRecords.Where(x => x.Type == "Positive")?.Sum(x => x.Count) ?? 0;
             subjectInfo.NegativeCount = studentSubjectRecords.Where(x => x.Type == "Negative")?.Sum(x => x.Count) ?? 0;

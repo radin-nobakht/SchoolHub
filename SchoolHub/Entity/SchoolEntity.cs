@@ -17,7 +17,7 @@ namespace SchoolHub.Entity
         [Required]
         public int CityId { get; set; }
 
-        public int DistrictId { get; set; }
+        public int? DistrictId { get; set; }
 
         [Required]
         public int ShiftGeneralId { get; set; }

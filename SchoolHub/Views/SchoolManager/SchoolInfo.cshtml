@@ -1,11 +1,12 @@
 ﻿@model SchoolHub.Dto.School.AllDatailAboutSchool
+
+
 @{
     ViewData["Title"] = "پنل مدیریت";
+    ViewBag.Name = Model?.School?.Name;
 }
 
 <div class="manager-school-page">
-
-    <!-- ==================== School Header ==================== -->
 
     <div class="school-card">
 
@@ -18,13 +19,26 @@
                 </div>
 
                 <div>
-                    <div class="school-title">
-                        @Model.School.Name
+
+                    <div class="school-title-row">
+
+                        <div class="school-title">
+                            @Model.School.Name
+                        </div>
+
+                        <button type="button"
+                                class="btn btn-outline-primary btn-sm btn-edit-school"
+                                id="btnEditSchool"
+                                data-id="@Model.School.Id">
+                            ✏️ ویرایش
+                        </button>
+
                     </div>
 
                     <div class="school-subtitle">
                         اطلاعات مدرسه
                     </div>
+
                 </div>
 
             </div>
@@ -32,113 +46,76 @@
         </div>
 
 
-        <!-- ==================== School Information ==================== -->
-
         <div class="school-info-grid">
 
             <div class="info-box">
-                <div class="info-icon">
-                    🏙️
-                </div>
-
+                <div class="info-icon">🏙️</div>
                 <div class="info-content">
                     <span>استان</span>
                     <h5>@Model.School.Province</h5>
                 </div>
             </div>
 
-
             <div class="info-box">
-                <div class="info-icon">
-                    🌆
-                </div>
-
+                <div class="info-icon">🌆</div>
                 <div class="info-content">
                     <span>شهر</span>
                     <h5>@Model.School.City</h5>
                 </div>
             </div>
 
-
             <div class="info-box">
-                <div class="info-icon">
-                    📍
-                </div>
-
+                <div class="info-icon">📍</div>
                 <div class="info-content">
                     <span>منطقه</span>
                     <h5>@Model.School.District</h5>
                 </div>
             </div>
 
-
             <div class="info-box">
-                <div class="info-icon">
-                    👨‍💼
-                </div>
-
+                <div class="info-icon">👨‍💼</div>
                 <div class="info-content">
                     <span>مدیر مدرسه</span>
                     <h5>@Model.School.MangerFullName</h5>
                 </div>
             </div>
 
-
             <div class="info-box">
-                <div class="info-icon">
-                    🏫
-                </div>
-
+                <div class="info-icon">🏫</div>
                 <div class="info-content">
                     <span>نوع مدرسه</span>
                     <h5>@Model.School.Type</h5>
                 </div>
             </div>
 
-
             <div class="info-box">
-                <div class="info-icon">
-                    👥
-                </div>
-
+                <div class="info-icon">👥</div>
                 <div class="info-content">
                     <span>جنسیت</span>
                     <h5>@Model.School.Gender</h5>
                 </div>
             </div>
 
-
             <div class="info-box">
-                <div class="info-icon">
-                    ⏰
-                </div>
-
+                <div class="info-icon">⏰</div>
                 <div class="info-content">
                     <span>شیفت</span>
                     <h5>@Model.School.Shift</h5>
                 </div>
             </div>
 
-
             <div class="info-box">
-                <div class="info-icon">
-                    📚
-                </div>
-
+                <div class="info-icon">📚</div>
                 <div class="info-content">
-                    <span>مقطع تحصیلی</span>
+                    <span>مقطع</span>
                     <h5>@Model.School.EducationLevel</h5>
                 </div>
             </div>
 
-
             <div class="info-box">
-                <div class="info-icon">
-                    🎓
-                </div>
-
+                <div class="info-icon">🎓</div>
                 <div class="info-content">
-                    <span>دوره تحصیلی</span>
+                    <span>دوره</span>
                     <h5>@Model.School.EducationPeriod</h5>
                 </div>
             </div>
@@ -147,8 +124,6 @@
 
     </div>
 
-
-    <!-- ==================== Classes Header ==================== -->
 
     <div class="classes-header">
 
@@ -160,30 +135,25 @@
 
             <div>
                 <h3>کلاس‌های مدرسه</h3>
-                <span>
-                    کلاس‌های ثبت شده در مدرسه
-                </span>
+                <span>کلاس‌های ثبت شده در مدرسه</span>
             </div>
 
         </div>
-
 
         <button type="button"
                 class="btn btn-success add-class-btn"
                 id="btnOpenAddClass">
 
-            <span>＋</span>
-            افزودن کلاس
+            ＋ افزودن کلاس
 
         </button>
 
     </div>
 
 
-    <!-- ==================== Classes ==================== -->
     @if (Model.Classes is not null && Model.Classes.Any())
     {
-        <div class="row g-4">
+        <div class="row g-2">
 
             @foreach (var item in Model.Classes)
             {
@@ -191,65 +161,36 @@
 
                     <div class="class-card">
 
-                        <!-- Class Header -->
-
                         <div class="class-card-header">
 
                             <div class="class-card-icon">
                                 🎓
                             </div>
 
-                            <div>
-
-                                <div class="class-name">
-                                    @item.Name
-                                </div>
-
-                                <div class="class-label">
-                                    کلاس
-                                </div>
-
+                            <div class="class-name">
+                                @item.Name
                             </div>
 
                         </div>
 
 
-                        <!-- Class Details -->
-
                         <div class="class-details">
 
                             <div class="class-detail">
-
-                                <span>
-                                    پایه
-                                </span>
-
-                                <strong>
-                                    @item.Grade
-                                </strong>
-
+                                <span>پایه:</span>
+                                <strong>@item.Grade</strong>
                             </div>
-
 
                             @if (!string.IsNullOrWhiteSpace(item.Major))
                             {
                                 <div class="class-detail">
-
-                                    <span>
-                                        رشته
-                                    </span>
-
-                                    <strong>
-                                        @item.Major
-                                    </strong>
-
+                                    <span>رشته:</span>
+                                    <strong>@item.Major</strong>
                                 </div>
                             }
 
                         </div>
 
-
-                        <!-- Class Actions -->
 
                         <div class="buttons">
 
@@ -257,28 +198,13 @@
                                asp-action="ClassInfo"
                                asp-route-classId="@item.Id"
                                class="btn btn-outline-primary btn-sm">
-
                                 👁 مشاهده
-
                             </a>
-
-
-                            <a asp-controller="Manager"
-                               asp-action="UpdateClass"
-                               asp-route-id="@item.Id"
-                               class="btn btn-outline-warning btn-sm">
-
-                                ✏️ ویرایش
-
-                            </a>
-
 
                             <button type="button"
                                     class="btn btn-outline-danger btn-sm btnDelete"
                                     data-id="@item.Id">
-
                                 🗑 حذف
-
                             </button>
 
                         </div>
@@ -292,8 +218,6 @@
     }
     else
     {
-        <!-- ==================== Empty Classes ==================== -->
-
         <div class="empty-classes">
 
             <div class="empty-icon">
@@ -321,27 +245,24 @@
 
 </div>
 
-<!-- =========================
-        Partials
-    ========================== -->
 
-<partial name="_AddClass.cshtml"
-         model="@Model.School.Id" />
+<partial name="_AddClass.cshtml" model="@Model.School.Id" />
+<partial name="_UpdateSchool.cshtml" model="@Model.School.Id" />
 
-<!-- ==================== Add Class Partial ==================== -->
-
-<partial name="_AddClass.cshtml"
-         model="@Model.School.Id" />
 
 @section Scripts {
+
     <script>
-        $(document).on("click", ".btnDelete", function() {
+
+        // =========================
+        // حذف کلاس
+        // =========================
+
+        $(document).on("click", ".btnDelete", function () {
 
             const button = $(this);
             const classId = button.data("id");
             const classCard = button.closest(".class-card");
-
-            console.log("Class ID:", classId);
 
             Swal.fire({
                 title: "حذف کلاس؟",
@@ -353,18 +274,19 @@
                 reverseButtons: true
             }).then((result) => {
 
-                if (!result.isConfirmed) {
+                if (!result.isConfirmed)
                     return;
-                }
 
                 $.ajax({
+
                     url: "/SchoolManager/DeleteClass",
                     type: "POST",
+
                     data: {
                         classId: classId
                     },
 
-                    success: function(data) {
+                    success: function (data) {
 
                         if (data) {
 
@@ -376,12 +298,12 @@
                                 showConfirmButton: false
                             });
 
-                            // حذف کارت و آزاد شدن جای آن
-                            classCard.fadeOut(300, function() {
+                            classCard.fadeOut(300, function () {
                                 $(this).remove();
                             });
 
-                        } else {
+                        }
+                        else {
 
                             Swal.fire({
                                 title: "خطا",
@@ -389,12 +311,12 @@
                                 icon: "error",
                                 confirmButtonText: "باشه"
                             });
+
                         }
+
                     },
 
-                    error: function(xhr, status, error) {
-
-                        console.error("Delete class error:", error);
+                    error: function () {
 
                         Swal.fire({
                             title: "خطا",
@@ -402,9 +324,15 @@
                             icon: "error",
                             confirmButtonText: "باشه"
                         });
+
                     }
+
                 });
+
             });
+
         });
+
     </script>
+
 }

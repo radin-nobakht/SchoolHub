@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿
+$(document).ready(function () {
 
     $(".select2").each(function () {
 
@@ -30,7 +31,7 @@ $(document).on("click", "#btnOpenAddSchool", function () {
     modal.show();
 });
 
-function city() {
+function cityForAddSchool() {
     let provinceId = $("#provinceGeneral").val();
 
     $.ajax({
@@ -52,7 +53,7 @@ function city() {
                 );
 
             });
-            district();
+            districtForAddSchool();
         },
         error: function (xhr, status, error) {
             console.error(error);
@@ -60,7 +61,7 @@ function city() {
     });
 }
 
-function district() {
+function districtForAddSchool() {
     let cityId = $("#schoolCity").val();
 
     $.ajax({
@@ -96,7 +97,7 @@ function district() {
     });
 };
 
-function generalItems() {
+function generalItemsForAddSchool() {
     $.ajax({
         url: "/school/GetGeneralsSchool",
         type: "GET",
@@ -130,7 +131,7 @@ function generalItems() {
                          </option>`
                 );
             })
-            city();
+            cityForAddSchool();
 
             //#endregion
 
@@ -554,11 +555,11 @@ $(document).on("click", ".btnUpdateTeacher", function () {
 
     const modal = new bootstrap.Modal($("#updateTeacherModal")[0]);
     $("#teacherUserId").val($(this).data("teacher-user-id"));
-    SubjectsForUpdateSchool();
+    SubjectsForUpdateTeacher();
     modal.show();
 });
 
-function SubjectsForUpdateSchool() {
+function SubjectsForUpdateTeacher() {
     let teacherUserId = $("#teacherUserId").val();
     let classId = $("#classId").val();
     $.ajax({
@@ -584,6 +585,279 @@ function SubjectsForUpdateSchool() {
                     </option>`
                 );
             });
+
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+$(document).on("click", "#btnEditSchool", function () {
+
+    const modal = new bootstrap.Modal($("#updateSchoolModal")[0]);
+    generalItemsForUpdateSchool();
+    managerNationalId();
+    modal.show();
+});
+
+function generalItemsForUpdateSchool() {
+    let schoolId = $("#updateSchoolId").val();
+    $.ajax({
+        url: "/SchoolManager/GetGeneralsForUpdateSchool",
+        type: "GET",
+        data: {
+            schoolId: schoolId
+        },
+        success: function (data) {
+            console.log(data);
+            console.log(data.schoolProperty);
+            console.log(data?.schoolProperty?.DistrictId);
+            $("#DistrictId").val(data.schoolProperty["DistrictId"]);
+            $("#cityId").val(data.schoolProperty["CityId"]);
+            //#region educationLevelGeneral
+
+            let educationLevelGeneralSelect = $("#updateEducationLevelGeneral");
+            educationLevelGeneralSelect.empty();
+
+            $.each(data.generals.generalEducationLevels, function (index, item) {
+                const isSelected = data.schoolProperty["EducationLevelId"] === item.id;
+                educationLevelGeneralSelect.append(
+                    `<option value="${item.id}" ${isSelected ? "selected" : ""}>
+                             ${item.title}
+                         </option>`
+                );
+
+            })
+            //#endregion
+
+            //#region provinceGeneral
+
+            let provinceGeneralSelect = $("#updateProvinceGeneral");
+            provinceGeneralSelect.empty();
+
+            $.each(data.generals.generalProrvince, function (index, item) {
+                const isSelected = data.schoolProperty["proviceId"] === item.id;
+
+                provinceGeneralSelect.append(
+                    `<option value="${item.id}"${isSelected ? "selected" : ""}>
+                             ${item.title}
+                         </option>`
+                );
+            })
+            cityForUpdateSchool();
+
+            //#endregion
+
+            //#region TypeGeneral
+
+            let typeGeneralSelect = $("#updateTypeGeneral");
+            typeGeneralSelect.empty();
+
+            $.each(data.generals.generalTypes, function (index, item) {
+                const isSelected = data.schoolProperty["TypeId"] === item.id;
+
+                typeGeneralSelect.append(
+                    `<option value="${item.id}"${isSelected ? "selected" : ""}>
+                             ${item.title}
+                         </option>`
+                );
+
+            })
+            //#endregion
+
+            //#region shiftGeneral
+
+            let shiftGeneralSelect = $("#updateShiftGeneral");
+            shiftGeneralSelect.empty();
+
+            $.each(data.generals.generalShifts, function (index, item) {
+                const isSelected = data.schoolProperty["ShiftId"] === item.id;
+
+                shiftGeneralSelect.append(
+                    `<option value="${item.id}"${isSelected ? "selected" : ""}>
+                             ${item.title}
+                         </option>`
+                );
+
+            })
+            //#endregion
+
+            //#region educationPeriodGeneral
+
+            let educationLevelSelect = $("#updateEducationPeriodGeneral");
+            educationLevelSelect.empty();
+
+            $.each(data.generals.generalEducationPeriods, function (index, item) {
+                const isSelected = data.schoolProperty["EducationPeriodId"] === item.id;
+
+                educationLevelSelect.append(
+                    `<option value="${item.id}"${isSelected ? "selected" : ""}>
+                             ${item.title}
+                         </option>`
+                );
+
+            })
+            //#endregion
+
+            //#region genderGeneral
+
+            let genderGeneral = $("#updateGenderGeneral");
+            genderGeneral.empty();
+
+            $.each(data.generals.generalGender, function (index, item) {
+                const isSelected = data.schoolProperty["GenderId"] === item.id;
+
+                genderGeneral.append(
+                    `<option value="${item.id}"${isSelected ? "selected" : ""}>
+                             ${item.title}
+                         </option>`
+                );
+
+            })
+            //#endregion
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+};
+
+function managerNationalId() {
+    $.ajax({
+        url: "/SchoolManager/GetNationalId",
+        type: "GET",
+        success: function (data) {
+
+            $("#managerNationalId").val(data);
+
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+$(document).on("input", "#managerNationalId", function () {
+
+    const input = $(this);
+
+    const value = input.val()
+        .replace(/\D/g, "")
+        .slice(0, 10);
+
+    input.val(value);
+
+    const result = $("#managerSearchResult");
+
+    // هنوز 10 رقم کامل نشده
+    if (value.length < 10) {
+        result.empty();
+        return;
+    }
+
+    $.ajax({
+        url: "/SchoolManager/GetManagerByNationalId",
+        type: "GET",
+        data: {
+            nationalId: value
+        },
+
+        success: function (data) {
+
+            result.empty();
+
+            if (data) {
+
+                result.html(`
+                    <div class="list-group-item list-group-item-action">
+                        ${data}
+                    </div>
+                `);
+
+            } else {
+
+                result.html(`
+                    <div class="text-danger mt-1">
+                        کاربری با این کد ملی پیدا نشد.
+                    </div>
+                `);
+
+            }
+        },
+
+        error: function () {
+
+            result.html(`
+                <div class="text-danger mt-1">
+                    خطایی در دریافت اطلاعات رخ داد.
+                </div>
+            `);
+
+        }
+    });
+});
+
+function cityForUpdateSchool() {
+    let provinceId = $("#updateProvinceGeneral").val();
+
+    $.ajax({
+        url: "/SchoolManager/GetCities",
+        type: "GET",
+        data: {
+            provinceId: provinceId
+        },
+        success: function (data) {
+            let select = $('#updateSchoolCity');
+            select.empty();
+
+            $.each(data, function (index, item) {
+                const isSelected = Number($("#cityId").val()) === Number(item.id);
+
+                select.append(
+                    `<option value="${item.id}"${isSelected ? "selected" : ""}>
+                            ${item.title}
+                        </option>`
+                );
+
+            });
+            districtForUpdateSchool();
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+function districtForUpdateSchool() {
+    let cityId = $("#updateSchoolCity").val();
+
+    $.ajax({
+        url: "/SchoolManager/GetDistricts",
+        type: "GET",
+        data: {
+            cityId: cityId
+        },
+        success: function (data) {
+            if (data != null) {
+
+            let select = $('#updateSchoolDistrict');
+            select.empty();
+
+            $.each(data, function (index, item) {
+                const isSelected = Number(($("#DistrictId").val())) === Number(item.id);
+                select.append(
+                    `<option value="${item.id}"${isSelected ? "selected" : ""}>
+                            ${item.title}
+                        </option>`
+                );
+
+            });
+                $("#UpdateDistrict").show();
+            }
+            else {
+                $("#UpdateDistrict").hide();
+            }
 
         },
         error: function (xhr, status, error) {

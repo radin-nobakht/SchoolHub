@@ -1,0 +1,276 @@
+﻿#updateSchoolModal .modal-dialog {
+    max-width: 900px;
+}
+
+#updateSchoolModal .school-modal {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================
+   Header
+   ========================= */
+
+#updateSchoolModal .school-modal-header {
+    background: linear-gradient(135deg, #4e73df, #224abe);
+    color: #fff;
+    border-bottom: none;
+    padding: 18px 24px;
+}
+
+#updateSchoolModal .modal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+    #updateSchoolModal .modal-title i {
+        font-size: 1.25rem;
+    }
+
+#updateSchoolModal .btn-close {
+    opacity: 1;
+}
+
+/* =========================
+   Body
+   ========================= */
+
+#updateSchoolModal .modal-body {
+    padding: 24px;
+    background: #fff;
+}
+
+#updateSchoolModal .row {
+    row-gap: 4px;
+}
+
+#updateSchoolModal .form-label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #343a40;
+}
+
+/* =========================
+   Inputs
+   ========================= */
+
+#updateSchoolModal .form-control,
+#updateSchoolModal .form-select {
+    min-height: 44px;
+    border: 1px solid #d9dee7;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+#updateSchoolModal .form-control {
+    padding: 9px 12px;
+}
+
+    #updateSchoolModal .form-control::placeholder {
+        color: #adb5bd;
+    }
+
+    #updateSchoolModal .form-control:focus,
+    #updateSchoolModal .form-select:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.12);
+    }
+
+/* =========================
+   Manager National ID
+   ========================= */
+
+#updateSchoolModal #managerNationalId {
+    direction: ltr;
+    text-align: left;
+    letter-spacing: 1px;
+}
+
+    #updateSchoolModal #managerNationalId::placeholder {
+        direction: rtl;
+        text-align: right;
+        letter-spacing: 0;
+    }
+
+/* =========================
+   Select2
+   ========================= */
+
+#updateSchoolModal .select2-container {
+    width: 100% !important;
+}
+
+#updateSchoolModal .select2-container--default
+.select2-selection--single {
+    height: 44px;
+    border: 1px solid #d9dee7;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+    #updateSchoolModal .select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered {
+        line-height: 42px;
+        padding-right: 12px;
+        padding-left: 35px;
+        color: #343a40;
+        font-size: 0.9rem;
+    }
+
+    #updateSchoolModal .select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow {
+        height: 42px;
+        left: 8px;
+        right: auto;
+    }
+
+#updateSchoolModal .select2-container--default.select2-container--open
+.select2-selection--single,
+#updateSchoolModal .select2-container--default
+.select2-container--focus
+.select2-selection--single {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.12);
+}
+
+/* Select2 dropdown */
+
+.select2-container--default .select2-dropdown {
+    border: 1px solid #d9dee7;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.select2-container--default .select2-search--dropdown {
+    padding: 8px;
+}
+
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+        border: 1px solid #d9dee7;
+        border-radius: 6px;
+        padding: 7px 10px;
+    }
+
+.select2-container--default .select2-results__option {
+    padding: 9px 12px;
+    font-size: 0.9rem;
+}
+
+.select2-container--default
+.select2-results__option--highlighted[aria-selected] {
+    background-color: #4e73df;
+}
+
+/* =========================
+   District
+   ========================= */
+
+#updateSchoolModal #UpdateDistrict {
+    transition: all 0.2s ease;
+}
+
+/* =========================
+   Error
+   ========================= */
+
+#updateSchoolModal .alert {
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+/* =========================
+   Footer
+   ========================= */
+
+#updateSchoolModal .modal-footer {
+    padding: 16px 24px;
+    background: #f8f9fc;
+    border-top: 1px solid #eaecf0;
+}
+
+    #updateSchoolModal .modal-footer .btn {
+        min-height: 42px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    #updateSchoolModal .modal-footer .btn-light {
+        background: #fff;
+    }
+
+        #updateSchoolModal .modal-footer .btn-light:hover {
+            background: #f1f3f5;
+        }
+
+    #updateSchoolModal .modal-footer .btn-primary {
+        background: #4e73df;
+        border-color: #4e73df;
+    }
+
+        #updateSchoolModal .modal-footer .btn-primary:hover {
+            background: #3d5fc4;
+            border-color: #3d5fc4;
+            transform: translateY(-1px);
+        }
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 767.98px) {
+
+    #updateSchoolModal .modal-dialog {
+        margin: 10px;
+    }
+
+    #updateSchoolModal .school-modal-header {
+        padding: 16px 18px;
+    }
+
+    #updateSchoolModal .modal-body {
+        padding: 18px;
+    }
+
+    #updateSchoolModal .modal-footer {
+        padding: 14px 18px;
+    }
+
+        #updateSchoolModal .modal-footer .btn {
+            flex: 1;
+        }
+}
+
+@media (max-width: 575.98px) {
+
+    #updateSchoolModal .modal-dialog {
+        margin: 8px;
+    }
+
+    #updateSchoolModal .modal-title {
+        font-size: 1rem;
+    }
+
+    #updateSchoolModal .modal-body {
+        padding: 16px;
+    }
+
+    #updateSchoolModal .modal-footer {
+        gap: 8px;
+    }
+}

@@ -3,9 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SchoolHub.Entity
 {
-    [Keyless]
     public class ScoreEntity
     {
+        [Required]
+        [Key]
+        public int Id { get; set; }
+
         [Required]
         public int StudentId { get; set; }
 

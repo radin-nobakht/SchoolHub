@@ -10,7 +10,6 @@ namespace SchoolHub.Service
 {
     public class GeneralService(MyContext db, IMapper mapper) : IGeneralService
     {
-
         public List<GeneralItemDto> GetTeacherSubjects(int classId, int teacherUserId)
         {
             var subjectIds = db.TeachingAssignments.Where(x => x.ClassId == classId && x.TeacherUserId == teacherUserId).Select(x => x.SubjectId).ToList();
@@ -19,7 +18,6 @@ namespace SchoolHub.Service
             return mapper.Map<List<GeneralItemDto>>(db.GeneralItems.Where(x => subjectIds.Contains(x.Id)).ToList());
 
         }
-
 
         public List<GeneralItemDto> GetCitiesByProvinceId(int provinceId)
         {
@@ -41,7 +39,7 @@ namespace SchoolHub.Service
         public Dictionary<string, List<GeneralItemDto>> GetGeneralItems(string[] titles)
         {
             var generalCategory = db
-                .GeneralItems.Where(x => titles.Contains(x.Title) && x.ParentId == null)
+                .GeneralItems.Where(x => titles.Contains(x.Title) && x.ParentId == null && x.Active)
                 .ToList();
             var categoryIds = generalCategory.Select(x => x.Id).ToList();
             var generalItems = db
@@ -50,7 +48,8 @@ namespace SchoolHub.Service
                 )
                 .ToList();
             return generalCategory.ToDictionary(
-                c => c.Title,
+                c => generalItems
+                        .FirstOrDefault(item => item.ParentId == c.Id)?.TitleType ?? "unknown",
                 c =>
                     generalItems
                         .Where(item => item.ParentId == c.Id)
@@ -61,48 +60,61 @@ namespace SchoolHub.Service
 
         public async Task<FullSchoolDataDto> GetFullDataOfSchoolById(int schoolId)
         {
-            #region schoolJoin
-            var result = (
-                from school in db.Schools
-                where school.Id == schoolId
+            var result =
+                 (
+                    from school in db.Schools
 
-                join manager in db.Users on school.ManagerUserId equals manager.Id
+                    where school.Id == schoolId
 
-                join city in db.GeneralItems on school.CityId equals city.Id
+                    join manager in db.Users
+                        on school.ManagerUserId equals manager.Id
 
-                join province in db.GeneralItems on city.ParentId equals province.Id
+                    join city in db.GeneralItems
+                        on school.CityId equals city.Id
 
-                join district in db.GeneralItems on school.DistrictId equals district.Id
+                    join province in db.GeneralItems
+                        on city.ParentId equals province.Id
 
-                join type in db.GeneralItems on school.TypeGeneralId equals type.Id
+                    // District اختیاری است، پس LEFT JOIN
+                    join district in db.GeneralItems
+                        on school.DistrictId equals district.Id into districtGroup
+                    from district in districtGroup.DefaultIfEmpty()
 
-                join gender in db.GeneralItems on school.GenderGeneralId equals gender.Id
+                    join type in db.GeneralItems
+                        on school.TypeGeneralId equals type.Id
 
-                join Shift in db.GeneralItems on school.ShiftGeneralId equals Shift.Id
+                    join gender in db.GeneralItems
+                        on school.GenderGeneralId equals gender.Id
 
-                join educationLevel in db.GeneralItems
-                    on school.EducationLevelGeneralId equals educationLevel.Id
+                    join shift in db.GeneralItems
+                        on school.ShiftGeneralId equals shift.Id
 
-                join educationPeriod in db.GeneralItems
-                    on school.EducationPeriodGeneralId equals educationPeriod.Id
+                    join educationLevel in db.GeneralItems
+                        on school.EducationLevelGeneralId equals educationLevel.Id
 
-                select new FullSchoolDataDto
-                {
-                    Id = schoolId,
-                    Name = school.Name,
-                    MangerFullName = (manager.Name + " " + manager.LastName),
-                    Province = province.Title,
-                    City = city.Title,
-                    District = district.Title,
-                    Type = type.Title,
-                    Gender = gender.Title,
-                    Shift = Shift.Title,
-                    EducationLevel = educationLevel.Title,
-                    EducationPeriod = educationPeriod.Title,
-                    MangerUserId = school.ManagerUserId,
-                }
-            ).FirstOrDefault();
-            #endregion
+                    join educationPeriod in db.GeneralItems
+                        on school.EducationPeriodGeneralId equals educationPeriod.Id
+
+                    select new FullSchoolDataDto
+                    {
+                        Id = school.Id,
+                        Name = school.Name,
+
+                        MangerFullName = manager.Name + " " + manager.LastName,
+                        MangerUserId = school.ManagerUserId,
+
+                        Province = province.Title,
+                        City = city.Title,
+                        District = district != null ? district.Title : "منطقه 1  ",
+
+                        Type = type.Title,
+                        Gender = gender.Title,
+                        Shift = shift.Title,
+
+                        EducationLevel = educationLevel.Title,
+                        EducationPeriod = educationPeriod.Title
+                    }
+                ).FirstOrDefault();
 
             return result;
         }
@@ -132,7 +144,6 @@ namespace SchoolHub.Service
 
         public List<GeneralItemDto> GetGenerals(string type, int? parentId = null) => mapper.Map<List<GeneralItemDto>>(db.GeneralItems.Where(x => x.TitleType == type && (parentId != null ? x.ParentId == parentId : true)).ToList());
 
-
         public GeneralItemDto GetCurrentItem(int classId, string type)
         {
             var clas = db.Classes.FirstOrDefault(x => x.Id == classId) ?? new ClassEntity();
@@ -140,7 +151,6 @@ namespace SchoolHub.Service
 
             return mapper.Map<GeneralItemDto>(generalItem);
         }
-
 
         public bool IsSubjectExistForThisGrade(List<int> subjectIds, int GradeId)
         {
@@ -158,7 +168,6 @@ namespace SchoolHub.Service
 
         }
 
-
         public List<GeneralItemDto> GetAvailableSubjectsByGradeId(int gradeId, int classId)
         {
             var assignedSubjects = db.TeachingAssignments.Where(x => x.ClassId == classId).Select(x => x.SubjectId).ToList();
@@ -166,12 +175,30 @@ namespace SchoolHub.Service
             var subjects = db.GeneralItems.Where(x => subjectIds.Contains(x.Id) && x.TitleType == "Subject").ToList();
             return mapper.Map<List<GeneralItemDto>>(subjects);
         }
-        public List<GeneralItemDto> GetAvailableSubjectsByGradeIdForUpdateTeacher(int gradeId, int classId,int teacherUserId)
+
+        public List<GeneralItemDto> GetAvailableSubjectsByGradeIdForUpdateTeacher(int gradeId, int classId, int teacherUserId)
         {
             var assignedSubjects = db.TeachingAssignments.Where(x => x.ClassId == classId && teacherUserId != x.TeacherUserId).Select(x => x.SubjectId).ToList();
             var subjectIds = db.GradeSubjects.Where(x => x.GradeId == gradeId && !assignedSubjects.Contains(x.SubjectId)).Select(x => x.SubjectId).ToList();
             var subjects = db.GeneralItems.Where(x => subjectIds.Contains(x.Id) && x.TitleType == "Subject").ToList();
             return mapper.Map<List<GeneralItemDto>>(subjects);
+        }
+
+        public List<int> GetGradeSubJectIds(int classId)
+        {
+            var @class = db.Classes.FirstOrDefault(x => x.Id == classId);
+            return db.GradeSubjects.Where(x => x.GradeId == @class.GradeGeneralId && (@class.MajorGeneralId == null || x.MajorGeneralId == @class.MajorGeneralId)).Select(x => x.SubjectId).ToList();
+        }
+
+        public Dictionary<string,int> GetGeneralIdsForSchool(int schoolId)
+        {
+            var school = db.Schools.FirstOrDefault(x => x.Id == schoolId);
+            if (school == null)
+                return new Dictionary<string, int>();
+
+            var proviceId = db.GeneralItems.FirstOrDefault(x => x.Id == school.CityId)?.ParentId ?? 0;
+            return new Dictionary<string, int> { ["proviceId"] = proviceId, ["ShiftId"] = school.ShiftGeneralId, ["GenderId"] = school.GenderGeneralId, ["TypeId"] =school.TypeGeneralId,["EducationLevelId"]= school.EducationLevelGeneralId, ["EducationPeriodId"] =school.EducationPeriodGeneralId, ["CityId"] =school.CityId, ["DistrictId"] =school.DistrictId ??0 };
+
         }
 
     }

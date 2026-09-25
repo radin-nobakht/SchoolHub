@@ -271,6 +271,34 @@ namespace SchoolHubTest.TestServices
             Assert.Empty(result);
         }
 
+        [Fact]
+        public void GetGeneralGetGeneralIdsForSchool_WhenSchoolExist_ReturnsIds()
+        {
+            // Arrange
+            testDb.Schools.Add(new SchoolEntity { CityId = 3, DistrictId = 4, EducationLevelGeneralId = 1, EducationPeriodGeneralId = 9, GenderGeneralId = 2, Id = 5, ManagerUserId = 7, Name = "", ShiftGeneralId = 6, TypeGeneralId = 8 });
+            testDb.GeneralItems.Add(new GeneralItemEntity { Active = false, Id = 3, ParentId = 11, Title = "", TitleType = "" });
+            testDb.SaveChanges();
+
+            // Act
+            var result = testService.GetGeneralIdsForSchool(5);
+
+            // Assert
+            Assert.Equal(8, result.Count());
+            var list = new List<int> { 11, 1, 9, 2, 6, 8, 3, 4 };
+            Assert.Equal(list.Order(), result.Values.Order());
+
+        }
+
+        [Fact]
+        public void GetGeneralGetGeneralIdsForSchool_WhenSchoolNotExist_ReturnsEmpty()
+        {
+            // Act
+            var result = testService.GetGeneralIdsForSchool(5);
+
+            // Assert
+            Assert.Empty(result);
+
+        }
 
     }
 

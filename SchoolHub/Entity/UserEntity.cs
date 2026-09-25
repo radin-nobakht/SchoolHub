@@ -21,9 +21,6 @@ namespace SchoolHub.Entity
         public string Password { get; set; }
 
         [Required]
-        public bool IsStudent { get; set; }
-
-        [Required]
         public int GenderGeneralId { get; set; }
     }
 }

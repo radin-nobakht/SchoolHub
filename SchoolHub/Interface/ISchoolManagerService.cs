@@ -16,9 +16,14 @@ namespace SchoolHub.Interface
         List<ClassDto> GetAllClasses(int schoolId);
         double GetClassAverage(int classId);
         ClassDto GetClassDetail(int classId);
+        StudentReportCardDto GetClassDetailForManager(int studentId);
+        int GetClassIdByStudentAndSchoolId(int studentUserId, int schoolId);
         int? GetGradeIdByClassId(int classId);
         ManagerClassInfoDto GetManagerClassDetail(ManagerClassInfoDto managerClass);
+        double GetOverallAverage(int studentId);
         int? GetSchoolIdByClassId(int classId);
+        List<ReportCardSubjectDto> GetSubjectsDetailForManager(int studentId, int classId);
+        int GetStudentIdByStudentAndClassId(int studentUserId, int classId);
         List<ManagerClassStudentDto> GetStudentsDetail(int classId);
         List<ManagerClassTeacherDto> GetTeachersDetail(int classId);
         bool IsClassExist(int classId);
@@ -31,5 +36,9 @@ namespace SchoolHub.Interface
         (int Id, bool Exist) IsUserExistByNationalId(string nationalIdNumber);
         OperationResultDto UpdateClass(ClassDto clas);
         OperationResultDto UpdateTeacher(Dto.Manager.TeacherDto teacher);
+        bool IsSchoolExist(int schoolId);
+        string GetNationalId(int userId);
+        UserEntity GetUserByNationalId(string nationalId);
+        ValidationDto UpdateSchool(SchoolDto schoolDto);
     }
 }
