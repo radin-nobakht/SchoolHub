@@ -4,107 +4,106 @@ using SchoolHub.Dto.School;
 using SchoolHub.Dto.Teacher;
 using SchoolHub.Interface;
 
-namespace SchoolHub.Service
+namespace SchoolHub.Service;
+
+public class SchoolTeacherService(MyContext db, IMapper mapper) : ISchoolTeacherService
 {
-    public class SchoolTeacherService(MyContext db, IMapper mapper) : ISchoolTeacherService
+    public List<ClassDto> GetTeacherClasses(int schoolId, int teacherUserId)
     {
-        public List<ClassDto> GetTeacherClasses(int schoolId, int teacherUserId)
-        {
-            var result =
-                from assignment in db.TeachingAssignments
+        var result =
+            from assignment in db.TeachingAssignments
 
-                join classes in db.Classes on assignment.ClassId equals classes.Id
+            join classes in db.Classes on assignment.ClassId equals classes.Id
 
-                where assignment.TeacherUserId == teacherUserId && classes.SchoolId == schoolId
+            where assignment.TeacherUserId == teacherUserId && classes.SchoolId == schoolId
 
-                join major in db.GeneralItems.Where(x => x.TitleType == "Major")
-                    on classes.MajorGeneralId equals major.Id
-                    into majorGroup
-                from major in majorGroup.DefaultIfEmpty()
+            join major in db.GeneralItems.Where(x => x.TitleType == "Major")
+                on classes.MajorGeneralId equals major.Id
+                into majorGroup
+            from major in majorGroup.DefaultIfEmpty()
 
-                join grade in db.GeneralItems.Where(x => x.TitleType == "Grade")
-                    on classes.GradeGeneralId equals grade.Id
+            join grade in db.GeneralItems.Where(x => x.TitleType == "Grade")
+                on classes.GradeGeneralId equals grade.Id
 
-                select new ClassDto
-                {
-                    Id = classes.Id,
-
-                    Name = classes.Name,
-
-                    Major = major != null ? major.Title : null,
-
-                    Grade = grade.Title,
-                };
-
-            return result.Distinct().ToList();
-        }
-
-        public bool IsTeacherOfschool(int teacherUserId, int schoolId) =>
-            db.TeachingAssignments.Any(x =>
-                x.TeacherUserId == teacherUserId
-                && db.Classes.Any(z => z.Id == x.ClassId && z.SchoolId == schoolId)
-            );
-
-        public int GetSchoolIdByClassId(int classId) =>
-            db.Classes.FirstOrDefault(x => x.Id == classId).SchoolId;
-
-        public bool IsTeacherOfClass(int teacherUserId, int classId) =>
-            db.TeachingAssignments.Any(x =>
-                x.TeacherUserId == teacherUserId && x.ClassId == classId
-            );
-
-        public string GetSchoolName(int schoolId) =>
-            db.Schools.FirstOrDefault(x => x.Id == schoolId).Name;
-
-        public TeacherClassInfoDto GetClassDetail(int classId)
-        {
-            var clas = db.Classes.FirstOrDefault(x => x.Id == classId);
-            var major = db.GeneralItems.FirstOrDefault(x => x.Id == clas.MajorGeneralId);
-            return new TeacherClassInfoDto
+            select new ClassDto
             {
-                ClassName = clas.Name,
-                Grade = db.GeneralItems.FirstOrDefault(x => x.Id == clas.GradeGeneralId).Title,
-                Major = major?.Title,
+                Id = classes.Id,
+
+                Name = classes.Name,
+
+                Major = major != null ? major.Title : null,
+
+                Grade = grade.Title,
             };
-        }
 
-        public List<TeacherClassStudentDto> GetStudentsDetail(int classId)
+        return result.Distinct().ToList();
+    }
+
+    public bool IsTeacherOfschool(int teacherUserId, int schoolId) =>
+        db.TeachingAssignments.Any(x =>
+            x.TeacherUserId == teacherUserId
+            && db.Classes.Any(z => z.Id == x.ClassId && z.SchoolId == schoolId)
+        );
+
+    public int GetSchoolIdByClassId(int classId) =>
+        db.Classes.FirstOrDefault(x => x.Id == classId).SchoolId;
+
+    public bool IsTeacherOfClass(int teacherUserId, int classId) =>
+        db.TeachingAssignments.Any(x =>
+            x.TeacherUserId == teacherUserId && x.ClassId == classId
+        );
+
+    public string GetSchoolName(int schoolId) =>
+        db.Schools.FirstOrDefault(x => x.Id == schoolId).Name;
+
+    public TeacherClassInfoDto GetClassDetail(int classId)
+    {
+        var clas = db.Classes.FirstOrDefault(x => x.Id == classId);
+        var major = db.GeneralItems.FirstOrDefault(x => x.Id == clas.MajorGeneralId);
+        return new TeacherClassInfoDto
         {
-            return (
-                from student in db.Students
-                where student.ClassId == classId
+            ClassName = clas.Name,
+            Grade = db.GeneralItems.FirstOrDefault(x => x.Id == clas.GradeGeneralId).Title,
+            Major = major?.Title,
+        };
+    }
 
-                join user in db.Users on student.StudentUserId equals user.Id
-                select new TeacherClassStudentDto
-                {
-                    StudentId = student.StudentUserId,
+    public List<TeacherClassStudentDto> GetStudentsDetail(int classId)
+    {
+        return (
+            from student in db.Students
+            where student.ClassId == classId
 
-                    FullName = user.Name + " " + user.LastName,
+            join user in db.Users on student.StudentUserId equals user.Id
+            select new TeacherClassStudentDto
+            {
+                StudentId = student.StudentUserId,
 
-                    Positives = student.Positives ?? 0,
+                FullName = user.Name + " " + user.LastName,
 
-                    Negatives = student.Negatives ?? 0,
+                Positives = student.Positives ?? 0,
 
-                    FirstTermGPA = (double)(student.FirstTermGPA ?? 0m),
+                Negatives = student.Negatives ?? 0,
 
-                    SecondTermGPA = (double)(student.SecondTermGPA ?? 0m),
-                }
-            ).ToList();
-        }
+                FirstTermGPA = (double)(student.FirstTermGPA ?? 0m),
 
-        public List<TeacherClassSubjectDto> GetSubjectDetail(int teacherId, int classId)
-        {
-            var subjects = (
-                from assignment in db.TeachingAssignments
+                SecondTermGPA = (double)(student.SecondTermGPA ?? 0m),
+            }
+        ).ToList();
+    }
 
-                where assignment.TeacherUserId == teacherId && assignment.ClassId == classId
+    public List<TeacherClassSubjectDto> GetSubjectDetail(int teacherId, int classId)
+    {
+        var subjects = (
+            from assignment in db.TeachingAssignments
 
-                join subject in db.GeneralItems on assignment.SubjectId equals subject.Id
+            where assignment.TeacherUserId == teacherId && assignment.ClassId == classId
 
-                select new TeacherClassSubjectDto { SubjectId = subject.Id, Name = subject.Title }
-            ).ToList();
+            join subject in db.GeneralItems on assignment.SubjectId equals subject.Id
 
-            return subjects;
-        }
+            select new TeacherClassSubjectDto { SubjectId = subject.Id, Name = subject.Title }
+        ).ToList();
+
+        return subjects;
     }
 }

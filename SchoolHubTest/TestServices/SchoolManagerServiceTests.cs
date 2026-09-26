@@ -600,7 +600,7 @@ namespace SchoolHubTest.TestServices
 
 
         [Fact]
-        public void GetUserByNationalId_WhenUserExist_ReturnsUser()  
+        public void GetUserByNationalId_WhenUserExist_ReturnsUser()
         {
             // Arrange
             testDb.Users.Add(new UserEntity { GenderGeneralId = 6, Id = 2, Name = "رادین", LastName = "نوبخت", NationalIdNumber = "0153054352", Password = "رادین" });
@@ -617,30 +617,132 @@ namespace SchoolHubTest.TestServices
         }
 
         [Fact]
-        public void GetUserByNationalId_WhenUserNotExist_ReturnsEmpty()  
+        public void GetUserByNationalId_WhenUserNotExist_ReturnsEmpty()
         {
             // Act
             var result = testService.GetUserByNationalId(nationalId: "015054352");
 
             // Assert
-            Assert.True(result.Id==0&&result.Name ==null&&result.LastName == null);
+            Assert.True(result.Id == 0 && result.Name == null && result.LastName == null);
         }
-        
+
 
         [Fact]
         public void UpdateSchool_WhenSchoolExist_RetrunsTrue()
         {
             // Arrange
-            var school = new SchoolEntity { Name = "Test School", ManagerUserId = 1, CityId = 1, DistrictId = 1, ShiftGeneralId = 1, TypeGeneralId = 1, GenderGeneralId = 1, EducationLevelGeneralId = 1, EducationPeriodGeneralId = 1 };
-            testDb.Schools.Add( school);
+            var school = new SchoolEntity
+            {
+                Name = "Test School",
+                ManagerUserId = 1,
+                CityId = 2,
+                DistrictId = 3,
+                ShiftGeneralId = 4,
+                TypeGeneralId = 5,
+                GenderGeneralId = 6,
+                EducationLevelGeneralId = 7,
+                EducationPeriodGeneralId = 8
+            };
+
+            testDb.Schools.Add(school);
+
+            testDb.GeneralItems.AddRange(
+                new GeneralItemEntity { Id = 2, Active = true, TitleType = "City", Title = "City" },
+                new GeneralItemEntity { Id = 3, Active = true, TitleType = "District", ParentId = 2, Title = "District" },
+                new GeneralItemEntity { Id = 4, Active = true, TitleType = "Shift", Title = "Shift" },
+                new GeneralItemEntity { Id = 5, Active = true, TitleType = "Type", Title = "Type" },
+                new GeneralItemEntity { Id = 6, Active = true, TitleType = "AdmissionGender", Title = "Gender" },
+                new GeneralItemEntity { Id = 7, Active = true, TitleType = "EducationLevel", Title = "Level" },
+                new GeneralItemEntity { Id = 8, Active = true, TitleType = "EducationPeriod", Title = "Period" }
+            );
+            testDb.Users.Add(new UserEntity { GenderGeneralId = 3, Id = 1, LastName = "", Name = "", NationalIdNumber = "", Password = "" });
             testDb.SaveChanges();
             // Act
-            var result = testService.UpdateSchoolAsync(mapper.Map<SchoolDto>(school));
+            var result = testService.UpdateSchool(mapper.Map<SchoolDto>(school));
 
             // Assert
-            Assert.True( result.IsCorrect);
+            Assert.True(result.IsCorrect);
         }
 
+
+        [Fact]
+        public void GetTeachersBySchoolId_WhenSchoolHasTeacher_ReturnsTeachers()
+        {
+            // Arrange
+            testDb.Teachers.AddRange(
+                new TeacherEntity { Id = 1, Active = true, SchoolId = 5, TeacherUserId = 6 },
+                new TeacherEntity { Id = 2, Active = true, SchoolId = 5, TeacherUserId = 7 },
+                new TeacherEntity { Id = 3, Active = true, SchoolId = 5, TeacherUserId = 8 },
+                new TeacherEntity { Id = 4, Active = true, SchoolId = 5, TeacherUserId = 9 },
+                new TeacherEntity { Id = 5, Active = false, SchoolId = 9, TeacherUserId = 10 },
+                new TeacherEntity { Id = 6, Active = true, SchoolId = 10, TeacherUserId = 11 }
+            );
+            testDb.Users.AddRange(
+                new UserEntity { Id = 6, NationalIdNumber = "", GenderGeneralId = 2, LastName = "", Name = "", Password = "" },
+                new UserEntity { Id = 7, NationalIdNumber = "", GenderGeneralId = 2, LastName = "", Name = "", Password = "" },
+                new UserEntity { Id = 8, NationalIdNumber = "", GenderGeneralId = 2, LastName = "", Name = "", Password = "" },
+                new UserEntity { Id = 9, NationalIdNumber = "", GenderGeneralId = 2, LastName = "", Name = "", Password = "" },
+                new UserEntity { Id = 10, NationalIdNumber = "", GenderGeneralId = 2, LastName = "", Name = "", Password = "" },
+                new UserEntity { Id = 11, NationalIdNumber = "", GenderGeneralId = 2, LastName = "", Name = "", Password = "" }
+            );
+            testDb.SaveChanges();
+            // Act
+            var result = testService.GetTeachersBySchoolId(5);
+
+            // Assert
+            Assert.Equal(4, result.Count);
+            Assert.Contains(result, x => x.UserId == 6);
+            Assert.Contains(result, x => x.UserId == 7);
+            Assert.Contains(result, x => x.UserId == 8);
+            Assert.Contains(result, x => x.UserId == 9);
+            Assert.DoesNotContain(result, x => x.UserId == 10);
+            Assert.DoesNotContain(result, x => x.UserId == 11);
+        }
+
+        [Fact]
+        public void GetTeachersBySchoolId_WhenSchoolHasntTeacher_ReturnsEmpty()
+        {
+            // Act
+            var result = testService.GetTeachersBySchoolId(5);
+
+            // Assert
+            Assert.Empty(result);
+        }
+
+
+        [Fact]
+        public void GetSchoolBySchoolId_WhenSchoolExist_ReturnsSchool()
+        {
+            // Arrange
+            testDb.Schools.Add(new SchoolEntity { Id = 5, ManagerUserId = 1, Name = "", CityId = 2, EducationLevelGeneralId = 3, EducationPeriodGeneralId = 4, GenderGeneralId = 6, ShiftGeneralId = 2, TypeGeneralId = 2 });
+            testDb.SaveChanges();
+
+
+            // Act
+            var result = testService.GetSchoolBySchoolId(schoolId:5);
+
+            // Assert
+            Assert.Equal(5, result.Id);
+            Assert.Equal(1, result.ManagerUserId);
+            Assert.Equal(2, result.CityId);
+            Assert.Equal(3, result.EducationLevelGeneralId);
+            Assert.Equal(4, result.EducationPeriodGeneralId);
+            Assert.Equal(6, result.GenderGeneralId);
+            Assert.Equal(2, result.ShiftGeneralId);
+            Assert.Equal(2, result.TypeGeneralId);
+        }
+
+
+        [Fact]
+        public void GetSchoolBySchoolId_WhenSchoolNotExist_ReturnsEmpty()
+        {
+            // Act
+            var result = testService.GetSchoolBySchoolId(5);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(0, result.Id);
+        }
 
         // =====================================================
         // Cleanup

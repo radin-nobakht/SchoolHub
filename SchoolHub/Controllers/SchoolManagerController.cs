@@ -7,6 +7,7 @@ using SchoolHub.Entity;
 using SchoolHub.Interface;
 using SchoolHub.Models;
 using System.Security.Claims;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace SchoolHub.Controllers;
 
@@ -177,7 +178,7 @@ public class SchoolManagerController(IGeneralService generalService, ISchoolMana
         return Json(scores);
     }
 
-    public IActionResult AddTeacher(Dto.Manager.TeacherDto addTeacher, string nationalId)
+    public IActionResult AddTeacherToClass(Dto.Manager.TeacherDto addTeacher, string nationalId)
     {
         var isAdd = schoolManagerService.AddTeacher(new Dto.Manager.TeacherDto { ClassId = addTeacher.ClassId, SubjectIds = addTeacher.SubjectIds }, nationalId);
         if (isAdd.Success)
@@ -298,14 +299,14 @@ public class SchoolManagerController(IGeneralService generalService, ISchoolMana
     }
 
 
-    public IActionResult GetManagerByNationalId(string nationalId)
+    public IActionResult GetUserByNationalId(string nationalId)
     {
-        var managerUser = schoolManagerService.GetUserByNationalId(nationalId);
-        return Json(managerUser.Name + " " + managerUser.LastName);
+        var user = schoolManagerService.GetUserByNationalId(nationalId);
+        return Json(user.Name + " " + user.LastName);
     }
 
 
-    public IActionResult UpdateSchool(SchoolDto school, string managerNationalId,int schoolId)
+    public IActionResult UpdateSchool(SchoolDto school, string managerNationalId, int schoolId)
     {
         school.Id = schoolId;
         school.ManagerUserId = schoolManagerService.GetUserByNationalId(managerNationalId)?.Id ?? 0;
@@ -318,7 +319,31 @@ public class SchoolManagerController(IGeneralService generalService, ISchoolMana
         {
             TempData["Eror"] = isUpdate.Message;
         }
-        return RedirectToAction("SchoolInfo", new { schoolId= school.Id});
+        return RedirectToAction("SchoolInfo", new { schoolId = school.Id });
+    }
+
+
+    public IActionResult Teachers(int schoolId)
+    {
+        var teachersView = new TeachersViewModel { SchoolId = schoolId };
+        teachersView.Teachers = schoolManagerService.GetTeachersBySchoolId(schoolId);
+        teachersView.SchoolName = schoolManagerService.GetSchoolBySchoolId(schoolId)?.Name ?? "";
+        return View(teachersView);
+    }
+
+
+    public IActionResult AddTeacherToSchool(string teacherNationalId,int schoolId)
+    {
+        var isAdd = schoolManagerService.AddTeacherToSchool(schoolId: schoolId, teacherNationalId: teacherNationalId);
+        if (isAdd.IsCorrect)
+        {
+            TempData["Success"] = isAdd.Message;
+        }
+        else
+        {
+            TempData["Eror"] = isAdd.Message;
+        }
+        return RedirectToAction("Teachers",new {schoolId});
     }
 
 

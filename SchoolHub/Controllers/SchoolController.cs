@@ -27,27 +27,6 @@ public class SchoolController(ISchoolService schoolService, IGeneralService gene
     }
 
     // =========================================================
-    // اطلاعات کلاس - Manager
-    // =========================================================
-
-    public IActionResult ClassInfo(int id)
-    {
-        var classInfo = schoolService.GetClassById(id);
-
-        if (classInfo == null)
-            return NotFound();
-
-        var model = new ClassInfoViewModel
-        {
-            Class = classInfo,
-            Students = schoolService.GetStudentByClassId(id),
-            Teachers = schoolService.GetTeacherByClassId(id),
-        };
-
-        return View(model);
-    }
-
-    // =========================================================
     // افزودن مدرسه
     // =========================================================
 

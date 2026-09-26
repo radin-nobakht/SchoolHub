@@ -1,0 +1,81 @@
+﻿@model int
+
+<div class="modal fade"
+     id="addTeacherToSchoolModal"
+     tabindex="-1"
+     aria-labelledby="addTeacherModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <form action="/SchoolManager/AddTeacherToSchool"
+                  method="post">
+
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTeacherModalLabel">
+                        افزودن معلم
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="بستن">
+                    </button>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body">
+
+                    <input type="hidden"
+                           id="schoolId"
+                           name="schoolId"
+                           value="@Model" />
+
+                    <div class="mb-3">
+                        <label for="teacherNationalId"
+                               class="form-label">
+                            کد ملی معلم
+                        </label>
+
+                        <input type="text"
+                               id="teacherNationalId"
+                               name="teacherNationalId"
+                               class="form-control"
+                               inputmode="numeric"
+                               maxlength="10"
+                               minlength="10"
+                               autocomplete="off"
+                               placeholder="کد ملی ۱۰ رقمی معلم" />
+
+                        <div id="teacherSearchResult"
+                             class="mt-2">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        انصراف
+                    </button>
+
+                    <button type="submit"
+                            id="addTeacherBtn"
+                            class="btn btn-primary"
+                            disabled>
+                        افزودن معلم
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

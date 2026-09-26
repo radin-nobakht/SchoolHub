@@ -2,6 +2,7 @@
 using SchoolHub.Dto.School;
 using SchoolHub.Dto;
 using SchoolHub.Entity;
+using SchoolHub.Models;
 
 namespace SchoolHub.Interface
 {
@@ -40,5 +41,8 @@ namespace SchoolHub.Interface
         string GetNationalId(int userId);
         UserEntity GetUserByNationalId(string nationalId);
         ValidationDto UpdateSchool(SchoolDto schoolDto);
+        List<TeacherListItemViewModel> GetTeachersBySchoolId(int schoolId);
+        SchoolDto GetSchoolBySchoolId(int schoolId);
+        ValidationDto AddTeacherToSchool(int schoolId, string teacherNationalId);
     }
 }

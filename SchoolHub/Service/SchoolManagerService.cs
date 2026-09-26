@@ -7,6 +7,8 @@ using SchoolHub.Dto;
 using SchoolHub.Entity;
 using SchoolHub.Interface;
 using System.Reflection.Metadata.Ecma335;
+using SchoolHub.Models;
+using System.Security.Cryptography.Xml;
 
 namespace SchoolHub.Service;
 
@@ -579,5 +581,34 @@ public class SchoolManagerService(MyContext db, IMapper mapper, IGeneralService 
     }
 
 
+    public List<TeacherListItemViewModel> GetTeachersBySchoolId(int schoolId)
+    {
+        var teachersUserId = db.Teachers.Where(t => t.Active && t.SchoolId == schoolId).Select(x => x.TeacherUserId).ToList();
+        return db.Users.Where(x => teachersUserId.Contains(x.Id)).Select(x => new TeacherListItemViewModel
+        {
+            FullName= x.Name + " " + x.LastName,
+            NationalId = x.NationalIdNumber,
+            UserId=x.Id
+        }).ToList();
+         
+    }
+
+    public SchoolDto GetSchoolBySchoolId(int schoolId)=> mapper.Map<SchoolDto>(db.Schools.FirstOrDefault(x => x.Id == schoolId) ??new SchoolEntity());
+
+    public ValidationDto AddTeacherToSchool(int schoolId,string teacherNationalId)
+    {
+        if (!IsSchoolExist(schoolId))
+            return new ValidationDto { IsCorrect = false, Message = "مدرسه وجود ندارد" };
+        var user = GetUserByNationalId(teacherNationalId);
+        if (user == new UserEntity())
+        return new ValidationDto { IsCorrect = false, Message = "کاربر وجود ندارد" };
+
+        if (db.Teachers.Any(x => x.TeacherUserId == user.Id))
+            return new ValidationDto { IsCorrect = false, Message = "کاربر قبلا در این مدرسه به عنوان معلم ثبت " };
+
+        db.Teachers.Add(new TeacherEntity { SchoolId = schoolId, Active = true, TeacherUserId = user.Id });
+        db.SaveChanges();
+        return new ValidationDto { IsCorrect = true, Message = "معلم با موفقیت ثبت شد" };
+    }
 
 }

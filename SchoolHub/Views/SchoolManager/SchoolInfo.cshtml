@@ -1,6 +1,5 @@
 ﻿@model SchoolHub.Dto.School.AllDatailAboutSchool
 
-
 @{
     ViewData["Title"] = "پنل مدیریت";
     ViewBag.Name = Model?.School?.Name;
@@ -8,6 +7,9 @@
 
 <div class="manager-school-page">
 
+    <!-- =====================================================
+         School Information
+         ===================================================== -->
     <div class="school-card">
 
         <div class="school-header">
@@ -27,7 +29,7 @@
                         </div>
 
                         <button type="button"
-                                class="btn btn-outline-primary btn-sm btn-edit-school"
+                                class="btn-edit-school"
                                 id="btnEditSchool"
                                 data-id="@Model.School.Id">
                             ✏️ ویرایش
@@ -36,7 +38,7 @@
                     </div>
 
                     <div class="school-subtitle">
-                        اطلاعات مدرسه
+                        اطلاعات و مدیریت مدرسه
                     </div>
 
                 </div>
@@ -46,77 +48,91 @@
         </div>
 
 
+        <!-- =====================================================
+             School Details
+             ===================================================== -->
         <div class="school-info-grid">
 
             <div class="info-box">
-                <div class="info-icon">🏙️</div>
-                <div class="info-content">
-                    <span>استان</span>
-                    <h5>@Model.School.Province</h5>
+                <div class="info-icon">
+                    🏫
                 </div>
-            </div>
 
-            <div class="info-box">
-                <div class="info-icon">🌆</div>
-                <div class="info-content">
-                    <span>شهر</span>
-                    <h5>@Model.School.City</h5>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <div class="info-icon">📍</div>
-                <div class="info-content">
-                    <span>منطقه</span>
-                    <h5>@Model.School.District</h5>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <div class="info-icon">👨‍💼</div>
-                <div class="info-content">
-                    <span>مدیر مدرسه</span>
-                    <h5>@Model.School.MangerFullName</h5>
-                </div>
-            </div>
-
-            <div class="info-box">
-                <div class="info-icon">🏫</div>
                 <div class="info-content">
                     <span>نوع مدرسه</span>
-                    <h5>@Model.School.Type</h5>
+                    <h5>
+                        @Model.School.Type
+                    </h5>
                 </div>
             </div>
 
+
             <div class="info-box">
-                <div class="info-icon">👥</div>
+                <div class="info-icon">
+                    👨‍🎓
+                </div>
+
                 <div class="info-content">
                     <span>جنسیت</span>
-                    <h5>@Model.School.Gender</h5>
+                    <h5>
+                        @Model.School.Gender
+                    </h5>
                 </div>
             </div>
 
+
             <div class="info-box">
-                <div class="info-icon">⏰</div>
+                <div class="info-icon">
+                    🕐
+                </div>
+
                 <div class="info-content">
                     <span>شیفت</span>
-                    <h5>@Model.School.Shift</h5>
+                    <h5>
+                        @Model.School.Shift
+                    </h5>
                 </div>
             </div>
 
+
             <div class="info-box">
-                <div class="info-icon">📚</div>
+                <div class="info-icon">
+                    🎓
+                </div>
+
                 <div class="info-content">
-                    <span>مقطع</span>
-                    <h5>@Model.School.EducationLevel</h5>
+                    <span>مقطع تحصیلی</span>
+                    <h5>
+                        @Model.School.EducationLevel
+                    </h5>
                 </div>
             </div>
 
+
             <div class="info-box">
-                <div class="info-icon">🎓</div>
+                <div class="info-icon">
+                    📚
+                </div>
+
                 <div class="info-content">
-                    <span>دوره</span>
-                    <h5>@Model.School.EducationPeriod</h5>
+                    <span>دوره تحصیلی</span>
+                    <h5>
+                        @Model.School.EducationPeriod
+                    </h5>
+                </div>
+            </div>
+
+
+            <div class="info-box">
+                <div class="info-icon">
+                    📍
+                </div>
+
+                <div class="info-content">
+                    <span>موقعیت</span>
+                    <h5>
+                        @Model.School.City
+                    </h5>
                 </div>
             </div>
 
@@ -125,6 +141,9 @@
     </div>
 
 
+    <!-- =====================================================
+         Classes Header
+         ===================================================== -->
     <div class="classes-header">
 
         <div class="classes-heading">
@@ -134,23 +153,42 @@
             </div>
 
             <div>
-                <h3>کلاس‌های مدرسه</h3>
-                <span>کلاس‌های ثبت شده در مدرسه</span>
+                <h3>
+                    کلاس‌های مدرسه
+                </h3>
+
+                <span>
+                    کلاس‌های ثبت شده در مدرسه
+                </span>
             </div>
 
         </div>
 
-        <button type="button"
-                class="btn btn-success add-class-btn"
-                id="btnOpenAddClass">
 
-            ＋ افزودن کلاس
+        <!-- Actions -->
+        <div class="classes-actions">
 
-        </button>
+            <a asp-controller="SchoolManager"
+               asp-action="Teachers"
+               asp-route-schoolId="@Model.School.Id"
+               class="btn btn-outline-primary teacher-management-btn">
+                👨‍🏫 مدیریت معلم‌ها
+            </a>
+
+            <button type="button"
+                    class="btn btn-success add-class-btn"
+                    id="btnOpenAddClass">
+                ＋ افزودن کلاس
+            </button>
+
+        </div>
 
     </div>
 
 
+    <!-- =====================================================
+         Classes
+         ===================================================== -->
     @if (Model.Classes is not null && Model.Classes.Any())
     {
         <div class="row g-2">
@@ -161,37 +199,61 @@
 
                     <div class="class-card">
 
+                        <!-- Class Header -->
                         <div class="class-card-header">
 
                             <div class="class-card-icon">
-                                🎓
+                                📖
                             </div>
 
-                            <div class="class-name">
-                                @item.Name
+                            <div>
+
+                                <div class="class-name">
+                                    @item.Name
+                                </div>
+
+                                <div class="class-label">
+                                    کلاس
+                                </div>
+
                             </div>
 
                         </div>
 
 
+                        <!-- Class Details -->
                         <div class="class-details">
 
                             <div class="class-detail">
-                                <span>پایه:</span>
-                                <strong>@item.Grade</strong>
+
+                                <span>
+                                    پایه
+                                </span>
+
+                                <strong>
+                                    @item.Grade
+                                </strong>
+
                             </div>
 
-                            @if (!string.IsNullOrWhiteSpace(item.Major))
-                            {
-                                <div class="class-detail">
-                                    <span>رشته:</span>
-                                    <strong>@item.Major</strong>
-                                </div>
-                            }
+
+                            <div class="class-detail">
+
+                                <span>
+                                    رشته
+                                </span>
+
+                                <strong>
+                                    @item.Major
+                                </strong>
+
+                            </div>
+
 
                         </div>
 
 
+                        <!-- Buttons -->
                         <div class="buttons">
 
                             <a asp-controller="SchoolManager"
@@ -218,6 +280,9 @@
     }
     else
     {
+        <!-- =================================================
+             Empty Classes
+             ================================================= -->
         <div class="empty-classes">
 
             <div class="empty-icon">
@@ -229,15 +294,13 @@
             </h4>
 
             <p>
-                برای این مدرسه هنوز هیچ کلاسی ایجاد نشده است.
+                برای شروع، اولین کلاس مدرسه را ایجاد کنید.
             </p>
 
             <button type="button"
                     class="btn btn-success"
                     id="btnOpenAddClass">
-
                 ＋ افزودن اولین کلاس
-
             </button>
 
         </div>
@@ -246,86 +309,89 @@
 </div>
 
 
-<partial name="_AddClass.cshtml" model="@Model.School.Id" />
-<partial name="_UpdateSchool.cshtml" model="@Model.School.Id" />
+<!-- =========================================================
+     Modals
+     ========================================================= -->
+
+<partial name="_AddClass.cshtml"
+         model="@Model.School.Id" />
+
+<partial name="_UpdateSchool.cshtml"
+         model="@Model.School.Id" />
 
 
 @section Scripts {
 
     <script>
 
-        // =========================
-        // حذف کلاس
-        // =========================
+        $(document).ready(function () {
 
-        $(document).on("click", ".btnDelete", function () {
+            // =================================================
+            // Delete Class
+            // =================================================
 
-            const button = $(this);
-            const classId = button.data("id");
-            const classCard = button.closest(".class-card");
+            $(".btnDelete").on("click", function () {
 
-            Swal.fire({
-                title: "حذف کلاس؟",
-                text: "آیا مطمئن هستید که می‌خواهید این کلاس را حذف کنید؟",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "بله، حذف کن",
-                cancelButtonText: "لغو",
-                reverseButtons: true
-            }).then((result) => {
+                const classId = $(this).data("id");
 
-                if (!result.isConfirmed)
-                    return;
+                Swal.fire({
+                    title: "حذف کلاس",
+                    text: "آیا از حذف این کلاس مطمئن هستید؟",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "بله، حذف کن",
+                    cancelButtonText: "انصراف",
+                    reverseButtons: true
+                }).then((result) => {
 
-                $.ajax({
+                    if (!result.isConfirmed)
+                        return;
 
-                    url: "/SchoolManager/DeleteClass",
-                    type: "POST",
+                    $.ajax({
+                        url: "/SchoolManager/DeleteClass",
+                        type: "POST",
+                        data: {
+                            classId: classId
+                        },
 
-                    data: {
-                        classId: classId
-                    },
+                        success: function (response) {
 
-                    success: function (data) {
+                            if (response.success) {
 
-                        if (data) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "کلاس حذف شد",
+                                    text: "کلاس با موفقیت حذف شد.",
+                                    confirmButtonText: "باشه"
+                                }).then(() => {
+                                    location.reload();
+                                });
+
+                            } else {
+
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "خطا",
+                                    text: response.message || "حذف کلاس انجام نشد.",
+                                    confirmButtonText: "باشه"
+                                });
+
+                            }
+
+                        },
+
+                        error: function () {
 
                             Swal.fire({
-                                title: "حذف شد",
-                                text: "کلاس با موفقیت حذف شد.",
-                                icon: "success",
-                                timer: 1500,
-                                showConfirmButton: false
-                            });
-
-                            classCard.fadeOut(300, function () {
-                                $(this).remove();
-                            });
-
-                        }
-                        else {
-
-                            Swal.fire({
-                                title: "خطا",
-                                text: "حذف کلاس انجام نشد.",
                                 icon: "error",
+                                title: "خطا",
+                                text: "در ارتباط با سرور مشکلی پیش آمد.",
                                 confirmButtonText: "باشه"
                             });
 
                         }
 
-                    },
-
-                    error: function () {
-
-                        Swal.fire({
-                            title: "خطا",
-                            text: "در هنگام حذف کلاس مشکلی پیش آمد.",
-                            icon: "error",
-                            confirmButtonText: "باشه"
-                        });
-
-                    }
+                    });
 
                 });
 
@@ -334,5 +400,4 @@
         });
 
     </script>
-
 }

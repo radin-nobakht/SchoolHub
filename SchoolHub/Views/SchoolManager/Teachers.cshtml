@@ -1,0 +1,191 @@
+﻿@model SchoolHub.Models.TeachersViewModel
+
+@{
+    ViewData["Title"] = "مدیریت معلم‌ها";
+    ViewBag.Name = Model.SchoolName;
+}
+
+<div class="manager-school-page">
+
+    <!-- =====================================================
+         Header
+         ===================================================== -->
+    <div class="school-card">
+
+        <div class="school-header">
+
+            <div class="school-header-info">
+
+                <div class="school-icon">
+                    👨‍🏫
+                </div>
+
+                <div>
+
+                    <div class="school-title-row">
+
+                        <div class="school-title">
+                            مدیریت معلم‌ها
+                        </div>
+
+                        <a asp-controller="SchoolManager"
+                           asp-action="SchoolInfo"
+                           asp-route-schoolId="@Model.SchoolId"
+                           class="btn-edit-school">
+                            ← بازگشت
+                        </a>
+
+                    </div>
+
+                    <div class="school-subtitle">
+                        مدیریت معلم‌های @Model.SchoolName
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             Teachers Header
+             ================================================= -->
+        <div class="classes-header">
+
+            <div class="classes-heading">
+
+                <div class="classes-icon">
+                    👨‍🏫
+                </div>
+
+                <div>
+                    <h3>
+                        معلم‌های مدرسه
+                    </h3>
+
+                    <span>
+                        معلم‌های فعال این مدرسه
+                    </span>
+                </div>
+
+            </div>
+
+            <button type="button"
+                    class="btn btn-success add-class-btn"
+                    id="btnOpenAddTeacherToSchool">
+                ＋ افزودن معلم
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             Teachers
+             ================================================= -->
+        @if (Model.Teachers is not null && Model.Teachers.Any())
+        {
+            <div class="row g-2">
+
+                @foreach (var teacher in Model.Teachers)
+                {
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+
+                        <div class="class-card">
+
+                            <!-- Teacher Header -->
+                            <div class="class-card-header">
+
+                                <div class="class-card-icon">
+                                    👨‍🏫
+                                </div>
+
+                                <div class="teacher-info">
+
+                                    <div class="class-name">
+                                        @teacher.FullName
+                                    </div>
+
+                                    <div class="class-label">
+                                        معلم
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Teacher Details -->
+                            <div class="class-details">
+
+                                <div class="class-detail">
+
+                                    <span>
+                                        کد ملی
+                                    </span>
+
+                                    <strong>
+                                        @teacher.NationalId
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Buttons -->
+                            <div class="buttons">
+
+                                <button type="button"
+                                        class="btn btn-outline-danger btn-sm btnDeleteTeacher"
+                                        data-id="@teacher.UserId">
+                                    🗑 حذف
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <!-- =================================================
+                 Empty Teachers
+                 ================================================= -->
+            <div class="empty-classes">
+
+                <div class="empty-icon">
+                    👨‍🏫
+                </div>
+
+                <h4>
+                    هنوز معلمی به مدرسه اضافه نشده است
+                </h4>
+
+                <p>
+                    برای شروع، اولین معلم مدرسه را اضافه کنید.
+                </p>
+
+                <button type="button"
+                        class="btn btn-success"
+                        id="btnOpenAddTeacherToSchool">
+                    ＋ افزودن اولین معلم
+                </button>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     Add Teacher Modal
+     ========================================================= -->
+<partial name="_AddTeacherToSchool.cshtml"
+         model="@Model.SchoolId" />

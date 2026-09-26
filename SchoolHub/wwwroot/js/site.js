@@ -27,7 +27,7 @@ $(document).ready(function () {
 
 $(document).on("click", "#btnOpenAddSchool", function () {
     const modal = new bootstrap.Modal($("#addSchoolModal")[0]);
-    generalItems();
+    generalItemsForAddSchool();
     modal.show();
 });
 
@@ -61,7 +61,8 @@ function cityForAddSchool() {
     });
 }
 
-function districtForAddSchool() {
+function districtForAddSchool
+    () {
     let cityId = $("#schoolCity").val();
 
     $.ajax({
@@ -757,7 +758,7 @@ $(document).on("input", "#managerNationalId", function () {
     }
 
     $.ajax({
-        url: "/SchoolManager/GetManagerByNationalId",
+        url: "/SchoolManager/GetUserByNationalId",
         type: "GET",
         data: {
             nationalId: value
@@ -865,3 +866,76 @@ function districtForUpdateSchool() {
         }
     });
 }
+
+$(document).on("click", "#btnOpenAddTeacherToSchool", function () {
+
+    const modal = new bootstrap.Modal($("#addTeacherToSchoolModal")[0]);
+    $("#addTeacherBtn").prop("disabled", true);
+    modal.show();
+});
+
+
+$(document).on("input", "#teacherNationalId", function () {
+
+    const input = $(this);
+
+    const value = input.val()
+        .replace(/\D/g, "")
+        .slice(0, 10);
+
+    input.val(value);
+
+    const result = $("#teacherSearchResult");
+
+    // هنوز 10 رقم کامل نشده
+    if (value.length < 10) {
+        $("#addTeacherBtn").prop("disabled", true);
+        result.empty();
+        return;
+    }
+
+    $.ajax({
+        url: "/SchoolManager/GetUserByNationalId",
+        type: "GET",
+        data: {
+            nationalId: value
+        },
+
+        success: function (data) {
+
+            result.empty();
+
+            if (data && data.trim() !== "") {
+
+                result.html(`
+                    <div class="list-group-item list-group-item-action">
+                        ${data}
+                    </div>
+                `);
+
+                $("#addTeacherBtn").prop("disabled", false);
+
+            } else {
+
+                result.html(`
+                    <div class="text-danger mt-1">
+                        کاربری با این کد ملی پیدا نشد.
+                    </div>
+                `);
+
+                $("#addTeacherBtn").prop("disabled", true);
+            }
+        },
+
+        error: function () {
+
+            result.html(`
+                <div class="text-danger mt-1">
+                    خطایی در دریافت اطلاعات رخ داد.
+                </div>
+            `);
+
+            $("#addTeacherBtn").prop("disabled", true);
+        }
+    });
+});

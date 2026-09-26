@@ -39,26 +39,26 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
         ).FirstOrDefault();
     }
 
-    public List<TeacherDto> GetTeacherByClassId(int classId)
-    {
-        return (
-            from teacherData in db.TeachingAssignments
+    //public List<TeacherDto> GetTeacherByClassId(int classId)
+    //{
+    //    return (
+    //        from teacherData in db.TeachingAssignments
 
-            where teacherData.ClassId == classId
+    //        where teacherData.ClassId == classId
 
-            join teacherUser in db.Users on teacherData.TeacherUserId equals teacherUser.Id
+    //        join teacherUser in db.Users on teacherData.TeacherUserId equals teacherUser.Id
 
-            join generalSubject in db.GeneralItems.Where(x => x.TitleType == "Subject")
-                on teacherData.SubjectId equals generalSubject.Id
+    //        join generalSubject in db.GeneralItems.Where(x => x.TitleType == "Subject")
+    //            on teacherData.SubjectId equals generalSubject.Id
 
-            select new TeacherDto
-            {
-                TeacherName = teacherUser.Name + " " + teacherUser.LastName,
+    //        select new TeacherDto
+    //        {
+    //            TeacherName = teacherUser.Name + " " + teacherUser.LastName,
 
-                SubjectName = generalSubject.Title,
-            }
-        ).ToList();
-    }
+    //            SubjectName = generalSubject.Title,
+    //        }
+    //    ).ToList();
+    //}
 
     public List<StudentDto> GetStudentByClassId(int classId)
     {
@@ -100,8 +100,6 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
             .Distinct()
             .ToList();
     }
-
-  
 
     public List<int> GetStudentSchoolIds(int userId)
     {
@@ -245,25 +243,25 @@ public class SchoolService(MyContext db, IMapper mapper) : ISchoolService
         return true;
     }
 
-    public List<TeacherDto> GetMySubjectsByClassId(int classId, int teacherUserId)
-    {
-        var result =
-            from assignment in db.TeachingAssignments
+    //public List<TeacherDto> GetMySubjectsByClassId(int classId, int teacherUserId)
+    //{
+    //    var result =
+    //        from assignment in db.TeachingAssignments
 
-            where assignment.ClassId == classId && assignment.TeacherUserId == teacherUserId
+    //        where assignment.ClassId == classId && assignment.TeacherUserId == teacherUserId
 
-            join teacher in db.Users on assignment.TeacherUserId equals teacher.Id
+    //        join teacher in db.Users on assignment.TeacherUserId equals teacher.Id
 
-            join subject in db.GeneralItems.Where(x => x.TitleType == "Subject")
-                on assignment.SubjectId equals subject.Id
+    //        join subject in db.GeneralItems.Where(x => x.TitleType == "Subject")
+    //            on assignment.SubjectId equals subject.Id
 
-            select new TeacherDto
-            {
-                TeacherName = teacher.Name + " " + teacher.LastName,
+    //        select new TeacherDto
+    //        {
+    //            TeacherName = teacher.Name + " " + teacher.LastName,
 
-                SubjectName = subject.Title,
-            };
+    //            SubjectName = subject.Title,
+    //        };
 
-        return result.ToList();
-    }
+    //    return result.ToList();
+    //}
 }

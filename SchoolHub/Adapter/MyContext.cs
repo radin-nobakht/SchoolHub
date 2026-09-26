@@ -22,6 +22,7 @@ namespace SchoolHub.Adapter
         public DbSet<TeachingAssignmentEntity> TeachingAssignments { get; set; }
         public DbSet<GradeSubjectEntity> GradeSubjects { get; set; }
         public DbSet<StudentSubjectRecordEntity> StudentSubjectRecords { get; set; }
+        public DbSet<TeacherEntity> Teachers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

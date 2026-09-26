@@ -1,5 +1,5 @@
-﻿/* =========================================================
-   Manager School Info
+/* =========================================================
+   Manager Teachers
    ========================================================= */
 
 .manager-school-page {
@@ -92,7 +92,7 @@
 
 
     /* =========================================================
-   Edit School Button
+   Back Button
    ========================================================= */
 
     .manager-school-page .btn-edit-school {
@@ -105,9 +105,10 @@
         color: #4e73df;
         font-size: 13px;
         font-weight: 500;
-        padding: 4px 9px;
+        padding: 5px 10px;
         border-radius: 7px;
         cursor: pointer;
+        text-decoration: none;
         white-space: nowrap;
         transition: background-color 0.2s ease, color 0.2s ease;
     }
@@ -117,77 +118,9 @@
             color: #224abe;
         }
 
-        .manager-school-page .btn-edit-school:focus {
-            outline: none;
-            box-shadow: none;
-        }
-
 
     /* =========================================================
-   School Information Grid
-   ========================================================= */
-
-    .manager-school-page .school-info-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 16px;
-    }
-
-    .manager-school-page .info-box {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        min-height: 82px;
-        padding: 15px 17px;
-        background: #f9fafb;
-        border: 1px solid #eef0f2;
-        border-radius: 14px;
-        transition: 0.2s ease;
-    }
-
-        .manager-school-page .info-box:hover {
-            transform: translateY(-2px);
-            border-color: #dbe3ec;
-            box-shadow: 0 5px 14px rgba(0, 0, 0, 0.04);
-        }
-
-    .manager-school-page .info-icon {
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #ffffff;
-        border-radius: 12px;
-        font-size: 21px;
-        flex-shrink: 0;
-        box-shadow: 0 2px 7px rgba(0, 0, 0, 0.05);
-    }
-
-    .manager-school-page .info-content {
-        min-width: 0;
-    }
-
-        .manager-school-page .info-content span {
-            display: block;
-            font-size: 12px;
-            color: #6b7280;
-            margin-bottom: 5px;
-        }
-
-        .manager-school-page .info-content h5 {
-            margin: 0;
-            font-size: 15px;
-            font-weight: 700;
-            color: #1f2937;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-
-    /* =========================================================
-   Classes Header
+   Teachers Header
    ========================================================= */
 
     .manager-school-page .classes-header {
@@ -210,7 +143,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #ecfdf5;
+        background: #eef2ff;
         border-radius: 14px;
         font-size: 24px;
         flex-shrink: 0;
@@ -230,42 +163,7 @@
 
 
     /* =========================================================
-   Classes Actions
-   ========================================================= */
-
-    .manager-school-page .classes-actions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-shrink: 0;
-    }
-
-
-    /* =========================================================
-   Teacher Management Button
-   ========================================================= */
-
-    .manager-school-page .teacher-management-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        min-height: 42px;
-        padding: 8px 15px;
-        border-radius: 10px;
-        font-size: 13px;
-        font-weight: 600;
-        white-space: nowrap;
-        transition: 0.2s ease;
-    }
-
-        .manager-school-page .teacher-management-btn:hover {
-            transform: translateY(-1px);
-        }
-
-
-    /* =========================================================
-   Add Class Button
+   Add Teacher Button
    ========================================================= */
 
     .manager-school-page .add-class-btn {
@@ -282,7 +180,16 @@
 
 
     /* =========================================================
-   Class Card
+   Teacher Grid
+   ========================================================= */
+
+    .manager-school-page .row {
+        align-items: stretch;
+    }
+
+
+    /* =========================================================
+   Teacher Card
    ========================================================= */
 
     .manager-school-page .class-card {
@@ -291,112 +198,116 @@
         flex-direction: column;
         background: #ffffff;
         border: 1px solid #e5e7eb;
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: 0 5px 16px rgba(0, 0, 0, 0.045);
-        transition: 0.2s ease;
+        border-radius: 12px;
+        padding: 12px 14px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.035);
+        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
         .manager-school-page .class-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             border-color: #d5dce5;
-            box-shadow: 0 9px 24px rgba(0, 0, 0, 0.07);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
         }
 
 
     /* =========================================================
-   Class Header
+   Teacher Header
    ========================================================= */
 
     .manager-school-page .class-card-header {
         display: flex;
         align-items: center;
-        gap: 13px;
-        padding-bottom: 17px;
+        gap: 10px;
+        padding-bottom: 10px;
         border-bottom: 1px solid #f0f1f3;
     }
 
     .manager-school-page .class-card-icon {
-        width: 48px;
-        height: 48px;
+        width: 38px;
+        height: 38px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #f0f9ff;
-        border-radius: 13px;
-        font-size: 23px;
+        background: #f5f3ff;
+        border-radius: 10px;
+        font-size: 19px;
         flex-shrink: 0;
     }
 
+    .manager-school-page .teacher-info {
+        min-width: 0;
+        flex: 1;
+    }
+
     .manager-school-page .class-name {
-        font-size: 17px;
-        font-weight: 800;
+        font-size: 14px;
+        font-weight: 700;
         color: #111827;
-        margin-bottom: 3px;
+        margin-bottom: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .manager-school-page .class-label {
-        font-size: 12px;
+        font-size: 11px;
         color: #9ca3af;
     }
 
 
     /* =========================================================
-   Class Details
+   Teacher Details
    ========================================================= */
 
     .manager-school-page .class-details {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        padding: 18px 0;
+        display: block;
+        padding: 10px 0;
     }
 
     .manager-school-page .class-detail {
-        flex: 1;
-        min-width: 120px;
-        padding: 11px 13px;
+        padding: 8px 10px;
         background: #f9fafb;
-        border-radius: 10px;
+        border-radius: 8px;
     }
 
         .manager-school-page .class-detail span {
-            display: block;
-            font-size: 11px;
+            display: inline;
+            font-size: 10px;
             color: #6b7280;
-            margin-bottom: 5px;
+            margin-left: 6px;
         }
 
         .manager-school-page .class-detail strong {
-            display: block;
-            font-size: 14px;
+            display: inline;
+            font-size: 12px;
             font-weight: 700;
             color: #1f2937;
         }
 
 
     /* =========================================================
-   Class Buttons
+   Teacher Buttons
    ========================================================= */
 
     .manager-school-page .buttons {
         display: flex;
-        gap: 8px;
+        width: 100%;
         margin-top: auto;
-        padding-top: 4px;
+        padding-top: 0;
     }
 
         .manager-school-page .buttons .btn {
-            flex: 1;
-            border-radius: 9px;
-            font-size: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 11px;
             font-weight: 600;
-            white-space: nowrap;
+            padding: 5px 8px;
         }
 
 
     /* =========================================================
-   Empty Classes
+   Empty Teachers
    ========================================================= */
 
     .manager-school-page .empty-classes {
@@ -449,8 +360,8 @@
 
 @media (max-width: 1100px) {
 
-    .manager-school-page .school-info-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .manager-school-page {
+        padding: 20px;
     }
 }
 
@@ -477,23 +388,18 @@
             font-size: 20px;
         }
 
-        .manager-school-page .school-info-grid {
-            grid-template-columns: 1fr;
-        }
-
         .manager-school-page .classes-header {
             align-items: flex-start;
             flex-direction: column;
         }
 
-        .manager-school-page .classes-actions {
+        .manager-school-page .add-class-btn {
             width: 100%;
+            justify-content: center;
         }
 
-        .manager-school-page .teacher-management-btn,
-        .manager-school-page .add-class-btn {
-            flex: 1;
-            justify-content: center;
+        .manager-school-page .class-card {
+            padding: 11px 12px;
         }
 }
 
@@ -531,22 +437,8 @@
             font-size: 12px;
         }
 
-        .manager-school-page .info-box {
-            min-height: 74px;
-        }
-
         .manager-school-page .classes-heading h3 {
             font-size: 18px;
-        }
-
-        .manager-school-page .classes-actions {
-            width: 100%;
-            flex-direction: column;
-        }
-
-        .manager-school-page .teacher-management-btn,
-        .manager-school-page .add-class-btn {
-            width: 100%;
         }
 
         .manager-school-page .buttons {
@@ -556,4 +448,14 @@
             .manager-school-page .buttons .btn {
                 width: 100%;
             }
+
+        .manager-school-page .class-name {
+            font-size: 13px;
+        }
+
+        .manager-school-page .class-card-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+        }
 }

@@ -1,0 +1,66 @@
+#addTeacherToSchoolModal .modal-content {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+#addTeacherToSchoolModal .modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+#addTeacherToSchoolModal .modal-title {
+    font-weight: 700;
+}
+
+#addTeacherToSchoolModal .modal-body {
+    padding: 1.5rem;
+}
+
+#addTeacherToSchoolModal .form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+#addTeacherToSchoolModal #teacherNationalId {
+    direction: ltr;
+    text-align: left;
+    letter-spacing: 1px;
+}
+
+    #addTeacherToSchoolModal #teacherNationalId:focus {
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.15);
+    }
+
+#addTeacherToSchoolModal #teacherSearchResult {
+    margin-top: 1rem;
+}
+
+    #addTeacherToSchoolModal #teacherSearchResult .alert {
+        border-radius: 12px;
+        border: none;
+    }
+
+#addTeacherToSchoolModal #teacherFullName {
+    font-size: 1rem;
+}
+
+#addTeacherToSchoolModal #teacherNationalIdResult {
+    direction: ltr;
+    display: inline-block;
+    letter-spacing: 1px;
+}
+
+#addTeacherToSchoolModal #teacherNationalIdError {
+    font-size: 0.85rem;
+}
+
+#addTeacherToSchoolModal .modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+#addTeacherToSchoolModal #addTeacherBtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}

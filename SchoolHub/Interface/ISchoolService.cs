@@ -8,7 +8,7 @@ namespace SchoolHub.Interface
     {
         ClassDto? GetClassById(int classId);
 
-        List<TeacherDto> GetTeacherByClassId(int classId);
+        //List<TeacherDto> GetTeacherByClassId(int classId);
 
         List<StudentDto> GetStudentByClassId(int classId);
 
@@ -28,6 +28,6 @@ namespace SchoolHub.Interface
 
         bool AddSchool(SchoolDto school);
 
-        List<TeacherDto> GetMySubjectsByClassId(int classId, int teacherUserId);
+        //List<TeacherDto> GetMySubjectsByClassId(int classId, int teacherUserId);
     }
 }
