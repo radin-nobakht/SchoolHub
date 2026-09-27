@@ -47,34 +47,25 @@
 
                     <!-- Class Id -->
                     <input type="hidden"
-                        id="classId"
+                           id="classId"
                            name="classId"
                            value="@Model" />
 
 
-                    <!-- Teacher National Id -->
+                    <!-- Teacher -->
                     <div class="form-group">
 
                         <label class="form-label">
-                            کد ملی معلم
+                            معلم
                         </label>
 
                         <div class="input-wrapper">
 
-                            <span class="input-icon">
-                                🪪
-                            </span>
-
-                            <input type="text"
-                                   id="nationalIdInput"
-                                   class="form-control custom-input"
-                                   name="nationalId"
-                                   required
-                                   maxlength="10"
-                                   minlength="10"
-                                   inputmode="numeric"
-                                   autocomplete="off"
-                                   placeholder="مثلاً 0012345678">
+                            <select id="teacherSelect"
+                                    name="teacherUserId"
+                                    class="form-select custom-select select2"
+                                    required>
+                            </select>
 
                         </div>
 
@@ -136,4 +127,3 @@
     </div>
 
 </div>
-```

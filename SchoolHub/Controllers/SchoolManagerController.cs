@@ -178,9 +178,9 @@ public class SchoolManagerController(IGeneralService generalService, ISchoolMana
         return Json(scores);
     }
 
-    public IActionResult AddTeacherToClass(Dto.Manager.TeacherDto addTeacher, string nationalId)
+    public IActionResult AddTeacherToClass(Dto.Manager.TeacherDto addTeacher)
     {
-        var isAdd = schoolManagerService.AddTeacher(new Dto.Manager.TeacherDto { ClassId = addTeacher.ClassId, SubjectIds = addTeacher.SubjectIds }, nationalId);
+        var isAdd = schoolManagerService.AddTeacher(addTeacher);
         if (isAdd.Success)
             TempData["Success"] = isAdd.Message;
         else
@@ -345,6 +345,16 @@ public class SchoolManagerController(IGeneralService generalService, ISchoolMana
         }
         return RedirectToAction("Teachers",new {schoolId});
     }
+
+    [HttpGet]
+    public IActionResult GetTeachers(int classId)
+    {
+        var schoolId=schoolManagerService.GetSchoolIdByClassId(classId);
+        var teacherIds = schoolManagerService.GetTeacherUserIds(schoolId ??0);
+        var schoolTeachers = schoolManagerService.GetAvailableTeachersById(teacherIds,classId);
+        return Json(schoolTeachers);
+    }
+
 
 
 

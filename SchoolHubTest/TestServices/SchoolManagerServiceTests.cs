@@ -216,7 +216,8 @@ namespace SchoolHubTest.TestServices
 
 
         [Fact]
-        public void AddTeacher_WhenDataIscorrect_ReturnnsTrue()
+        public void AddTeacher_WhenDataIscorrect_ReturnsTrue()
+
         {
             // Arrange
             testDb.Users.Add(new UserEntity { GenderGeneralId = 4, NationalIdNumber = "0153054352", Name = "mamad", Id = 5, LastName = "یس", Password = "dddd" });
@@ -235,7 +236,7 @@ namespace SchoolHubTest.TestServices
             testDb.SaveChanges();
 
             // Act
-            var result = testService.AddTeacher(new SchoolHub.Dto.Manager.TeacherDto { TeacherUserId = 0, ClassId = 7, SubjectIds = [1567, 1568, 1569] }, "0153054352");
+            var result = testService.AddTeacher(new SchoolHub.Dto.Manager.TeacherDto { TeacherUserId = 5, ClassId = 7, SubjectIds = [1567, 1568, 1569] });
 
             // Assert
             Assert.True(result.Success);
@@ -744,10 +745,67 @@ namespace SchoolHubTest.TestServices
             Assert.Equal(0, result.Id);
         }
 
+        [Fact]
+        public void GetTeacherUserIds_WhenSchoolHasTeaccher_ReturnsTeacherUserIds()
+        {
+            // Arrange
+            testDb.Teachers.AddRange(Enumerable.Range(14, 5).Select(id => new TeacherEntity { TeacherUserId = id, SchoolId = 11, Active = true }));
+            testDb.SaveChanges();
+
+            // Act
+            var result = testService.GetTeacherUserIds(schoolId:11);
+
+            // Assert
+            Assert.Equal([14, 15, 16, 17, 18], result.Order());
+        }
+
+        [Fact]
+        public void GetTeacherUserIds_WhenSchoolHasntTeaccher_ReturnsEmpty()
+        {
+            // Act
+            var result = testService.GetTeacherUserIds(schoolId:11);
+
+            // Assert
+            Assert.Empty(result);
+        }
+
+
+        [Fact]
+        public void GetAvailableTeachersById_WhenIdsAreOk_ReturnsUsers()
+        {
+            // Arrange
+            testDb.Users.AddRange(Enumerable.Range(1, 7).Select(id => new UserEntity { Id = id,GenderGeneralId=1,LastName="",Name="",NationalIdNumber="",Password="" }));
+            testDb.TeachingAssignments.AddRange(Enumerable.Range(1, 5).Select(id => new TeachingAssignmentEntity { ClassId=8,SubjectId=5,TeacherUserId=id}));
+
+            testDb.SaveChanges();
+
+            // Act
+            var result = testService.GetAvailableTeachersById([1, 2, 3, 4, 5, 6, 7],8);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.Equal(
+                [ 6, 7],
+                result.Select(x => x.Id).Order()
+            );
+        }
+
+        [Fact]
+        public void GetAvailableTeachersById_WhenSomeIdsDoNotExist_ReturnsEmpty()
+        {
+        
+
+            // Act
+            var result = testService.GetAvailableTeachersById([1, 2, 3, 6, 7],4);
+
+            // Assert
+            Assert.Empty(result);
+        }
         // =====================================================
         // Cleanup
         // =====================================================
-
+     
         public void Dispose()
         {
             db.Dispose();

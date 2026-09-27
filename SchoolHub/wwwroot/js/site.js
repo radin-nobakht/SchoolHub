@@ -61,8 +61,7 @@ function cityForAddSchool() {
     });
 }
 
-function districtForAddSchool
-    () {
+function districtForAddSchool() {
     let cityId = $("#schoolCity").val();
 
     $.ajax({
@@ -373,9 +372,39 @@ $(document).on("input", "#nationalIdInput", function () {
 $(document).on("click", "#btnAddTeacher", function () {
 
     const modal = new bootstrap.Modal($("#assignTeacherModal")[0]);
+    GetTeachers();
     SubjectsForAddTeacher();
     modal.show();
 });
+
+function GetTeachers() {
+    let classId = $("#classId").val();
+    $.ajax({
+        url: "/SchoolManager/GetTeachers",
+        type: "GET",
+        data: {
+            classId: classId
+        },
+        success: function (data) {
+            let select = $('#teacherSelect');
+            select.empty();
+
+            $.each(data, function (index, item) {
+
+                select.append(
+                    `<option value="${item.id}">
+                            ${item.name + " " + item.lastName}
+                        </option>`
+                );
+
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
 
 function SubjectsForAddTeacher() {
     let classId = $("#classId").val();
@@ -939,3 +968,4 @@ $(document).on("input", "#teacherNationalId", function () {
         }
     });
 });
+

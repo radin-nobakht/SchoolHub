@@ -54,12 +54,10 @@ public class MenuService(MyContext db) : IMenuService
     public List<SchoolBarDto> GetSchoolThatTeacherBar(int userId)
     {
         var result = (
-            from assignment in db.TeachingAssignments
-            where assignment.TeacherUserId == userId
+            from teacher in db.Teachers
+            where teacher.TeacherUserId == userId
 
-            join schoolClass in db.Classes on assignment.ClassId equals schoolClass.Id
-
-            join school in db.Schools on schoolClass.SchoolId equals school.Id
+            join school in db.Schools on teacher.SchoolId equals school.Id
 
             join type in db.GeneralItems on school.TypeGeneralId equals type.Id
 

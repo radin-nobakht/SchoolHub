@@ -328,17 +328,16 @@ public class SchoolManagerService(MyContext db, IMapper mapper, IGeneralService 
 
     public bool IsTeacherInClass(int classId, int teacherUserId) => db.TeachingAssignments.Any(x => x.ClassId == classId && x.TeacherUserId == teacherUserId);
 
-    public OperationResultDto AddTeacher(Dto.Manager.TeacherDto teacher, string nationalId)
+    public OperationResultDto AddTeacher(Dto.Manager.TeacherDto teacher)
     {
 
         if (!IsClassExist(teacher.ClassId))
             return new OperationResultDto { Success = false, Message = "کلاس وجود ندارد" };
 
-        var user = IsUserExistByNationalId(nationalId);
-        if (!user.Exist)
-            return new OperationResultDto { Success = false, Message = "کاربری با این کد ملی وجود ندارد" };
+        var user = IsUserExistById(teacher.TeacherUserId);
+        if (!user)
+            return new OperationResultDto { Success = false, Message = "کاربر وجود ندارد" };
 
-        teacher.TeacherUserId = user.Id;
 
         if (IsTeacherInClass(teacher.ClassId, teacher.TeacherUserId))
             return new OperationResultDto { Success = false, Message = "معلم قبلا داخل کلاس بوده" };
@@ -609,6 +608,15 @@ public class SchoolManagerService(MyContext db, IMapper mapper, IGeneralService 
         db.Teachers.Add(new TeacherEntity { SchoolId = schoolId, Active = true, TeacherUserId = user.Id });
         db.SaveChanges();
         return new ValidationDto { IsCorrect = true, Message = "معلم با موفقیت ثبت شد" };
+    }
+
+    public List<int> GetTeacherUserIds(int schoolId) => db.Teachers.Where(x => x.SchoolId == schoolId && x.Active).Select(x => x.TeacherUserId).ToList();
+
+    public List<UserDto> GetAvailableTeachersById(List<int> teacherUserIds,int classId)
+    {
+        var classTeacherUserIds = db.TeachingAssignments.Where(x => x.ClassId == classId).Select(x=> x.TeacherUserId).ToList();
+        var teachers = db.Users.Where(x => teacherUserIds.Contains(x.Id) && !classTeacherUserIds.Contains(x.Id)).ToList();
+        return mapper.Map<List<UserDto>>(teachers);
     }
 
 }

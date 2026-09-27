@@ -10,7 +10,7 @@ namespace SchoolHub.Interface
     {
         bool AddClass(ClassDto classDto);
         OperationResultDto AddStudent(StudentDto student, string nationalIdNumber);
-        OperationResultDto AddTeacher(Dto.Manager.TeacherDto teacher, string nationalId);
+        OperationResultDto AddTeacher(Dto.Manager.TeacherDto teacher);
         bool DeleteClass(int classId);
         bool DeleteStudent(int studentId);
         bool DeleteTeacher(int classId, int teacherUserId);
@@ -44,5 +44,7 @@ namespace SchoolHub.Interface
         List<TeacherListItemViewModel> GetTeachersBySchoolId(int schoolId);
         SchoolDto GetSchoolBySchoolId(int schoolId);
         ValidationDto AddTeacherToSchool(int schoolId, string teacherNationalId);
+        List<int> GetTeacherUserIds(int schoolId);
+        List<UserDto> GetAvailableTeachersById(List<int> teacherUserIds, int classId);
     }
 }
