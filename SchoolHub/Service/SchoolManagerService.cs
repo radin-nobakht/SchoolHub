@@ -582,9 +582,10 @@ public class SchoolManagerService(MyContext db, IMapper mapper, IGeneralService 
 
     public List<TeacherListItemViewModel> GetTeachersBySchoolId(int schoolId)
     {
-        var teachersUserId = db.Teachers.Where(t => t.Active && t.SchoolId == schoolId).Select(x => x.TeacherUserId).ToList();
-        return db.Users.Where(x => teachersUserId.Contains(x.Id)).Select(x => new TeacherListItemViewModel
+        var teachersUserIdAndId = db.Teachers.Where(t => t.Active && t.SchoolId == schoolId).Select(x => new  { TeacherUserId=x.TeacherUserId , Id=x.Id }).ToList();
+        return db.Users.Where(x => teachersUserIdAndId.Select(x=> x.TeacherUserId).Contains(x.Id)).AsEnumerable().Select(x => new TeacherListItemViewModel
         {
+            TeacherId=teachersUserIdAndId.FirstOrDefault(i => i.TeacherUserId == x.Id)?.Id ?? 0,
             FullName= x.Name + " " + x.LastName,
             NationalId = x.NationalIdNumber,
             UserId=x.Id
@@ -602,9 +603,15 @@ public class SchoolManagerService(MyContext db, IMapper mapper, IGeneralService 
         if (user == new UserEntity())
         return new ValidationDto { IsCorrect = false, Message = "کاربر وجود ندارد" };
 
-        if (db.Teachers.Any(x => x.TeacherUserId == user.Id))
-            return new ValidationDto { IsCorrect = false, Message = "کاربر قبلا در این مدرسه به عنوان معلم ثبت " };
-
+        if (db.Teachers.Any(x => x.TeacherUserId == user.Id && x.SchoolId == schoolId))
+        {
+            var teacher = db.Teachers.FirstOrDefault(x => x.SchoolId == schoolId && x.TeacherUserId == user.Id && !x.Active);
+            if(teacher == new TeacherEntity() || teacher == null)
+                return new ValidationDto { IsCorrect = false, Message = "کاربر قبلا در این مدرسه به عنوان معلم ثبت شده" };
+            teacher.Active = true;
+            db.SaveChanges();
+            return new ValidationDto { IsCorrect = true, Message = "معلم با موفقیت بازگردانده شد" };
+        }
         db.Teachers.Add(new TeacherEntity { SchoolId = schoolId, Active = true, TeacherUserId = user.Id });
         db.SaveChanges();
         return new ValidationDto { IsCorrect = true, Message = "معلم با موفقیت ثبت شد" };
@@ -618,5 +625,24 @@ public class SchoolManagerService(MyContext db, IMapper mapper, IGeneralService 
         var teachers = db.Users.Where(x => teacherUserIds.Contains(x.Id) && !classTeacherUserIds.Contains(x.Id)).ToList();
         return mapper.Map<List<UserDto>>(teachers);
     }
+
+    public ValidationDto DeleteTeacherOfSchool(int teacherId)
+    {
+        var teacher = db.Teachers.FirstOrDefault(x=> x.Id == teacherId &&x.Active);
+        if (teacher == new TeacherEntity() || teacher == null)
+            return new ValidationDto { IsCorrect = false, Message = "همچین معلمی وجود ندارد" };
+
+        var classes = db.Classes.Where(x => x.SchoolId == teacher.SchoolId).ToList();
+
+        var teachingAssignments = db.TeachingAssignments.Where(x=> classes.Select(x=> x.Id).Contains(x.ClassId)).ToList();
+
+        if (teachingAssignments.Select(x => x.TeacherUserId).Contains(teacher.TeacherUserId))
+            return new ValidationDto { IsCorrect = false, Message = "معلم کلاس دارد لطفا اول کلاس ها را حذف کنید" };
+
+        teacher.Active = false;
+        db.SaveChanges();
+        return new ValidationDto { IsCorrect = true, Message = "حذف با موفقیت انجام شد" };
+    }
+
 
 }

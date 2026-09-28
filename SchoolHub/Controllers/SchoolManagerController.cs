@@ -331,7 +331,6 @@ public class SchoolManagerController(IGeneralService generalService, ISchoolMana
         return View(teachersView);
     }
 
-
     public IActionResult AddTeacherToSchool(string teacherNationalId,int schoolId)
     {
         var isAdd = schoolManagerService.AddTeacherToSchool(schoolId: schoolId, teacherNationalId: teacherNationalId);
@@ -355,7 +354,8 @@ public class SchoolManagerController(IGeneralService generalService, ISchoolMana
         return Json(schoolTeachers);
     }
 
-
-
-
+    public IActionResult DaleteTeacherOfSchool(int teacherId)
+    {
+        return Json(schoolManagerService.DeleteTeacherOfSchool(teacherId));
+    }
 }

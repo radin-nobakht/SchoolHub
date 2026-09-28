@@ -802,10 +802,51 @@ namespace SchoolHubTest.TestServices
             // Assert
             Assert.Empty(result);
         }
+
+        [Fact]
+        public void DeleteTeacherOfSchool_WhenTeacherExistButHasntClass_ReturnsTrue()
+        {
+            // Arrange
+            testDb.Teachers.Add( new TeacherEntity { Id=5,TeacherUserId = 5 ,Active=true,SchoolId=6});
+            testDb.SaveChanges();
+
+            // Act
+            var result = testService.DeleteTeacherOfSchool(teacherId:5);
+
+            // Assert
+            Assert.True(result.IsCorrect);
+        }
+
+        [Fact]
+        public void DeleteTeacherOfSchool_WhenTeacherNotExist_ReturnsFalse()
+        {
+            // Act
+            var result = testService.DeleteTeacherOfSchool(teacherId: 5);
+
+            // Assert
+            Assert.False(result.IsCorrect);
+        }
+
+        [Fact]
+        public void DeleteTeacherOfSchool_WhenTeacherExistBuitHasClass_ReturnsFalse()
+        {
+            // Arrange
+            testDb.Teachers.Add(new TeacherEntity { Id = 5, TeacherUserId = 5, Active = true, SchoolId = 6 });
+            testDb.Classes.Add(new ClassEntity { GradeGeneralId = 5, Id = 6, MajorGeneralId = 4, Name = "", SchoolId = 6 });
+            testDb.TeachingAssignments.Add(new TeachingAssignmentEntity { ClassId = 6, SubjectId = 54, TeacherUserId = 5 });
+            testDb.SaveChanges();
+
+            // Act
+            var result = testService.DeleteTeacherOfSchool(teacherId: 5);
+
+            // Assert
+            Assert.False(result.IsCorrect);
+        }
+
         // =====================================================
         // Cleanup
         // =====================================================
-     
+
         public void Dispose()
         {
             db.Dispose();

@@ -405,7 +405,6 @@ function GetTeachers() {
     });
 }
 
-
 function SubjectsForAddTeacher() {
     let classId = $("#classId").val();
     $.ajax({
@@ -903,7 +902,6 @@ $(document).on("click", "#btnOpenAddTeacherToSchool", function () {
     modal.show();
 });
 
-
 $(document).on("input", "#teacherNationalId", function () {
 
     const input = $(this);
@@ -969,3 +967,69 @@ $(document).on("input", "#teacherNationalId", function () {
     });
 });
 
+$(document).on("click", "#btnDeleteTeacherOfSchool", function () {
+    var teacherId = $(this).data("id");
+    var teacherCard = $(this).closest(".class-card");
+    Swal.fire({
+        title: "حذف کلاس؟",
+        text: "آیا مطمئن هستید که می‌خواهید این معلم را حذف کنید؟",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "بله، حذف کن",
+        cancelButtonText: "لغو",
+        reverseButtons: true
+    }).then((result) => {
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        $.ajax({
+            url: "/SchoolManager/DaleteTeacherOfSchool",
+            type: "POST",
+            data: {
+                teacherId: teacherId
+            },
+
+            success: function (data) {
+
+                if (data.isCorrect) {
+
+                    Swal.fire({
+                        title: "حذف شد",
+                        text: data.message,
+                        icon: "success",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    // حذف کارت و آزاد شدن جای آن
+                    teacherCard.fadeOut(300, function () {
+                        $(this).remove();
+                    });
+
+                } else {
+
+                    Swal.fire({
+                        title: "خطا",
+                        text: data.message,
+                        icon: "error",
+                        confirmButtonText: "باشه"
+                    });
+                }
+            },
+
+            error: function (xhr, status, error) {
+
+                console.error("Delete class error:", error);
+
+                Swal.fire({
+                    title: "خطا",
+                    text: "در هنگام حذف معلم مشکلی پیش آمد.",
+                    icon: "error",
+                    confirmButtonText: "باشه"
+                });
+            }
+        });
+    });
+});

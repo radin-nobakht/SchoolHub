@@ -46,5 +46,6 @@ namespace SchoolHub.Interface
         ValidationDto AddTeacherToSchool(int schoolId, string teacherNationalId);
         List<int> GetTeacherUserIds(int schoolId);
         List<UserDto> GetAvailableTeachersById(List<int> teacherUserIds, int classId);
+        ValidationDto DeleteTeacherOfSchool(int teacherId);
     }
 }
